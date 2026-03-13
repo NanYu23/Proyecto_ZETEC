@@ -6,6 +6,7 @@ import { Product } from "../../models/producto.model";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
+import { CarritoService } from '../../services/carrito.service';
 
 @Component({
     selector: 'app-catalogo',
@@ -15,18 +16,19 @@ import { RouterModule } from "@angular/router";
     styleUrl: './catalogo.component.css',
 })
 export class CatalogoComponent implements OnInit {
-    // ✅ signals en lugar de arrays normales
+
     private allProducts = signal<Product[]>([]);
     filteredProducts = signal<Product[]>([]);
     categories = signal<string[]>([]);
     selectedCategory = '';
 
     private productService = inject(ProductService);
+    private carritoService = inject(CarritoService);
 
     ngOnInit() {
         this.productService.getAll().subscribe(data => {
             this.allProducts.set(data);
-            this.filteredProducts.set([...data]);                          // ✅ .set() notifica
+            this.filteredProducts.set([...data]);
             this.categories.set([...new Set(data.map(p => p.category))].sort());
         });
     }
@@ -35,6 +37,10 @@ export class CatalogoComponent implements OnInit {
         const filtered = this.selectedCategory
             ? this.allProducts().filter(p => p.category === this.selectedCategory)
             : [...this.allProducts()];
-        this.filteredProducts.set(filtered);   // ✅ .set() notifica
+        this.filteredProducts.set(filtered);
+    }
+
+    agregarAlCarrito(producto: Product) {
+        this.carritoService.agregarProducto(producto);
     }
 }

@@ -64,6 +64,7 @@
 <section class="catalog-grid">
   @for(p of filteredProducts(); track p.id){
     <app-product-card [product]="p"></app-product-card>
+
   }
 
   @if(filteredProducts().length === 0){

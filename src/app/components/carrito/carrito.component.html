@@ -1,0 +1,18 @@
+<h2>Mi carrito</h2>
+
+@for(producto of carritoService.carrito(); track producto.id; let i = $index){
+
+  <div>
+    <h3>{{ producto.name }}</h3>
+    <p>{{ producto.price }}</p>
+
+    <button (click)="eliminarProducto(i)">
+      Eliminar
+    </button>
+  </div>
+
+}
+
+@if(carritoService.carrito().length === 0){
+  <p>Tu carrito está vacío</p>
+}

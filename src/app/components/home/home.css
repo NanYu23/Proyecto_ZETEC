@@ -30,6 +30,18 @@
    NAVBAR
    ✅ background-color explícito para evitar que styles.css lo sobreescriba
    =========================== */
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  border-radius: 50%;
+  padding: 2px 6px;
+}
+
 :host .navbar {
   display: flex;
   align-items: center;
@@ -112,6 +124,7 @@
   display: flex;
   align-items: center;
   transition: background 0.2s;
+  position: relative;
 }
 
 :host .navbar__icon-btn:hover {

@@ -4,6 +4,8 @@ import { ProductService } from '../../services/producto.service';
 import { Product } from '../../models/producto.model';
 import { ProductCardComponent } from '../producto/producto.component';
 import { RouterModule } from '@angular/router';
+import { CarritoService } from '../../services/carrito.service';
+
 
 @Component({
   selector: 'app-home',
@@ -13,9 +15,10 @@ import { RouterModule } from '@angular/router';
   styleUrl: './home.css'
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  // ✅ signal en lugar de array normal: Angular siempre detecta el cambio
+
   products = signal<Product[]>([]);
   private productService = inject(ProductService);
+  carritoService = inject(CarritoService);
 
   slides = [
     { id: 1, image: 'foto1_carrusel.jpeg', alt: 'Banner 1' },
@@ -29,7 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.productService.getAll().subscribe(data => {
-      this.products.set(data.slice(0, 4));  // ✅ .set() notifica a Angular automáticamente
+      this.products.set(data.slice(0, 4));
     });
     this.startAutoplay();
   }
