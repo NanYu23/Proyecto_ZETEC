@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+
+    <product>
+        <id>1</id>
+        <name>Lápiz #2 MAE</name>
+        <price>8</price>
+        <imageUrl>https://regem.mx/cdn/shop/files/D_NQ_NP_660292-MLM54519884721_032023-O_720x.webp?v=1689374931</imageUrl>
+        <category>Lápices</category>
+        <description>Lápiz del #2 utilizado comúnmente en escuelas.</description>
+        <inStock>1</inStock>
+    </product>
+
+    <product>
+        <id>2</id>
+        <name>Cuaderno Scribe Raya</name>
+        <price>48</price>
+        <imageUrl>https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTaH3NchXjNBhdZ9EkHn1sIiew5Du2WoQyA6xcgDqiwnNXZ8WcFLBot2hWKeQGVa2Kq32MxsDnS9IvmEpFnVQY1clfqxORiWKRyu91KbZ-okvVYNRp4Ywt38A</imageUrl>
+        <category>Cudernos</category>
+        <description>Cuaderno de tapa dura con doble espiral.</description>
+        <inStock>1</inStock>
+    </product>
+
+    <product>
+        <id>3</id>
+        <name>Bolígrafo Bic Negro Punto Medio</name>
+        <price>6</price>
+        <imageUrl>https://ofixmx.vtexassets.com/arquivos/ids/163366/BOLIGRAFO-MEDIANO-NEGRO-DURA--BIC.jpg?v=638417585007500000</imageUrl>
+        <category>Bolígrafos</category>
+        <description>Bolígrafo marca BIC punto medio.</description>
+        <inStock>1</inStock>
+    </product>
+
+    <product>
+        <id>4</id>
+        <name>Borrador Pelikan M-20</name>
+        <price>10</price>
+        <imageUrl>https://tonypapelerias.vtexassets.com/arquivos/ids/277012/02370025_2.jpg?v=638556527611400000</imageUrl>
+        <category>Borradores</category>
+        <description>Borrador de migajón de marca Pelikan.</description>
+        <inStock>0</inStock>
+    </product>
+
+    <product>
+        <id>5</id>
+        <name>Colores Prismacolor con 24</name>
+        <price>135</price>
+        <imageUrl>https://m.media-amazon.com/images/I/61CrNwIKzYL._AC_UF894,1000_QL80_.jpg</imageUrl>
+        <category>Colores</category>
+        <description>Colores gama premium con 24 colores.</description>
+        <inStock>20</inStock>
+    </product>
+
+</products>
