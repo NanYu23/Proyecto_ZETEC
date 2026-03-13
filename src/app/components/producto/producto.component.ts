@@ -7,10 +7,9 @@ import { CarritoService } from '../../services/carrito.service';
   selector: 'app-product-card',
   standalone: true,
   templateUrl: './producto.component.html',
-  styleUrl: './producto.component.css'
+  styleUrl: './producto.component.css',
 })
 export class ProductCardComponent {
-
   @Input() product!: Product;
 
   private carritoService = inject(CarritoService);
@@ -29,16 +28,15 @@ export class ProductCardComponent {
     }
   }
 
+  // Solo cambia este método, todo lo demás queda igual
   addToCart() {
-
     if (this.quantity > this.product.inStock) {
-      alert("No hay suficiente stock");
+      alert('No hay suficiente stock');
       return;
     }
 
-    for (let i = 0; i < this.quantity; i++) {
-      this.carritoService.agregarProducto(this.product);
-    }
+    // ✅ Una sola llamada pasando la cantidad, el servicio maneja el resto
+    this.carritoService.agregarProducto(this.product, this.quantity);
+    this.quantity = 1; // reset tras agregar
   }
-
 }
