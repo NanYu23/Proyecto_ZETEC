@@ -1,148 +1,135 @@
+/* producto.component.css */
+
 /* CONTENEDOR DE LA CARD */
-.card{
-     width: 300px; 
-    min-height: 420px;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    overflow: hidden;
-    background: #ffffff;
-    transition: transform .2s ease, box-shadow .2s ease;
+.card {
+  /* ✅ Sin width fijo: el grid padre controla el ancho */
+  width: 100%;
+  min-height: 420px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #ffffff;
+  transition: transform .2s ease, box-shadow .2s ease;
+  display: flex;
+  flex-direction: column;   /* ✅ para que el body ocupe el alto restante */
 }
 
 /* EFECTO HOVER */
-.card:hover{
-    transform: translateY(-4px);
-    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
 }
 
 /* IMAGEN */
-.img{
-    width: 100%;
-    height: 250px;
-    object-fit: contain;
-    display: block;
+.img {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  display: block;
 }
 
 /* CUERPO */
-.body{
-    font-family: system-ui, BlinkMacSystemFont;
-    padding: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex: 1;
+.body {
+  font-family: system-ui, BlinkMacSystemFont;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;   /* ✅ ocupa el espacio restante de la card */
 }
 
 /* TITULO + PRECIO */
-.top{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
 }
 
-.title{
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    color: #111827;
+.title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.3;
 }
 
-.price{
-    font-weight: 700;
-    color: #2563eb;
-    font-size: 15px;
+.price {
+  font-weight: 700;
+  color: #2563eb;
+  font-size: 15px;
+  white-space: nowrap;   /* ✅ evita que el precio se parta */
 }
 
 /* META */
-.meta{
-    margin: 0;
-    color: #6b7280;
-    font-size: 13px;
+.meta {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
 }
 
 /* DESCRIPCION */
-.desc{
-    margin: 4px 0;
-    font-size: 14px;
-    color: #4b5563;
-    line-height: 1.4;
+.desc {
+  margin: 0;
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.4;
 }
 
 /* STOCK */
-.stock{
-    margin-top: auto;
-    font-size: 13px;
-    font-weight: 600;
-    color: #059669;
+.stock {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #059669;
 }
 
-.stock.out{
-    color: #dc2626;
+.stock.out {
+  color: #dc2626;
 }
 
-/* HEADER */
-.header{
-    margin-bottom: 18px;
+/* ACCIONES */
+.product-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;   /* ✅ empuja las acciones al fondo de la card */
+  padding-top: 10px;
 }
 
-.h1{
-    margin: 0 0 6px;
-    font-size: 26px;
-    font-weight: 700;
+.quantity {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.p{
-    margin: 0;
-    color: #6b7280;
-    font-size: 15px;
+.quantity button {
+  background: #f3f4f6;
+  border: none;
+  padding: 6px 12px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-/* GRID */
-.grid{
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 260px);
-    gap: 30px;
-    /*max-width: 1200px;
-    margin: 0 auto;*/
-    justify-content: center;
+.quantity span {
+  padding: 0 12px;
+  font-weight: bold;
 }
 
-.product-actions{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-top:10px;
+.cart-btn {
+  background: #5b7bb5;
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
-.quantity{
-  display:flex;
-  align-items:center;
-  border:1px solid #ccc;
-  border-radius:8px;
-  overflow:hidden;
+.cart-btn:hover {
+  background: #1a6dbf;
 }
-
-.quantity button{
-  background:#f3f4f6;
-  border:none;
-  padding:6px 12px;
-  font-size:16px;
-  cursor:pointer;
-}
-
-.quantity span{
-  padding:0 12px;
-  font-weight:bold;
-}
-
-.cart-btn{
-  background:#5b7bb5;
-  border:none;
-  color:white;
-  border-radius:50%;
-  width:40px;
-  height:40px;
-  font-size:18px;
-  cursor:pointer;
-}
-

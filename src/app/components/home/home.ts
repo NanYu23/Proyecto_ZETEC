@@ -1,4 +1,5 @@
-import { Component, inject, ChangeDetectorRef, afterNextRender } from '@angular/core';
+// home.ts
+import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { ProductService } from '../../services/producto.service';
 import { Product } from '../../models/producto.model';
 import { ProductCardComponent } from '../producto/producto.component';
@@ -9,19 +10,47 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [ProductCardComponent, RouterModule],
   templateUrl: './home.html',
-  styleUrls: ['./home.css']
+  styleUrl: './home.css'
 })
-export class HomeComponent {
-  products: Product[] = [];
+export class HomeComponent implements OnInit, OnDestroy {
+  // ✅ signal en lugar de array normal: Angular siempre detecta el cambio
+  products = signal<Product[]>([]);
   private productService = inject(ProductService);
-  private cdr = inject(ChangeDetectorRef);
 
-  constructor() {
-    afterNextRender(() => {              // 👈 solo corre en el browser
-      this.productService.getAll().subscribe(data => {
-        this.products = data.slice(0, 4);
-        this.cdr.detectChanges();
-      });
+  slides = [
+    { id: 1, image: 'foto1_carrusel.jpeg', alt: 'Banner 1' },
+    { id: 2, image: 'foto2_carrusel.jpeg', alt: 'Banner 2' },
+    { id: 3, image: 'foto3_carrusel.jpeg', alt: 'Banner 3' },
+    { id: 4, image: 'foto4_carrusel.jpeg', alt: 'Banner 4' },
+  ];
+
+  currentSlide = 0;
+  private autoplayTimer: any;
+
+  ngOnInit() {
+    this.productService.getAll().subscribe(data => {
+      this.products.set(data.slice(0, 4));  // ✅ .set() notifica a Angular automáticamente
     });
+    this.startAutoplay();
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.autoplayTimer);
+  }
+
+  startAutoplay() {
+    this.autoplayTimer = setInterval(() => this.nextSlide(), 4000);
+  }
+
+  nextSlide() {
+    this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+  }
+
+  prevSlide() {
+    this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+  }
+
+  goToSlide(index: number) {
+    this.currentSlide = index;
   }
 }

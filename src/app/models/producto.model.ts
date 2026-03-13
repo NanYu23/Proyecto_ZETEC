@@ -1,3 +1,4 @@
+//producto.model.ts
 export interface Product {
     id: number; //declarar variables
     name: string;

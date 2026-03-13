@@ -1,3 +1,4 @@
+<!-- producto.component.html -->
 <article class="card">
   <img class="img" [src]="product.imageUrl" [alt]="product.name" />
 
@@ -9,6 +10,7 @@
 
     <p class="meta">{{ product.category }}</p>
     <p class="desc">{{ product.description }}</p>
+
     <p class="stock" [class.out]="product.inStock === 0">
       @if (product.inStock > 0) {
         En stock: {{ product.inStock }}
@@ -17,15 +19,16 @@
       }
     </p>
 
-    // Solo mostrar acciones si el producto está en stock
-    <div class="product-actions">
-      <div class="quantity">
-        <button (click)="decrease()">-</button>
-        <span>{{ quantity }}</span>
-        <button (click)="increase()">+</button>
+    <!-- ✅ Solo mostrar acciones si el producto está en stock -->
+    @if (product.inStock > 0) {
+      <div class="product-actions">
+        <div class="quantity">
+          <button (click)="decrease()">-</button>
+          <span>{{ quantity }}</span>
+          <button (click)="increase()">+</button>
+        </div>
+        <button class="cart-btn" (click)="addToCart()">🛒</button>
       </div>
-
-      <button class="cart-btn" (click)="addToCart()">🛒</button>
-    </div>
+    }
   </div>
 </article>

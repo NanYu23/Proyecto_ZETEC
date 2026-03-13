@@ -1,3 +1,4 @@
+//producto.component.ts
 import { Component, Input } from "@angular/core";
 import { Product } from "../../models/producto.model";
 
