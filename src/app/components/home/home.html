@@ -1,0 +1,15 @@
+<header class="header">
+    <h1>Productos destacados</h1>
+</header>
+
+<section class="grid">
+    @for(p of products; track p.id){
+        <app-product-card [product]="p"></app-product-card>
+    }
+</section>
+
+<div class="more">
+   <button routerLink="/catalogo" class="btn">
+  VER MÁS PRODUCTOS
+</button>
+</div>

@@ -3,9 +3,10 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
+  standalone: true,            // 👈 faltaba
   imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']     // 👈 era styleUrl
 })
 export class App {
   protected readonly title = signal('Proyecto_ZETEC');

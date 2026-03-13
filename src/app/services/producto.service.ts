@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 import { Product } from '../models/producto.model';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -15,18 +15,16 @@ export class ProductService {
   ) {}
 
   getAll(): Observable<Product[]> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return of([]);
+    }
+
     return this.http
       .get('/productos.xml', { responseType: 'text' })
       .pipe(map(xml => this.parseXml(xml)));
   }
 
   private parseXml(xmlText: string): Product[] {
-
-    // 🔹 Evita ejecutar DOMParser en el servidor
-    if (!isPlatformBrowser(this.platformId)) {
-      return [];
-    }
-
     const parser = new DOMParser();
     const doc = parser.parseFromString(xmlText, 'application/xml');
 
@@ -39,7 +37,7 @@ export class ProductService {
       imageUrl: this.getText(node, 'imageUrl'),
       category: this.getText(node, 'category'),
       description: this.getText(node, 'description'),
-      inStock: Number(this.getText(node, 'inStock')) > 0
+      inStock: Number(this.getText(node, 'inStock'))
     }));
   }
 

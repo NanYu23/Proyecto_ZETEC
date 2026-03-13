@@ -5,5 +5,5 @@ export interface Product {
     imageUrl: string;
     category: string;
     description: string;
-    inStock: boolean;
+    inStock: number; 
 }

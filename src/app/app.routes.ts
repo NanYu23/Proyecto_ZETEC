@@ -1,7 +1,11 @@
 import { Routes } from '@angular/router';
-import { CatalogoComponent } from './components/catalogo/catalogo.component';
+import { HomeComponent } from './components/home/home';
 
 export const routes: Routes = [
-  { path: '', component: CatalogoComponent }, //separar las rutas y saber a donde nos va a mandar al abrir la ruta principal
-  { path: '**', redirectTo: '' },
+  { path: '', component: HomeComponent },
+  { 
+    path: 'catalogo', 
+    loadComponent: () => import('./components/catalogo/catalogo.component')
+                          .then(m => m.CatalogoComponent) 
+  }
 ];

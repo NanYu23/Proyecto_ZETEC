@@ -9,9 +9,9 @@
 
     <p class="meta">{{ product.category }}</p>
     <p class="desc">{{ product.description }}</p>
-    <p class="stock" [class.out]="!product.inStock">
-      @if (product.inStock) {
-        En stock
+    <p class="stock" [class.out]="product.inStock === 0">
+      @if (product.inStock > 0) {
+        En stock: {{ product.inStock }}
       } @else {
         Agotado
       }
