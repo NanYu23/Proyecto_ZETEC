@@ -51,4 +51,114 @@
         <inStock>20</inStock>
     </product>
 
+    <product>
+        <id>6</id>
+        <name>Borrador Pelikan M-40</name>
+        <price>7</price>
+        <imageUrl>https://joinet-images-bucket.s3.us-east-1.amazonaws.com/wp-content/uploads/2025/08/06150401.webp</imageUrl>
+        <category>Borradores</category>
+        <description>Borrador de migajón de marca Pelikan.</description>
+        <inStock>20</inStock>
+    </product>
+
+    <product>
+        <id>7</id>
+        <name>Bolígrafo Bic Rojo Punto Medio</name>
+        <price>6</price>
+        <imageUrl>https://superdtodo.com/assets/uploads/7daf3f41a8a669415147abbf966a3e37.png</imageUrl>
+        <category>Bolígrafos</category>
+        <description>Bolígrafo marca BIC punto medio.</description>
+        <inStock>1</inStock>
+    </product>
+
+    <product>
+        <id>8</id>
+        <name>Bolígrafo Bic Azul Punto Medio</name>
+        <price>6</price>
+        <imageUrl>https://www.kflo.com.mx/web/image/product.product/855/image_1024/%5BBic%20P.M%20Azul%5D%20Bic%20Bol%C3%ADgrafo%20Punto%20Medio%20Azul?unique=177adee</imageUrl>
+        <category>Bolígrafos</category>
+        <description>Bolígrafo marca BIC punto medio.</description>
+        <inStock>1</inStock>
+    </product>
+
+    <product>
+        <id>9</id>
+        <name>Lápiz Dixon Triconderoga</name>
+        <price>8</price>
+        <imageUrl>https://proesa.com/cdn/shop/files/art_850228_01_30e0eed6-86cb-4a8d-a942-cda969087746_1000x.jpg?v=1768064517</imageUrl>
+        <category>Lápices</category>
+        <description>Lápiz de grafito Tinconderoga de uso escolar.</description>
+        <inStock>1</inStock>
+    </product>
+
+    <product>
+        <id>10</id>
+        <name>Sacapuntas Dobles Maped</name>
+        <price>15</price>
+        <imageUrl>https://www.correosclic.gob.mx/images/thumbs/0022153_4-sacapuntas-dobles-con-deposito-para-lapices-crayones-escolares-y-maquillaje_550.png</imageUrl>
+        <category>Sacapuntas</category>
+        <description>Práctico y bonito sacapuntas doble con 2 agujeros para lápices pequeños y lápices grandes</description>
+        <inStock>1</inStock>
+    </product>
+
+    <product>
+        <id>11</id>
+        <name>Sacapuntas Dobles Metálicos MAE</name>
+        <price>10</price>
+        <imageUrl>https://papeleriadelahorro.mx/cdn/shop/products/sacapuntastotalschool.png?v=1751744445</imageUrl>
+        <category>Sacapuntas</category>
+        <description>Permite afilar las puntas de tus lápices de una manera rápida y sencilla.</description>
+        <inStock>1</inStock>
+    </product>
+
+    <product>
+        <id>12</id>
+        <name>Colores Norma con 12</name>
+        <price>80</price>
+        <imageUrl>https://cdn1.totalcommerce.cloud/normamx/product-zoom/es/colores-norma-12-sm-unidades-1.webp</imageUrl>
+        <category>Colores</category>
+        <description>Colores gama estándar con 12 colores.</description>
+        <inStock>1</inStock>
+    </product>
+
+    <product>
+        <id>13</id>
+        <name>Acuarela con Pincel Pelikan C/12</name>
+        <price>25</price>
+        <imageUrl>https://http2.mlstatic.com/D_NQ_NP_2X_698285-MLA99600546140_122025-F.webp</imageUrl>
+        <category>Acuarelas</category>
+        <description>Estuche de cartón de alta resistencia, pastillas de acuarela lavables.</description>
+        <inStock>1</inStock>
+    </product>
+
+    <product>
+        <id>14</id>
+        <name>Pegamento Adhesivo Pritt 42 gr</name>
+        <price>30</price>
+        <imageUrl>https://elpartenon.com.mx/wp-content/uploads/2024/04/Captura-de-pantalla-2024-04-06-a-las-13.20.18.png</imageUrl>
+        <category>Pegamentos</category>
+        <description>Pegamento adhesivo Pritt de 42 gramos.</description>
+        <inStock>1</inStock>
+    </product>
+
+    <product>
+        <id>15</id>
+        <name>Pegamento Blanco Escolar Resistol 850</name>
+        <price>27</price>
+        <imageUrl>https://www.officedepot.com.mx/medias/39677.jpg-515ftw?context=bWFzdGVyfHJvb3R8NjU0MTV8aW1hZ2UvanBlZ3xhREk0TDJnMU5pOHhNREEzTURneE1qQXpNekExTkM4ek9UWTNOeTVxY0dkZk5URTFablIzfDBkNGFkMWZkNmYzZTMxM2EyNzhhMzczODUzZDRlZTc1YmExMTg4NDkxMmMzMTI1NGZhZDkzZTU1NjkyOGI4NWE</imageUrl>
+        <category>Pegamentos</category>
+        <description>Pegamento blanco líquido. Gran fuerza de adhesión con acabado transparente.</description>
+        <inStock>1</inStock>
+    </product>
+
+    <product>
+        <id>16</id>
+        <name>Tijeras Escolares MAE</name>
+        <price>30</price>
+        <imageUrl>https://www.officedepot.com.mx/medias/100082082.jpg-515ftw?context=bWFzdGVyfHJvb3R8MzU5NzV8aW1hZ2UvanBlZ3xhREUxTDJobU5DOHhNVEF5TnpBeU5qZ3dORGMyTmk4eE1EQXdPREl3T0RJdWFuQm5YelV4TldaMGR3fGUyOGFkNjIxNDQzZmY4MmI3MDcxZWUzNDU5Y2ZjYzFkMDE5NzkwMjM0NTJmMjA4N2JkZDQyOGRmYTM2N2YzNjU</imageUrl>
+        <category>Tijeras</category>
+        <description>Acero inoxidable, plástico con punta roma. </description>
+        <inStock>1</inStock>
+    </product>
+
 </products>

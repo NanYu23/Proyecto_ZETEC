@@ -1,0 +1,28 @@
+/* catalogo.component.css*/
+/* ===== CONTENEDOR GENERAL ===== */
+:host {
+    display: block;
+    padding: 40px 20px;
+    background: #f9fafb;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header h1 {
+    font-family: system-ui, BlinkMacSystemFont;
+    margin: 0 0 10px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
+}
+
+/* ===== GRID CENTRADO ===== */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 300px);
+    justify-content: center; 
+    gap: 30px;
+}
