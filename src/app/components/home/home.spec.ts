@@ -1,7 +1,7 @@
 //home.spec.ts
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomeComponent } from './home';  // ✅ Nombre correcto de la clase
+import { HomeComponent } from './home';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -9,7 +9,7 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HomeComponent]  // ✅ Nombre correcto
+      imports: [HomeComponent]
     })
     .compileComponents();
 

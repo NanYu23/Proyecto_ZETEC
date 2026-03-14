@@ -28,14 +28,12 @@ export class ProductCardComponent {
     }
   }
 
-  // Solo cambia este método, todo lo demás queda igual
   addToCart() {
     if (this.quantity > this.product.inStock) {
       alert('No hay suficiente stock');
       return;
     }
 
-    // ✅ Una sola llamada pasando la cantidad, el servicio maneja el resto
     this.carritoService.agregarProducto(this.product, this.quantity);
     this.quantity = 1; // reset tras agregar
   }

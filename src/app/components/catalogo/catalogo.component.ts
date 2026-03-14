@@ -23,7 +23,7 @@ export class CatalogoComponent implements OnInit {
     selectedCategory = '';
 
     private productService = inject(ProductService);
-    private carritoService = inject(CarritoService);
+    carritoService = inject(CarritoService);
 
     ngOnInit() {
         this.productService.getAll().subscribe(data => {

@@ -2,7 +2,6 @@
 
 /* CONTENEDOR DE LA CARD */
 .card {
-  /* ✅ Sin width fijo: el grid padre controla el ancho */
   width: 100%;
   min-height: 420px;
   border: 1px solid #e5e7eb;
@@ -11,7 +10,7 @@
   background: #ffffff;
   transition: transform .2s ease, box-shadow .2s ease;
   display: flex;
-  flex-direction: column;   /* ✅ para que el body ocupe el alto restante */
+  flex-direction: column;
 }
 
 /* EFECTO HOVER */
@@ -35,7 +34,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  flex: 1;   /* ✅ ocupa el espacio restante de la card */
+  flex: 1;
 }
 
 /* TITULO + PRECIO */
@@ -58,7 +57,7 @@
   font-weight: 700;
   color: #2563eb;
   font-size: 15px;
-  white-space: nowrap;   /* ✅ evita que el precio se parta */
+  white-space: nowrap;
 }
 
 /* META */
@@ -93,7 +92,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: auto;   /* ✅ empuja las acciones al fondo de la card */
+  margin-top: auto;
   padding-top: 10px;
 }
 

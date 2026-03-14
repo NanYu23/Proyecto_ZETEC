@@ -6,7 +6,6 @@ import { ProductCardComponent } from '../producto/producto.component';
 import { RouterModule } from '@angular/router';
 import { CarritoService } from '../../services/carrito.service';
 
-
 @Component({
   selector: 'app-home',
   standalone: true,

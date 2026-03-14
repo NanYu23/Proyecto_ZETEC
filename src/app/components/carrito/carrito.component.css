@@ -18,6 +18,18 @@
 }
 
 /* ===== NAVBAR ===== */
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  border-radius: 50%;
+  padding: 2px 6px;
+}
+
 :host .navbar {
   display: flex;
   align-items: center;
@@ -40,7 +52,7 @@
 :host .navbar__link { color: #fff !important; text-decoration: none; font-size: 16px; font-weight: 600; opacity: 0.9; transition: opacity 0.2s; }
 :host .navbar__link:hover, :host .navbar__link.active { opacity: 1; border-bottom: 2px solid rgba(255,255,255,0.8); padding-bottom: 2px; }
 :host .navbar__actions { display: flex; align-items: center; gap: 6px; }
-:host .navbar__icon-btn { background: none; border: none; cursor: pointer; color: #fff !important; padding: 6px; border-radius: 6px; display: flex; align-items: center; transition: background 0.2s; }
+:host .navbar__icon-btn { background: none; border: none; cursor: pointer; color: #fff !important; padding: 6px; border-radius: 6px; display: flex; align-items: center; transition: background 0.2s; position: relative;}
 :host .navbar__icon-btn:hover { background: rgba(255,255,255,0.15); }
 
 /* ===== CONTENEDOR ===== */
@@ -73,7 +85,6 @@
   text-align: right;
 }
 
-/* ===== DIVIDER ===== */
 .cart-divider {
   border: none;
   border-top: 1.5px solid #d1d5db;
@@ -189,7 +200,7 @@
   color: var(--color-text);
 }
 
-/* ===== VACÍO ===== */
+/* ===== VACIO ===== */
 .cart-empty {
   text-align: center;
   color: var(--color-muted);
@@ -197,7 +208,7 @@
   font-size: 16px;
 }
 
-/* ===== BOTÓN PAGO ===== */
+/* ===== PAGO ===== */
 .cart-checkout {
   display: flex;
   justify-content: center;

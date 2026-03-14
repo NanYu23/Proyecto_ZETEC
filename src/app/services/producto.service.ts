@@ -11,13 +11,6 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  // ✅ isPlatformBrowser eliminado definitivamente.
-  //    Con RenderMode.Client en app.routes.server.ts, el servidor Node.js
-  //    NUNCA ejecuta código de componentes ni del servicio —
-  //    solo manda el HTML shell vacío al browser.
-  //    Por lo tanto DOMParser nunca se llama en servidor,
-  //    y el guard isPlatformBrowser solo causaba que el servicio
-  //    devolviera of([]) en momentos del ciclo de hidratación.
   getAll(): Observable<Product[]> {
     return this.http
       .get('/productos.xml', { responseType: 'text' })

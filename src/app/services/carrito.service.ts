@@ -14,12 +14,12 @@ export class CarritoService {
 
   carrito = signal<CartItem[]>([]);
 
-  // ✅ Total calculado automáticamente cuando cambia el carrito
+  // Total calculado
   total = computed(() =>
     this.carrito().reduce((sum, item) => sum + item.product.price * item.quantity, 0)
   );
 
-  // ✅ Agrega producto con cantidad; si ya existe, suma la cantidad
+  // Agrega producto con cantidad; si ya existe, suma la cantidad
   agregarProducto(producto: Product, cantidad: number = 1) {
     this.carrito.update(items => {
       const existente = items.findIndex(i => i.product.id === producto.id);
@@ -44,11 +44,22 @@ export class CarritoService {
   }
 
   incrementarCantidad(index: number) {
+
     this.carrito.update(items => {
+
       const nuevo = [...items];
-      nuevo[index] = { ...nuevo[index], quantity: nuevo[index].quantity + 1 };
+
+      if (nuevo[index].quantity < nuevo[index].product.inStock) {
+        nuevo[index] = {
+          ...nuevo[index],
+          quantity: nuevo[index].quantity + 1
+        };
+      }
+
       return nuevo;
+
     });
+
   }
 
   decrementarCantidad(index: number) {

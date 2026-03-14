@@ -26,10 +26,7 @@
   min-height: 100vh;
 }
 
-/* ===========================
-   NAVBAR
-   ✅ background-color explícito para evitar que styles.css lo sobreescriba
-   =========================== */
+/* NAVBAR */
 
 .cart-count {
   position: absolute;
@@ -45,7 +42,7 @@
 :host .navbar {
   display: flex;
   align-items: center;
-  background-color: #1a6dbf !important;   /* ✅ azul forzado */
+  background-color: #1a6dbf !important;
   background: #1a6dbf;
   padding: 0 28px;
   height: 62px;
@@ -131,9 +128,8 @@
   background: rgba(255,255,255,0.15);
 }
 
-/* ===========================
-   CARRUSEL
-   =========================== */
+/* CARRUSEL */
+
 .carousel {
   position: relative;
   overflow: hidden;
@@ -207,9 +203,8 @@
   background: var(--color-primary);
 }
 
-/* ===========================
-   SECCIÓN PRODUCTOS
-   =========================== */
+/* SECCION PRODUCTOS */
+
 .featured {
   padding: 30px 28px 48px;
   max-width: 1200px;
@@ -231,9 +226,8 @@
   .featured__grid { grid-template-columns: 1fr; }
 }
 
-/* ===========================
-   BOTÓN VER MÁS
-   =========================== */
+/* BOTON VER MAS */
+
 .featured__more {
   margin-top: 40px;
   text-align: center;

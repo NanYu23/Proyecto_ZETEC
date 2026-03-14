@@ -1,6 +1,5 @@
 /* catalogo.component.css */
 
-
 :root {
   --color-primary:    #1a6dbf;
   --color-primary-dk: #155a9e;
@@ -20,9 +19,19 @@
   min-height: 100vh;
 }
 
-/* ===========================
-   NAVBAR — mismo fix que home
-   =========================== */
+/* NAVBAR */
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  border-radius: 50%;
+  padding: 2px 6px;
+}
+
 :host .navbar {
   display: flex;
   align-items: center;
@@ -98,13 +107,13 @@
   display: flex;
   align-items: center;
   transition: background 0.2s;
+  position: relative;
 }
 
 :host .navbar__icon-btn:hover { background: rgba(255,255,255,0.15); }
 
-/* ===========================
-   ENCABEZADO + FILTRO
-   =========================== */
+/* ENCABEZADO + FILTRO */
+
 .catalog-header {
   display: flex;
   align-items: center;
@@ -144,9 +153,8 @@
   box-shadow: 0 0 0 3px rgba(47,128,209,0.15);
 }
 
-/* ===========================
-   GRID
-   =========================== */
+/* GRID */
+
 .catalog-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
