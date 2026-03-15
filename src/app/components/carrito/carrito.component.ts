@@ -24,4 +24,58 @@ export class CarritoComponent {
   decrementar(index: number) {
     this.carritoService.decrementarCantidad(index);
   }
+
+  generarXML() {
+
+  const productos = this.carritoService.carrito();
+
+  let total = 0;
+
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<recibo>
+  <tienda>Papelería Zetec</tienda>
+  <fecha>${new Date().toISOString()}</fecha>
+  <productos>
+`;
+
+  productos.forEach(item => {
+
+      const precio = item.product.price;
+      const subtotal = precio * item.quantity;
+      total += subtotal;
+
+      xml += `
+      <producto>
+        <nombre>${item.product.name}</nombre>
+        <categoria>${item.product.category}</categoria>
+        <precio>${precio}</precio>
+        <cantidad>${item.quantity}</cantidad>
+        <subtotal>${subtotal}</subtotal>
+      </producto>
+  `;
+
+    });
+
+    xml += `
+    </productos>
+    <total>${total}</total>
+  </recibo>
+  `;
+
+    this.descargarXML(xml);
+  }
+
+  descargarXML(xml: string) {
+
+    const blob = new Blob([xml], { type: 'application/xml' });
+
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "recibo_carrito.xml";
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  }
 }
