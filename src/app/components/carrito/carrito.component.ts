@@ -58,7 +58,9 @@ export class CarritoComponent {
 
     xml += `
     </productos>
-    <total>${total}</total>
+    <subtotal>${total}</subtotal>
+    <iva>${this.carritoService.iva()}</iva>
+    <total>${this.carritoService.totalConIVA()}</total>
   </recibo>
   `;
 

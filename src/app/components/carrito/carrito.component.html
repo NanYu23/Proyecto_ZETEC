@@ -95,9 +95,26 @@
 
   <!-- Total | Proceder al pago -->
   @if (carritoService.carrito().length > 0) {
+    <div class="cart-subtotal">
+      <div>
+        <span style="color: darkblue;" class="cart-subtotal__label">Subtotal:</span>
+        <span style="color: darkblue;" class="cart-subtotal__value">$ {{ carritoService.subtotal() }}</span>
+      </div>
+    </div>
+
+    <div class="cart-iva">
+      <div>
+
+        <span style="color: darkblue;" class="cart-iva__label">IVA (16%):</span>
+        <span style="color: darkblue;" class="cart-iva__value">$ {{ carritoService.iva() }}</span>
+      </div>
+    </div>
+
     <div class="cart-total">
-      <span style="color: rgb(68, 124, 245);" class="cart-total__label">Total:</span>
-      <span class="cart-total__value">$ {{ carritoService.total() }}</span>
+      <div>
+        <span style="color: green;" class="cart-total__label">Total:</span>
+        <span style="color: green;" class="cart-total__value">$ {{ carritoService.totalConIVA() }}</span>
+      </div>
     </div>
 
     <div class="cart-checkout">

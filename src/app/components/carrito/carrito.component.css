@@ -180,6 +180,46 @@
   flex-shrink: 0;
 }
 
+/* ===== SUBTOTAL ===== */
+.cart-subtotal {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 12px;
+  padding: 28px 0 0;
+  font-size: 18px;
+}
+
+.cart-subtotal__label {
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.cart-subtotal__value {
+  font-size: 18px;
+  color: var(--color-text);
+}
+
+/* ===== IVA ===== */
+.cart-iva {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 12px;
+  padding: 28px 0 0;
+  font-size: 16px;
+}
+
+.cart-iva__label {
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.cart-iva__value {
+  font-size: 16px;
+  color: var(--color-text);
+}
+
 /* ===== TOTAL ===== */
 .cart-total {
   display: flex;

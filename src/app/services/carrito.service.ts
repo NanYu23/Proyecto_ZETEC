@@ -14,10 +14,15 @@ export class CarritoService {
 
   carrito = signal<CartItem[]>([]);
 
-  // Total calculado
-  total = computed(() =>
+  // Subotal calculado
+  subtotal = computed(() =>
     this.carrito().reduce((sum, item) => sum + item.product.price * item.quantity, 0)
   );
+
+  // Total con iva (16%)
+  total = computed(() => this.subtotal() * 1.16);
+  iva = computed(() => parseFloat((this.total() - this.subtotal()).toFixed(2)));
+  totalConIVA = computed(() => parseFloat(this.total().toFixed(2)));
 
   // Agrega producto con cantidad; si ya existe, suma la cantidad
   agregarProducto(producto: Product, cantidad: number = 1) {
