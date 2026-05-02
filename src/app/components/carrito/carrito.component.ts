@@ -1,7 +1,7 @@
 // carrito.component.ts
 import { Component, inject } from '@angular/core';
 import { CarritoService } from '../../services/carrito.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-carrito',
@@ -80,4 +80,15 @@ export class CarritoComponent {
 
     window.URL.revokeObjectURL(url);
   }
+
+  router = inject(Router);
+  irCheckout() {
+
+  if (this.carritoService.carrito().length === 0) {
+    alert("Tu carrito está vacío");
+    return;
+  }
+
+  this.router.navigate(['/checkout']);
+}
 }

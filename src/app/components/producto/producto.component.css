@@ -117,18 +117,42 @@
   font-weight: bold;
 }
 
+/* BOTON CARRITO BONITO */
 .cart-btn {
-  background: #5b7bb5;
+  width: 46px;
+  height: 46px;
   border: none;
-  color: white;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 18px;
+  background: #4c6aa5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,.15);
+  padding: 0;
 }
 
+/* Hover */
 .cart-btn:hover {
-  background: #1a6dbf;
+  background: #4c6aa5;
+  transform: translateY(-2px) scale(1.08);
+  box-shadow: 0 8px 18px rgba(0,0,0,.20);
+  
+}
+
+/* Click */
+.cart-btn:active {
+  transform: scale(.95);
+}
+
+/* Imagen dentro */
+.cart-btn img {
+  width: 23px;
+  height: 23px;
+  object-fit: contain;
+  filter: brightness(0) invert(1) opacity(.95);
+}
+.cart-btn {
+  background: linear-gradient(135deg, #4c6aa5, #00a8bd);
 }

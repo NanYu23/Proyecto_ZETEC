@@ -80,4 +80,8 @@ export class CarritoService {
   obtenerCantidad() {
     return this.carrito().reduce((sum, item) => sum + item.quantity, 0);
   }
+  vaciarCarrito() {
+  this.carrito.set([]);
+}
+
 }

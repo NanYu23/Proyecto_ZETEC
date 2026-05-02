@@ -263,7 +263,9 @@
   padding: 13px 60px;
   border-radius: 6px;
   font-size: 15px;
+  color: white;
   font-weight: 600;
+  background-color: #7eafdb;
   letter-spacing: 0.3px;
   transition: background 0.2s, transform 0.15s;
 }
@@ -271,4 +273,5 @@
 .btn-checkout:hover {
   background: var(--color-primary-dk);
   transform: translateY(-1px);
+  background-color:  rgb(33, 74, 209);;
 }
