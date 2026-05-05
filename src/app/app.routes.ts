@@ -30,6 +30,18 @@ export const routes: Routes = [
                           .then(m => m.DireccionEntregaComponent)
 
   },
+  {
+    path: 'finalizar-pedido',
+    loadComponent: () => import('./components/finalizar_pedido/finalizar_pedido.component')
+                          .then(m => m.FinalizarPedidoComponent)
+
+  },
+  {
+    path: 'historial-pedidos',
+    loadComponent: () => import('./components/historial_pedidos/historial_pedidos.component')
+                          .then(m => m.HistorialPedidosComponent)
+
+  },
 
   { path: '**', redirectTo: 'inicio' }
 ];

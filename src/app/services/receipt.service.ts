@@ -123,6 +123,53 @@ export class ReceiptService {
     </recibo>`;
   }
 
+  generateCustomReceiptHTML(data: any): string {
+
+  const productosHTML = data.productos.map((item: any) => `
+    <tr>
+      <td>${item.product.name}</td>
+      <td>${item.quantity}</td>
+      <td>$${item.product.price}</td>
+    </tr>
+  `).join('');
+
+  return `
+    <html>
+      <head>
+        <title>Recibo Zetec</title>
+        <style>
+          body { font-family: Arial; padding: 20px; }
+          h1 { color: #1a6dbf; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          td, th { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        </style>
+      </head>
+      <body>
+
+        <h1>Recibo de compra</h1>
+
+        <p><strong>Guía:</strong> ${data.pedido.guia}</p>
+        <p><strong>Dirección:</strong> ${data.pedido.direccion}</p>
+        <p><strong>Teléfono:</strong> ${data.pedido.telefono}</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${productosHTML}
+          </tbody>
+        </table>
+
+      </body>
+    </html>
+  `;
+}
+
   downloadXML(receiptData: ReceiptData) {
     const xml = this.generateReceiptXML(receiptData);
 

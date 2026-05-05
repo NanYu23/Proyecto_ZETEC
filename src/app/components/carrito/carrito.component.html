@@ -13,7 +13,8 @@
     <a routerLink="/inicio" routerLinkActive="active" class="navbar__link">Inicio</a>
   </div>
   <div class="navbar__actions">
-    <button class="navbar__icon-btn" title="Historial">
+    
+    <button class="navbar__icon-btn" title="Historial" routerLink="/historial-pedidos">
       <svg
         viewBox="0 0 24 24"
         width="22"
@@ -26,6 +27,7 @@
         <polyline points="12 6 12 12 16 14" />
       </svg>
     </button>
+
     <button class="navbar__icon-btn" title="Carrito" routerLink="/carrito">
       <svg
         viewBox="0 0 24 24"
@@ -148,6 +150,6 @@
       <button (click)="irCheckout()" class="btn-checkout">Proceder al pago</button>
     </div>
 
-  <!--<button (click)="generarXML()" class="btn-recibo">Generar recibo XML</button>  ya no se ve -->
+    <!--<button (click)="generarXML()" class="btn-recibo">Generar recibo XML</button>  ya no se ve -->
   }
 </div>

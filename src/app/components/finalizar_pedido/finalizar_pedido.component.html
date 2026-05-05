@@ -1,4 +1,4 @@
-<!-- direccion-entrega.component.html -->
+<!-- ===== finalizar pedido.html ===== -->
 
 <!-- ===== NAVBAR ===== -->
 <nav class="navbar">
@@ -30,7 +30,7 @@
       </svg>
     </button>
 
-    <a class="navbar__icon-btn" title="Carrito" routerLink="/carrito">
+    <button class="navbar__icon-btn" title="Carrito" routerLink="/carrito">
       <svg
         viewBox="0 0 24 24"
         width="22"
@@ -47,7 +47,7 @@
       <span class="cart-count">
         {{ carritoService.obtenerCantidad() }}
       </span>
-    </a>
+    </button>
 
     <button class="navbar__icon-btn" title="Mi cuenta">
       <svg
@@ -65,54 +65,38 @@
   </div>
 </nav>
 
-<!-- ===== CONTENEDOR ===== -->
-<div class="delivery-container">
-  <!-- TITULO -->
-  <div class="delivery-header">
-    <h1 class="delivery-title">Dirección de entrega</h1>
-  </div>
+<!-- ===== CONTENIDO ===== -->
+<div class="container">
+  <h1 class="title">¡Gracias!</h1>
+  <hr />
 
-  <hr class="delivery-divider" />
+  @for (item of productos; track item.product.id) {
+    <div class="producto">
+      <img [src]="item.product.imageUrl" class="producto__img" />
 
-  <!-- DIRECCIONES -->
-  <div class="delivery-options">
-    <!-- Recolección -->
-    <label class="delivery-option">
-      <input type="radio" name="direccion" [(ngModel)]="seleccion" value="recoleccion" />
-
-      <div class="delivery-option__content">
-        <span class="delivery-option__title">Recolección física</span>
+      <div class="producto__info">
+        <p>
+          <strong>{{ item.product.name }}</strong>
+        </p>
+        <p>Cantidad: {{ item.quantity }}</p>
+        <p>Precio: $ {{ item.product.price }}</p>
       </div>
-    </label>
+    </div>
+  }
 
-    <!-- Dirección guardada -->
-    <label class="delivery-option">
-      <input type="radio" name="direccion" [(ngModel)]="seleccion" value="direccion1" />
+  <hr />
 
-      <div class="delivery-option__content">
-        <span class="delivery-option__title">Dirección 1</span>
-        <span class="delivery-option__sub">Teléfono: 3312345678</span>
-      </div>
-    </label>
-  </div>
+  <p><strong>Guía de tu pedido:</strong> {{ pedido.guia }}</p>
 
-  <!-- BOTON -->
-  <div class="delivery-action">
-    <button class="btn-primary" (click)="usarDireccion()">Enviar a esta dirección</button>
-  </div>
+  <p>
+    <strong>Enviado a:</strong><br />
+    {{ pedido.direccion }}
+  </p>
 
-  <hr class="delivery-divider space" />
+  <p><strong>Teléfono:</strong> {{ pedido.telefono }}</p>
 
-  <!-- NUEVA DIRECCION -->
-  <div class="new-address">
-    <h2 class="new-address__title">Ingresar nueva dirección</h2>
-
-    <input type="text" placeholder="Dirección:" [(ngModel)]="nuevaDireccion" class="input-field" />
-
-    <input type="text" placeholder="Teléfono:" [(ngModel)]="nuevoTelefono" class="input-field" />
-
-    <button class="btn-primary btn-add" (click)="agregarDireccion()">
-      Agregar nueva dirección
-    </button>
+  <div class="acciones">
+    <button class="btn btn-primary" (click)="descargarRecibo()">Descargar recibo</button>
+    <button class="btn btn-secondary" routerLink="/">Volver al inicio</button>
   </div>
 </div>
