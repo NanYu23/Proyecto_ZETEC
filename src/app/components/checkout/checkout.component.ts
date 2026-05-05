@@ -11,6 +11,7 @@ import { CarritoService } from '../../services/carrito.service';
 import { PaypalService, CaptureResponse } from '../../services/paypal.service';
 import { ReceiptService } from '../../services/receipt.service';
 import { enviroment } from '../../../enviroments/enviroment';
+import { DireccionService } from '../../services/direccion.service';
 
 import { Router } from '@angular/router';
 
@@ -27,6 +28,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private paypalService = inject(PaypalService);
   private receiptService = inject(ReceiptService);
   private router = inject(Router);
+  private direccionService = inject(DireccionService);
 
   nombreUsuario = 'Usuario';
   direccion = 'Av. Principal #123, Guadalajara, Jalisco';
@@ -42,6 +44,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private readonly API_URL = 'http://localhost:3000/api/paypal';
 
   ngOnInit(): void {
+    const dir = this.direccionService.direccionSeleccionada();
+    if (dir) {
+      this.direccion = `${dir.direccion} — Tel: ${dir.telefono}`;
+    } else {
+      this.direccion = 'Recolección física en tienda';
+    }
+
     this.loadPayPalScript();
 
     this.paypalService

@@ -9,5 +9,6 @@ app.use(cors()); //activa CORS para permitir solicitudes desde el frontend
 app.use(express.json()); //recibir json
 app.use('/api', productosRoutes);
 app.use('/api/paypal', require('./routes/paypal.routes'));
+app.use('/api/direcciones', require('./routes/direcciones.routes'));
 
 module.exports = app;
