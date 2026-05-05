@@ -81,6 +81,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.paymentError = '';
 
       const items = this.carritoService.carrito().map(item => ({
+        id: item.product.id,
         nombre: item.product.name,
         cantidad: item.quantity,
         precio: item.product.price
@@ -102,16 +103,20 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       try {
         this.isProcessing = true;
 
+        console.log('DATA PAYPAL:', data);
+
         const response = await fetch(`${this.API_URL}/capture-order`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ orderId: data.orderID })
+          body: JSON.stringify({ 
+            orderId: data.orderID
+          })
         });
 
         const capture = await response.json();
 
         if (capture.success) {
-          this.receiptData = capture;
+          this.receiptData = capture.data;
           this.paymentSuccess = true;
           this.carritoService.vaciarCarrito();
           setTimeout(() => this.showReceiptModal(), 500);
@@ -119,7 +124,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           throw new Error(capture.error);
         }
 
-      } catch {
+      } catch (error) {
+        console.error(error);
         this.paymentError = 'Error al procesar el pago.';
       } finally {
         this.isProcessing = false;
@@ -129,28 +135,50 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     // BOTÓN PAYPAL
     paypal.Buttons({
       fundingSource: paypal.FUNDING.PAYPAL,
+
+      style: {
+        layout: 'vertical',
+        color: 'gold',
+        shape: 'pill',
+        label: 'paypal',
+        height: 50
+      },
+
       createOrder,
       onApprove,
       onError: () => this.paymentError = 'Error con PayPal'
     }).render('#paypal-button-container');
 
     // BOTÓN TARJETA
-    if (paypal.Buttons({ fundingSource: paypal.FUNDING.CARD }).isEligible()) {
-      paypal.Buttons({
-        fundingSource: paypal.FUNDING.CARD,
-        createOrder,
-        onApprove,
-        onError: () => this.paymentError = 'Error con tarjeta'
-      }).render('#paypal-button-container');
-    }
+    paypal.Buttons({
+      fundingSource: paypal.FUNDING.CARD,
+
+      style: {
+        layout: 'vertical',
+        shape: 'pill',
+        height: 50
+      },
+
+      createOrder,
+      onApprove,
+      onError: () => this.paymentError = 'Error con tarjeta'
+    }).render('#card-button-container');
   }
 
   showReceiptModal(): void {
-    if (this.receiptData?.data) {
-      const html = this.receiptService.generateReceiptHTML(this.receiptData.data as any);
+    if (this.receiptData) {
+      const html = this.receiptService.generateReceiptHTML(this.receiptData as any);
+
       const win = window.open('', '_blank');
+
       if (win) {
+        win.document.open();
         win.document.write(html);
+
+        (win as any).downloadXML = () => {
+          this.receiptService.downloadXML(this.receiptData as any);
+        };
+
         win.document.close();
       }
     }

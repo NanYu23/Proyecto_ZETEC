@@ -80,6 +80,7 @@ async function createPaypalOrder(orderData) {
           }
         },
         items: itemsNormalizados.map(item => ({
+          sku: String(item.id),
           name: item.nombre,
           quantity: String(item.cantidad),
           unit_amount: {
