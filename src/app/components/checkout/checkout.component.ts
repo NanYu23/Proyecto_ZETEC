@@ -102,7 +102,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       const response = await fetch(`${this.API_URL}/create-order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items }),
+        body: JSON.stringify({ items, direccion: this.direccion }),
       });
 
       const res = await response.json();

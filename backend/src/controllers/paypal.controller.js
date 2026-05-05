@@ -1,9 +1,9 @@
 const db = require('../config/db');
 
-const { 
-  createPaypalOrder, 
-  capturePaypalOrder, 
-  getPaypalOrderDetails 
+const {
+  createPaypalOrder,
+  capturePaypalOrder,
+  getPaypalOrderDetails,
 } = require('../services/paypal.service.js');
 
 /* =========================
@@ -11,62 +11,69 @@ const {
 ========================= */
 async function createOrder(req, res) {
   try {
-    const { items, payerEmail, customerName } = req.body;
+    const { items, payerEmail, customerName, direccion } = req.body;
 
     console.log('ITEMS QUE LLEGAN DEL FRONT:', items);
 
     // Validación
     if (!items || !Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'El carrito está vacío' 
+      return res.status(400).json({
+        success: false,
+        error: 'El carrito está vacío',
       });
     }
 
     // Calcular total
     const subtotal = items.reduce((acc, item) => {
-      return acc + (item.precio * item.cantidad);
+      return acc + item.precio * item.cantidad;
     }, 0);
 
     const iva = subtotal * 0.16;
     const total = subtotal + iva;
 
     // Crear orden en PayPal
-    const paypalOrder = await createPaypalOrder({ 
+    const paypalOrder = await createPaypalOrder({
       items,
-      payerEmail: payerEmail || 'customer@papeleria-zetec.com'
+      payerEmail: payerEmail || 'customer@papeleria-zetec.com',
     });
 
     console.log('Orden PayPal creada:', paypalOrder.id);
 
     // Guardar orden en BD
-    const [ordenResult] = await db.execute(`
-      INSERT INTO ordenes 
-      (paypal_order_id, cliente_nombre, cliente_email, total, estado)
-      VALUES (?, ?, ?, ?, 'CREATED')
-    `, [
-      paypalOrder.id,
-      customerName || 'Cliente',
-      payerEmail || 'cliente@correo.com',
-      total.toFixed(2)
-    ]);
+    const [ordenResult] = await db.execute(
+      `
+  INSERT INTO ordenes 
+  (paypal_order_id, cliente_nombre, cliente_email, total, estado, direccion)
+  VALUES (?, ?, ?, ?, 'CREATED', ?)
+`,
+      [
+        paypalOrder.id,
+        customerName || 'Cliente',
+        payerEmail || 'cliente@correo.com',
+        total.toFixed(2),
+        direccion || 'Recolección física en tienda', // ← nuevo
+      ],
+    );
 
     const ordenId = ordenResult.insertId;
 
     // Guardar items
     for (const item of items) {
-      await db.execute(`
+      await db.execute(
+        `
         INSERT INTO orden_items 
         (orden_id, producto_id, nombre, cantidad, precio_unitario, subtotal)
         VALUES (?, ?, ?, ?, ?, ?)
-      `, [
-        ordenId,
-        item.id,
-        item.nombre,
-        item.cantidad,
-        item.precio,
-        (item.precio * item.cantidad).toFixed(2)
-      ]);
+      `,
+        [
+          ordenId,
+          item.id,
+          item.nombre,
+          item.cantidad,
+          item.precio,
+          (item.precio * item.cantidad).toFixed(2),
+        ],
+      );
     }
 
     res.status(200).json({
@@ -74,17 +81,16 @@ async function createOrder(req, res) {
       data: {
         id: paypalOrder.id,
         status: paypalOrder.status,
-        links: paypalOrder.links
-      }
+        links: paypalOrder.links,
+      },
     });
-
   } catch (error) {
     console.error('Error en createOrder:', error.message);
 
     res.status(500).json({
       success: false,
       error: 'No se pudo crear la orden',
-      detalle: error.message
+      detalle: error.message,
     });
   }
 }
@@ -99,7 +105,7 @@ async function captureOrder(req, res) {
     if (!orderId) {
       return res.status(400).json({
         success: false,
-        error: 'orderId es obligatorio'
+        error: 'orderId es obligatorio',
       });
     }
 
@@ -110,16 +116,19 @@ async function captureOrder(req, res) {
       return res.status(400).json({
         success: false,
         error: 'El pago no fue completado',
-        status: captureData.status
+        status: captureData.status,
       });
     }
 
     console.log('CAPTURE DATA:', JSON.stringify(captureData, null, 2));
 
     // Buscar orden en BD
-    const [ordenRows] = await db.execute(`
+    const [ordenRows] = await db.execute(
+      `
       SELECT id FROM ordenes WHERE paypal_order_id = ?
-    `, [orderId]);
+    `,
+      [orderId],
+    );
 
     if (ordenRows.length === 0) {
       throw new Error('Orden no encontrada en BD');
@@ -128,24 +137,32 @@ async function captureOrder(req, res) {
     const ordenId = ordenRows[0].id;
 
     // Obtener items reales desde BD
-    const [itemsDB] = await db.execute(`
+    const [itemsDB] = await db.execute(
+      `
       SELECT producto_id, cantidad, nombre, precio_unitario
       FROM orden_items
       WHERE orden_id = ?
-    `, [ordenId]);
+    `,
+      [ordenId],
+    );
 
     // Descontar stock
-    await descontarStock(itemsDB.map(item => ({
-      sku: item.producto_id,
-      quantity: item.cantidad
-    })));
+    await descontarStock(
+      itemsDB.map((item) => ({
+        sku: item.producto_id,
+        quantity: item.cantidad,
+      })),
+    );
 
     // Actualizar estado
-    await db.execute(`
+    await db.execute(
+      `
       UPDATE ordenes 
       SET estado = 'COMPLETED'
       WHERE id = ?
-    `, [ordenId]);
+    `,
+      [ordenId],
+    );
 
     // Datos de pago
     const purchaseUnit = captureData.purchase_units[0];
@@ -161,22 +178,21 @@ async function captureOrder(req, res) {
       payerName: `${captureData.payer?.name?.given_name || ''} ${captureData.payer?.name?.surname || ''}`,
       createTime: captureData.create_time || captureData.update_time || new Date().toISOString(),
       updateTime: captureData.update_time,
-      items: itemsDB
+      items: itemsDB,
     };
 
     res.status(200).json({
       success: true,
       message: 'Pago capturado exitosamente',
-      data: receiptData
+      data: receiptData,
     });
-
   } catch (error) {
     console.error('Error en captureOrder:', error.message);
 
     res.status(500).json({
       success: false,
       error: 'No se pudo capturar la orden',
-      detalle: error.message
+      detalle: error.message,
     });
   }
 }
@@ -191,7 +207,7 @@ async function getOrderDetails(req, res) {
     if (!orderId) {
       return res.status(400).json({
         success: false,
-        error: 'orderId es requerido'
+        error: 'orderId es requerido',
       });
     }
 
@@ -199,16 +215,15 @@ async function getOrderDetails(req, res) {
 
     res.status(200).json({
       success: true,
-      data: orderDetails
+      data: orderDetails,
     });
-
   } catch (error) {
     console.error('Error en getOrderDetails:', error.message);
 
     res.status(500).json({
       success: false,
       error: 'No se pudieron obtener los detalles de la orden',
-      detalle: error.message
+      detalle: error.message,
     });
   }
 }
@@ -226,11 +241,14 @@ async function descontarStock(items) {
       const productId = Number(item.sku);
       const cantidad = Number(item.quantity);
 
-      const [result] = await connection.execute(`
+      const [result] = await connection.execute(
+        `
         UPDATE productos
         SET inStock = inStock - ?
         WHERE id = ? AND inStock >= ?
-      `, [cantidad, productId, cantidad]);
+      `,
+        [cantidad, productId, cantidad],
+      );
 
       if (result.affectedRows === 0) {
         throw new Error(`Stock insuficiente para producto ${productId}`);
@@ -238,11 +256,9 @@ async function descontarStock(items) {
     }
 
     await connection.commit();
-
   } catch (error) {
     await connection.rollback();
     throw error;
-
   } finally {
     connection.release();
   }
@@ -251,5 +267,5 @@ async function descontarStock(items) {
 module.exports = {
   createOrder,
   captureOrder,
-  getOrderDetails
+  getOrderDetails,
 };
