@@ -109,14 +109,6 @@ display: block;
 
 :host .navbar__icon-btn:hover { background: rgba(255,255,255,0.15); }
 
-:host .navbar__icon-btn,
-:host .navbar__icon-btn i,
-:host .navbar__icon-btn svg,
-:host .navbar__icon-btn span,
-:host .navbar__icon-btn mat-icon {
-  
-}
-
 /* ===== CONTENEDOR IGUAL ===== */
 
 .checkout-container {
