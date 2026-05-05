@@ -79,9 +79,9 @@ export class ReceiptService {
 
   generateReceiptXML(receiptData: ReceiptData): string {
 
-    const total = this.safeNumber(receiptData.amount);
-    const subtotal = total / 1.16;
-    const iva = total - subtotal;
+    const subtotal = this.safeNumber(receiptData.amount);
+    const iva = subtotal * 0.16;
+    const total = subtotal + iva;
 
     const fechaISO = new Date(receiptData.createTime || new Date()).toISOString();
 
@@ -186,9 +186,9 @@ export class ReceiptService {
 
   generateReceiptHTML(receiptData: ReceiptData): string {
 
-    const total = this.safeNumber(receiptData.amount);
-    const subtotal = total / 1.16;
-    const iva = total - subtotal;
+    const subtotal = this.safeNumber(receiptData.amount);
+    const iva = subtotal * 0.16;
+    const total = subtotal + iva;
 
     const fecha = this.formatDate(receiptData.createTime);
 
