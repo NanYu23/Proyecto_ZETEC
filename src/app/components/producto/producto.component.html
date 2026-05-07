@@ -19,18 +19,29 @@
       }
     </p>
 
-    <!-- Solo mostrar acciones si el producto esta en stock -->
     @if (product.inStock > 0) {
       <div class="product-actions">
         <div class="quantity">
-          <button (click)="decrease()">-</button>
+          <button (click)="decrease()" [disabled]="quantity <= 1">-</button>
           <span>{{ quantity }}</span>
-          <button (click)="increase()">+</button>
+          <button (click)="increase()" [disabled]="quantity >= stockDisponible">+</button>
         </div>
-          <button class="cart-btn" (click)="addToCart()">
-          <img src="/icono_añadir_al_carrito.png" alt="Agregar al carrito">
-          </button>      
-        </div>
+
+        <button
+          class="cart-btn"
+          (click)="addToCart()"
+          [class.cart-btn--agotado]="stockDisponible <= 0"
+          [title]="
+            stockDisponible <= 0 ? 'Ya agregaste todo el stock disponible' : 'Agregar al carrito'
+          "
+        >
+          <img src="/icono_añadir_al_carrito.png" alt="Agregar al carrito" />
+        </button>
+      </div>
+
+      @if (stockDisponible <= 0 && cantidadEnCarrito > 0) {
+        <p class="stock-warning">Ya tienes el máximo disponible en tu carrito.</p>
+      }
     }
   </div>
 </article>

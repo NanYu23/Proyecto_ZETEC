@@ -275,3 +275,51 @@
   transform: translateY(-1px);
   background-color:  rgb(33, 74, 209);;
 }
+
+
+/* ===== TOAST DE STOCK ===== */
+.stock-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a2e;
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  z-index: 9999;
+  white-space: nowrap;
+  animation: toastIn 0.25s ease;
+}
+
+.stock-toast__icon { font-size: 1.1rem; }
+
+/* Botón + cuando ya está en el máximo */
+.qty-btn--max {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.qty-btn--max:hover {
+  background: var(--color-white); /* cancela el hover normal */
+  color: #9ca3af;
+}
+
+/* Texto "Máximo en carrito" */
+.cart-row__max-warn {
+  margin: 4px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e65c00;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}

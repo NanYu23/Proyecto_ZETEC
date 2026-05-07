@@ -8,15 +8,14 @@ export interface CartItem {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CarritoService {
-
   carrito = signal<CartItem[]>([]);
 
   // Subotal calculado
   subtotal = computed(() =>
-    this.carrito().reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+    this.carrito().reduce((sum, item) => sum + item.product.price * item.quantity, 0),
   );
 
   // Total con iva (16%)
@@ -26,13 +25,13 @@ export class CarritoService {
 
   // Agrega producto con cantidad; si ya existe, suma la cantidad
   agregarProducto(producto: Product, cantidad: number = 1) {
-    this.carrito.update(items => {
-      const existente = items.findIndex(i => i.product.id === producto.id);
+    this.carrito.update((items) => {
+      const existente = items.findIndex((i) => i.product.id === producto.id);
       if (existente >= 0) {
         const nuevo = [...items];
         nuevo[existente] = {
           ...nuevo[existente],
-          quantity: nuevo[existente].quantity + cantidad
+          quantity: nuevo[existente].quantity + cantidad,
         };
         return nuevo;
       }
@@ -41,7 +40,7 @@ export class CarritoService {
   }
 
   eliminarProducto(index: number) {
-    this.carrito.update(items => {
+    this.carrito.update((items) => {
       const nuevo = [...items];
       nuevo.splice(index, 1);
       return nuevo;
@@ -49,26 +48,22 @@ export class CarritoService {
   }
 
   incrementarCantidad(index: number) {
-
-    this.carrito.update(items => {
-
+    this.carrito.update((items) => {
       const nuevo = [...items];
 
       if (nuevo[index].quantity < nuevo[index].product.inStock) {
         nuevo[index] = {
           ...nuevo[index],
-          quantity: nuevo[index].quantity + 1
+          quantity: nuevo[index].quantity + 1,
         };
       }
 
       return nuevo;
-
     });
-
   }
 
   decrementarCantidad(index: number) {
-    this.carrito.update(items => {
+    this.carrito.update((items) => {
       const nuevo = [...items];
       if (nuevo[index].quantity > 1) {
         nuevo[index] = { ...nuevo[index], quantity: nuevo[index].quantity - 1 };
@@ -80,8 +75,14 @@ export class CarritoService {
   obtenerCantidad() {
     return this.carrito().reduce((sum, item) => sum + item.quantity, 0);
   }
-  vaciarCarrito() {
-  this.carrito.set([]);
-}
 
+  // ✅ Corregido: fuera de vaciarCarrito y usando this.carrito()
+  obtenerCantidadEnCarrito(productoId: number): number {
+    const item = this.carrito().find((i) => i.product.id === productoId);
+    return item ? item.quantity : 0;
+  }
+
+  vaciarCarrito() {
+    this.carrito.set([]);
+  }
 }

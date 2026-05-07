@@ -1,4 +1,10 @@
-<!-- carrito.component.html -->
+<!-- ===== TOAST (fuera del loop, al inicio del template) ===== -->
+@if (toastVisible()) {
+  <div class="stock-toast">
+    <span class="stock-toast__icon">⚠️</span>
+    <span class="stock-toast__msg">{{ toastProducto() }}</span>
+  </div>
+}
 
 <!-- ===== NAVBAR ===== -->
 <nav class="navbar">
@@ -13,48 +19,22 @@
     <a routerLink="/inicio" routerLinkActive="active" class="navbar__link">Inicio</a>
   </div>
   <div class="navbar__actions">
-    
     <button class="navbar__icon-btn" title="Historial" routerLink="/historial-pedidos">
-      <svg
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="10" />
         <polyline points="12 6 12 12 16 14" />
       </svg>
     </button>
-
     <button class="navbar__icon-btn" title="Carrito" routerLink="/carrito">
-      <svg
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="9" cy="21" r="1" />
         <circle cx="20" cy="21" r="1" />
         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
       </svg>
-
-      <span class="cart-count">
-        {{ carritoService.obtenerCantidad() }}
-      </span>
+      <span class="cart-count">{{ carritoService.obtenerCantidad() }}</span>
     </button>
     <button class="navbar__icon-btn" title="Mi cuenta">
-      <svg
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
         <circle cx="12" cy="7" r="4" />
       </svg>
@@ -77,26 +57,17 @@
 
   @for (item of carritoService.carrito(); track item.product.id; let i = $index) {
     <div class="cart-row">
-      <!-- Imagen -->
       <img class="cart-row__img" [src]="item.product.imageUrl" [alt]="item.product.name" />
 
-      <!-- Info -->
       <div class="cart-row__info">
         <p class="cart-row__name">{{ item.product.name }}</p>
         <p class="cart-row__stock">Stock: {{ item.product.inStock }}</p>
 
-        <!-- Control de cantidad -->
+        <!-- Controles de cantidad -->
         <div class="cart-row__qty">
           @if (item.quantity === 1) {
             <button class="qty-btn qty-btn--trash" (click)="eliminarProducto(i)" title="Eliminar">
-              <svg
-                viewBox="0 0 24 24"
-                width="16"
-                height="16"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="3 6 5 6 21 6" />
                 <path d="M19 6l-1 14H6L5 6" />
                 <path d="M10 11v6M14 11v6" />
@@ -108,48 +79,49 @@
           }
 
           <span class="qty-value">{{ item.quantity }}</span>
-          <button class="qty-btn" (click)="incrementar(i)">+</button>
+
+          <!-- Botón + con feedback visual cuando está al máximo -->
+          <button
+            class="qty-btn"
+            (click)="incrementar(i)"
+            [class.qty-btn--max]="item.quantity >= item.product.inStock"
+            [title]="item.quantity >= item.product.inStock ? 'Stock máximo alcanzado' : 'Aumentar cantidad'"
+          >+</button>
         </div>
+
+        <!-- Aviso inline cuando se alcanzó el máximo -->
+        @if (item.quantity >= item.product.inStock) {
+          <p class="cart-row__max-warn">✓ Máximo en carrito</p>
+        }
       </div>
 
-      <!-- Precio -->
       <span class="cart-row__price">$ {{ item.product.price * item.quantity }}</span>
     </div>
 
     <hr class="cart-divider" />
   }
 
-  <!-- Total | Proceder al pago -->
   @if (carritoService.carrito().length > 0) {
     <div class="cart-subtotal">
       <div>
         <span style="color: darkblue" class="cart-subtotal__label">Subtotal:</span>
-        <span style="color: darkblue" class="cart-subtotal__value"
-          >$ {{ carritoService.subtotal() }}</span
-        >
+        <span style="color: darkblue" class="cart-subtotal__value">$ {{ carritoService.subtotal() }}</span>
       </div>
     </div>
-
     <div class="cart-iva">
       <div>
         <span style="color: darkblue" class="cart-iva__label">IVA (16%):</span>
         <span style="color: darkblue" class="cart-iva__value">$ {{ carritoService.iva() }}</span>
       </div>
     </div>
-
     <div class="cart-total">
       <div>
         <span style="color: green" class="cart-total__label">Total:</span>
-        <span style="color: green" class="cart-total__value"
-          >$ {{ carritoService.totalConIVA() }}</span
-        >
+        <span style="color: green" class="cart-total__value">$ {{ carritoService.totalConIVA() }}</span>
       </div>
     </div>
-
     <div class="cart-checkout">
       <button (click)="irCheckout()" class="btn-checkout">Proceder al pago</button>
     </div>
-
-    <!--<button (click)="generarXML()" class="btn-recibo">Generar recibo XML</button>  ya no se ve -->
   }
 </div>

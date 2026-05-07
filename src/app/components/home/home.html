@@ -94,7 +94,10 @@
 <section class="featured">
   <div class="featured__grid">
     @for (p of products(); track p.id) {
-      <app-product-card [product]="p"></app-product-card>
+      <app-product-card
+        [product]="p"
+        (stockSuperado)="onStockSuperado($event)">  <!-- 👈 -->
+      </app-product-card>
     }
   </div>
 
@@ -102,3 +105,20 @@
     <button routerLink="/catalogo" class="btn-primary">VER MÁS PRODUCTOS</button>
   </div>
 </section>
+
+<!-- ===== MODAL ===== -->
+@if (mostrarModalStock() && productoModalStock()) {
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-icon">⚠️</div>
+      <h3 class="modal-title">Stock no disponible</h3>
+      <p class="modal-message">
+        No puedes agregar más unidades de
+        <strong>{{ productoModalStock()!.name }}</strong>.
+        Solo hay <strong>{{ productoModalStock()!.inStock }}</strong>
+        {{ productoModalStock()!.inStock === 1 ? 'unidad' : 'unidades' }} en existencia.
+      </p>
+      <button class="modal-btn" (click)="cerrarModal()">Entendido</button>
+    </div>
+  </div>
+}

@@ -1,15 +1,16 @@
-// home.ts
+//home.ts
 import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { ProductService } from '../../services/producto.service';
 import { Product } from '../../models/producto.model';
 import { ProductCardComponent } from '../producto/producto.component';
 import { RouterModule } from '@angular/router';
 import { CarritoService } from '../../services/carrito.service';
+import { CommonModule } from '@angular/common'; // 👈 necesario para @if
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ProductCardComponent, RouterModule],
+  imports: [ProductCardComponent, RouterModule, CommonModule], // 👈 agrega CommonModule
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -18,6 +19,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   products = signal<Product[]>([]);
   private productService = inject(ProductService);
   carritoService = inject(CarritoService);
+
+  // 👇 Modal
+  mostrarModalStock = signal(false);
+  productoModalStock = signal<Product | null>(null);
 
   slides = [
     { id: 1, image: 'foto1_carrusel.jpeg', alt: 'Banner 1' },
@@ -54,5 +59,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   goToSlide(index: number) {
     this.currentSlide = index;
+  }
+
+  // 👇 Recibe el evento de la card
+  onStockSuperado(producto: Product) {
+    this.productoModalStock.set(producto);
+    this.mostrarModalStock.set(true);
+  }
+
+  cerrarModal() {
+    this.mostrarModalStock.set(false);
   }
 }

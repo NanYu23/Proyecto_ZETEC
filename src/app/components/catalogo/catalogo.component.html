@@ -91,12 +91,33 @@
 </div>
 
 <!-- ===== GRID DE PRODUCTOS ===== -->
+<!-- GRID: escucha el evento (stockSuperado) de cada card -->
 <section class="catalog-grid">
   @for (p of filteredProducts(); track p.id) {
-    <app-product-card [product]="p"></app-product-card>
+    <app-product-card
+      [product]="p"
+      (stockSuperado)="onStockSuperado($event)">  <!-- 👈 -->
+    </app-product-card>
   }
 
   @if (filteredProducts().length === 0) {
     <p class="catalog-empty">No hay productos en esta categoría.</p>
   }
 </section>
+
+<!-- ===== MODAL — aquí ya no hay transforms ni overflow que lo bloqueen ===== -->
+@if (mostrarModalStock() && productoModalStock()) {
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-icon">⚠️</div>
+      <h3 class="modal-title">Stock no disponible</h3>
+      <p class="modal-message">
+        No puedes agregar más unidades de
+        <strong>{{ productoModalStock()!.name }}</strong>.
+        Solo hay <strong>{{ productoModalStock()!.inStock }}</strong>
+        {{ productoModalStock()!.inStock === 1 ? 'unidad' : 'unidades' }} en existencia.
+      </p>
+      <button class="modal-btn" (click)="cerrarModal()">Entendido</button>
+    </div>
+  </div>
+}
