@@ -67,36 +67,47 @@
 
 <!-- ===== CONTENIDO ===== -->
 <div class="container">
-  <h1 class="title">¡Gracias!</h1>
-  <hr />
+  
+  <!-- SI NO ESTAMOS EN MODO RECIBO -->
+  <ng-container *ngIf="!mostrarRecibo">
+    <h1 class="title">¡Gracias por tu compra!</h1>
+    <hr />
 
-  @for (item of productos; track item.product.id) {
-    <div class="producto">
-      <img [src]="item.product.imageUrl" class="producto__img" />
-
-      <div class="producto__info">
-        <p>
-          <strong>{{ item.product.name }}</strong>
-        </p>
-        <p>Cantidad: {{ item.quantity }}</p>
-        <p>Precio: $ {{ item.product.price }}</p>
+    @for (item of productos; track item.product.id) {
+      <div class="producto">
+        <img [src]="item.product.imageUrl" class="producto__img" />
+        <div class="producto__info">
+          <p><strong>{{ item.product.name }}</strong></p>
+          <p>Cantidad: {{ item.quantity }}</p>
+          <p>Precio: $ {{ item.product.price }}</p>
+        </div>
       </div>
+    }
+
+    <hr />
+    <p><strong>Guía de tu pedido:</strong> {{ pedido.guia }}</p>
+    <p><strong>Enviado a:</strong><br /> {{ pedido.direccion }}</p>
+    <p><strong>Teléfono:</strong> {{ pedido.telefono }}</p>
+
+    <div class="acciones">
+      <!-- Cambiamos la función aquí -->
+      <button class="btn btn-primary" (click)="generarDatosRecibo()">
+        Ver / Descargar Recibo
+      </button>
+      <button class="btn btn-secondary" routerLink="/">Volver al inicio</button>
     </div>
-  }
+  </ng-container>
 
-  <hr />
-
-  <p><strong>Guía de tu pedido:</strong> {{ pedido.guia }}</p>
-
-  <p>
-    <strong>Enviado a:</strong><br />
-    {{ pedido.direccion }}
-  </p>
-
-  <p><strong>Teléfono:</strong> {{ pedido.telefono }}</p>
-
-  <div class="acciones">
-    <button class="btn btn-primary" (click)="descargarRecibo()">Descargar recibo</button>
-    <button class="btn btn-secondary" routerLink="/">Volver al inicio</button>
+  <!-- SI ESTAMOS EN MODO RECIBO -->
+  <div *ngIf="mostrarRecibo && datosRecibo">
+    <div class="no-print" style="margin-bottom: 10px;">
+        <button class="btn btn-secondary" (click)="mostrarRecibo = false"> 
+            ← Volver al resumen 
+        </button>
+    </div>
+    
+    <!-- TU NUEVO COMPONENTE PROFESIONAL -->
+    <app-receipt-view [data]="datosRecibo"></app-receipt-view>
   </div>
+
 </div>

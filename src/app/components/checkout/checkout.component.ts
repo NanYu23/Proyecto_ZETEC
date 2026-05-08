@@ -113,7 +113,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
         if (capture.success) {
 
-          // 🧠 GUARDAR PEDIDO EN BACKEND
+          // GUARDAR PEDIDO EN BACKEND
           await fetch('http://localhost:3000/api/pedidos', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -129,10 +129,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             }),
           });
 
-          // 🧹 LIMPIAR CARRITO
+          // LIMPIAR CARRITO
           this.carritoService.vaciarCarrito();
 
-          // 🚀 REDIRECCIÓN FINAL
+          // REDIRECCIÓN FINAL
           this.router.navigate(['/finalizar-pedido'], {
             state: {
               pedido: {

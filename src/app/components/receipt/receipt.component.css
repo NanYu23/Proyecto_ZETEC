@@ -1,0 +1,138 @@
+/* receipt.component.css */
+
+/* Contenedor de acciones estilo moderno */
+.actions-container {
+  max-width: 850px;
+  margin: 20px auto;
+  perspective: 1000px;
+}
+
+.actions-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 15px 25px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  animation: slideDown 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.actions-label {
+  font-weight: 600;
+  color: #64748b;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.buttons-group {
+  display: flex;
+  gap: 12px;
+}
+
+/* Base del botón moderno */
+.btn-modern {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Estilo XML (Verde Esmeralda) */
+.btn-xml {
+  background: #10b981;
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-xml:hover {
+  background: #059669;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+/* Estilo PDF (Azul Real) */
+.btn-pdf {
+  background: #3b82f6;
+  color: white;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.btn-pdf:hover {
+  background: #2563eb;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+/* Efecto Click (Active) */
+.btn-modern:active {
+  transform: translateY(1px);
+  filter: brightness(0.9);
+}
+
+/* Animación de entrada */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsivo para móviles */
+@media (max-width: 600px) {
+  .actions-card {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  .buttons-group {
+    width: 100%;
+    flex-direction: column;
+  }
+  .btn-modern {
+    justify-content: center;
+  }
+}
+
+/* Asegurar que no se imprima nada de esto */
+@media print {
+  .actions-container {
+    display: none !important;
+  }
+}
+
+.receipt-box { padding: 40px; border: 1px solid #eee; font-family: sans-serif; font-size: 12px; }
+.header { display: flex; justify-content: space-between; border-bottom: 2px solid #1a6dbf; margin-bottom: 20px; }
+.blue { color: #1a6dbf; margin: 0; }
+.uuid { font-size: 10px; color: #666; }
+
+.section-title { background: #1a6dbf; color: white; padding: 5px 10px; font-weight: bold; margin: 15px 0; }
+.info-table, .items-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+.info-table td, .items-table th, .items-table td { border: 1px solid #ddd; padding: 8px; }
+.items-table th { background: #f4f4f4; text-align: left; }
+
+.footer-flex { display: flex; justify-content: space-between; margin-top: 20px; }
+.tax-info p { margin: 4px 0; }
+.totals { text-align: right; min-width: 200px; }
+.grand-total { font-size: 16px; font-weight: bold; color: #1a6dbf; border-top: 2px solid #1a6dbf; padding-top: 5px; }
+
+.legal-footer { margin-top: 40px; border-top: 1px solid #eee; text-align: center; color: #888; font-style: italic; }
+
+@media print {
+  .no-print { display: none; }
+  .receipt-box { border: none; }
+}
