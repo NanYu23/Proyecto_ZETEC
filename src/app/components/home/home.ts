@@ -12,10 +12,9 @@ import { CommonModule } from '@angular/common'; // 👈 necesario para @if
   standalone: true,
   imports: [ProductCardComponent, RouterModule, CommonModule], // 👈 agrega CommonModule
   templateUrl: './home.html',
-  styleUrl: './home.css'
+  styleUrl: './home.css',
 })
 export class HomeComponent implements OnInit, OnDestroy {
-
   products = signal<Product[]>([]);
   private productService = inject(ProductService);
   carritoService = inject(CarritoService);
@@ -23,6 +22,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   // 👇 Modal
   mostrarModalStock = signal(false);
   productoModalStock = signal<Product | null>(null);
+
+  mostrarTerminos = false;
+  mostrarPrivacidad = false;
+
+  abrirTerminos() {
+    this.mostrarTerminos = true;
+  }
+  abrirPrivacidad() {
+    this.mostrarPrivacidad = true;
+  }
 
   slides = [
     { id: 1, image: 'foto1_carrusel.jpeg', alt: 'Banner 1' },
@@ -35,7 +44,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private autoplayTimer: any;
 
   ngOnInit() {
-    this.productService.getAll().subscribe(data => {
+    this.productService.getAll().subscribe((data) => {
       this.products.set(data.slice(0, 4));
     });
     this.startAutoplay();
