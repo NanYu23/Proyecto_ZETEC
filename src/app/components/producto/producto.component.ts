@@ -12,6 +12,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './producto.component.css',
 })
 export class ProductCardComponent {
+  showToast = false;
+
   @Input() product!: Product;
   @Output() stockSuperado = new EventEmitter<Product>(); // 👈 nuevo
 
@@ -35,12 +37,17 @@ export class ProductCardComponent {
   }
 
   addToCart() {
-    if (this.cantidadEnCarrito >= this.product.inStock ||
-        this.cantidadEnCarrito + this.quantity > this.product.inStock) {
+    if (
+      this.cantidadEnCarrito >= this.product.inStock ||
+      this.cantidadEnCarrito + this.quantity > this.product.inStock
+    ) {
       this.stockSuperado.emit(this.product); // 👈 emite al padre
       return;
     }
     this.carritoService.agregarProducto(this.product, this.quantity);
     this.quantity = 1;
+
+    this.showToast = true;
+    setTimeout(() => (this.showToast = false), 2500);
   }
 }

@@ -1,3 +1,6 @@
+//carrito.component.ts
+
+
 import { Component, inject, signal } from '@angular/core';
 import { CarritoService } from '../../services/carrito.service';
 import { Router, RouterModule } from '@angular/router';
@@ -94,4 +97,22 @@ export class CarritoComponent {
     a.click();
     window.URL.revokeObjectURL(url);
   }
+
+
+  modalVaciarVisible = false;
+
+abrirModalVaciar() {
+  this.modalVaciarVisible = true;
+}
+
+confirmarVaciar() {
+  this.carritoService.vaciarCarrito();
+  this.modalVaciarVisible = false;
+}
+
+cancelarVaciar() {
+  this.modalVaciarVisible = false;
+
+}
+
 }
