@@ -316,7 +316,7 @@
   margin: 4px 0 0;
   font-size: 12px;
   font-weight: 600;
-  color: #e65c00;
+  color: #37ad09;
 }
 
 @keyframes toastIn {
@@ -436,4 +436,22 @@
 @keyframes slideUp {
   from { transform: translateY(20px); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
+}
+
+.btn-eliminar-tipo {
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: #e53e3e;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  width: fit-content;
+  transition: color 0.2s;
+}
+
+.btn-eliminar-tipo:hover {
+  color: #c53030;
+  text-decoration: underline;
 }

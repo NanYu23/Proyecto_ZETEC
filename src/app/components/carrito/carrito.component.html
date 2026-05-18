@@ -129,6 +129,10 @@
           </button>
         </div>
 
+        <button class="btn-eliminar-tipo" (click)="eliminarTipoCompleto(item.product.id)">
+          Eliminar todos
+        </button>
+
         <!-- Aviso inline cuando se alcanzó el máximo -->
         @if (item.quantity >= item.product.inStock) {
           <p class="cart-row__max-warn">✓ Máximo en carrito</p>
@@ -170,8 +174,6 @@
   }
 </div>
 
-
-
 <!-- Modal de confirmación — agrégalo al final del template -->
 @if (modalVaciarVisible) {
   <div class="modal-overlay" (click)="cancelarVaciar()">
@@ -179,7 +181,7 @@
       <div class="modal-icon">🗑️</div>
       <h3 class="modal-title">¿Vaciar carrito?</h3>
       <p class="modal-message">
-        Se eliminarán todos los productos del carrito.<br/>
+        Se eliminarán todos los productos del carrito.<br />
         Esta acción no se puede deshacer.
       </p>
       <div class="modal-actions">

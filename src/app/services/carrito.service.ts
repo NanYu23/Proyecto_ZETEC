@@ -47,6 +47,13 @@ export class CarritoService {
     });
   }
 
+  eliminarProductosPorTipo(productoId: number) {
+  this.carrito.update((items) => {
+    return items.filter((item) => item.product.id !== productoId);
+  });
+}
+
+
   incrementarCantidad(index: number) {
     this.carrito.update((items) => {
       const nuevo = [...items];

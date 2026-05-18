@@ -1,3 +1,4 @@
+//carrito.component.ts
 import { Component, inject, signal } from '@angular/core';
 import { CarritoService } from '../../services/carrito.service';
 import { Router, RouterModule } from '@angular/router';
@@ -7,7 +8,7 @@ import { Router, RouterModule } from '@angular/router';
   standalone: true,
   imports: [RouterModule],
   templateUrl: './carrito.component.html',
-  styleUrl: './carrito.component.css'
+  styleUrl: './carrito.component.css',
 })
 export class CarritoComponent {
   carritoService = inject(CarritoService);
@@ -19,6 +20,10 @@ export class CarritoComponent {
 
   eliminarProducto(index: number) {
     this.carritoService.eliminarProducto(index);
+  }
+
+  eliminarTipoCompleto(productoId: number) {
+    this.carritoService.eliminarProductosPorTipo(productoId);
   }
 
   incrementar(index: number) {
@@ -36,7 +41,7 @@ export class CarritoComponent {
 
   mostrarToast(nombreProducto: string, stock: number) {
     this.toastProducto.set(
-      `Máximo alcanzado: solo hay ${stock} ${stock === 1 ? 'unidad' : 'unidades'} de "${nombreProducto}"`
+      `Máximo alcanzado: solo hay ${stock} ${stock === 1 ? 'unidad' : 'unidades'} de "${nombreProducto}"`,
     );
     this.toastVisible.set(true);
     clearTimeout(this.toastTimer);
@@ -60,7 +65,7 @@ export class CarritoComponent {
   <fecha>${new Date().toISOString()}</fecha>
   <productos>`;
 
-    productos.forEach(item => {
+    productos.forEach((item) => {
       const precio = item.product.price;
       const subtotal = precio * item.quantity;
       total += subtotal;
