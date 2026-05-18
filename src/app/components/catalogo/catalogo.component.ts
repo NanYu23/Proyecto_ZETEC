@@ -3,7 +3,6 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ProductCardComponent } from '../producto/producto.component';
 import { ProductService } from '../../services/producto.service';
 import { Product } from '../../models/producto.model';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CarritoService } from '../../services/carrito.service';
@@ -11,7 +10,7 @@ import { CarritoService } from '../../services/carrito.service';
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [CommonModule, FormsModule, ProductCardComponent, RouterModule],
+  imports: [FormsModule, ProductCardComponent, RouterModule],
   templateUrl: './catalogo.component.html',
   styleUrl: './catalogo.component.css',
 })

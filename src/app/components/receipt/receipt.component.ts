@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ReceiptData } from '../../services/receipt.service';
 
 @Component({
   selector: 'app-receipt-view',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CurrencyPipe, DatePipe],
   templateUrl: './receipt.component.html',
   styleUrls: ['./receipt.component.css']
 })

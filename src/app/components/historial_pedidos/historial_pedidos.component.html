@@ -14,30 +14,16 @@
   </div>
 
   <div class="navbar__actions">
-    
+
     <button class="navbar__icon-btn" title="Historial" routerLink="/historial-pedidos">
-      <svg
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="10" />
         <polyline points="12 6 12 12 16 14" />
       </svg>
     </button>
 
     <button class="navbar__icon-btn" title="Carrito" routerLink="/carrito">
-      <svg
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="9" cy="21" r="1" />
         <circle cx="20" cy="21" r="1" />
         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
@@ -49,14 +35,7 @@
     </button>
 
     <button class="navbar__icon-btn" title="Mi cuenta">
-      <svg
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
         <circle cx="12" cy="7" r="4" />
       </svg>
@@ -75,15 +54,19 @@
     </h2>
 
     <!-- ITEM -->
-    <div class="pedido-item" *ngFor="let pedido of pedidos; let i = index">
-      <img src="https://via.placeholder.com/80" class="producto-img" />
+    @for (pedido of pedidos; track $index; let i = $index) {
+      <div class="pedido-item">
+        <img src="https://via.placeholder.com/80" class="producto-img" />
 
-      <div class="descripcion">Descripción del producto</div>
+        <div class="descripcion">Descripción del producto</div>
 
-      <div class="precio">$ {{ pedido.precio }} MXN</div>
+        <div class="precio">$ {{ pedido.precio }} MXN</div>
 
-      <button *ngIf="i === 0" class="btn-cancelar">Cancelar compra</button>
-    </div>
+        @if (i === 0) {
+          <button class="btn-cancelar">Cancelar compra</button>
+        }
+      </div>
+    }
 
     <!-- BOTÓN -->
     <div class="btn-container">

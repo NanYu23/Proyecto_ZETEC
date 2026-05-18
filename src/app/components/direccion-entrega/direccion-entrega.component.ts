@@ -1,14 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { CarritoService } from '../../services/carrito.service';
 import { DireccionService, Direccion } from '../../services/direccion.service';
 
 @Component({
   selector: 'app-direccion-entrega',
   standalone: true,
-  imports: [FormsModule, RouterModule, CommonModule],
+  imports: [FormsModule, RouterModule],
   templateUrl: './direccion-entrega.component.html',
   styleUrls: ['./direccion-entrega.component.css']
 })
@@ -20,17 +19,17 @@ export class DireccionEntregaComponent implements OnInit {
 
   seleccion: string = 'recoleccion';
   direcciones: Direccion[] = [];
-  cargando = false;  // ← nuevo
+  cargando = false;
 
   nuevaDireccion: string = '';
   nuevoTelefono: string = '';
 
   async ngOnInit() {
-    this.cargando = true;  // ← nuevo
+    this.cargando = true;
     this.direcciones = await this.direccionService.obtenerDirecciones();
     const actual = this.direccionService.direccionSeleccionada();
     if (actual) this.seleccion = String(actual.id);
-    this.cargando = false;  // ← nuevo
+    this.cargando = false;
   }
 
   usarDireccion() {

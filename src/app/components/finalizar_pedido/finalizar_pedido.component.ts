@@ -2,7 +2,6 @@
 
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { CarritoService } from '../../services/carrito.service';
 import { ReceiptService, ReceiptData } from '../../services/receipt.service';
 import { ReceiptViewComponent } from '../receipt/receipt.component';
@@ -10,14 +9,14 @@ import { ReceiptViewComponent } from '../receipt/receipt.component';
 @Component({
   selector: 'app-finalizar-pedido',
   standalone: true,
-  imports: [RouterModule, CommonModule, ReceiptViewComponent], 
+  imports: [RouterModule, ReceiptViewComponent],
   templateUrl: './finalizar_pedido.component.html',
   styleUrls: ['./finalizar_pedido.component.css']
 })
 export class FinalizarPedidoComponent {
   productos: any[] = [];
   pedido = { guia: '', direccion: '', telefono: '' };
-  
+
   // Variables para el recibo
   mostrarRecibo = false;
   datosRecibo?: ReceiptData;
@@ -60,7 +59,7 @@ export class FinalizarPedidoComponent {
     };
 
     this.mostrarRecibo = true;
-    
+
     window.scrollTo(0, 0);
   }
 }

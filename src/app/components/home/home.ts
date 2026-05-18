@@ -5,12 +5,11 @@ import { Product } from '../../models/producto.model';
 import { ProductCardComponent } from '../producto/producto.component';
 import { RouterModule } from '@angular/router';
 import { CarritoService } from '../../services/carrito.service';
-import { CommonModule } from '@angular/common'; // 👈 necesario para @if
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ProductCardComponent, RouterModule, CommonModule], // 👈 agrega CommonModule
+  imports: [ProductCardComponent, RouterModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -19,7 +18,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private productService = inject(ProductService);
   carritoService = inject(CarritoService);
 
-  // 👇 Modal
+  // Modal
   mostrarModalStock = signal(false);
   productoModalStock = signal<Product | null>(null);
 
@@ -70,7 +69,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.currentSlide = index;
   }
 
-  // 👇 Recibe el evento de la card
+  // Recibe el evento de la card
   onStockSuperado(producto: Product) {
     this.productoModalStock.set(producto);
     this.mostrarModalStock.set(true);

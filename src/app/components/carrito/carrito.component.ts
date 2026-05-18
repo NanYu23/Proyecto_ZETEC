@@ -1,15 +1,11 @@
-//carrito.component.ts
-
-
 import { Component, inject, signal } from '@angular/core';
 import { CarritoService } from '../../services/carrito.service';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule],
   templateUrl: './carrito.component.html',
   styleUrl: './carrito.component.css'
 })
@@ -98,21 +94,18 @@ export class CarritoComponent {
     window.URL.revokeObjectURL(url);
   }
 
-
   modalVaciarVisible = false;
 
-abrirModalVaciar() {
-  this.modalVaciarVisible = true;
-}
+  abrirModalVaciar() {
+    this.modalVaciarVisible = true;
+  }
 
-confirmarVaciar() {
-  this.carritoService.vaciarCarrito();
-  this.modalVaciarVisible = false;
-}
+  confirmarVaciar() {
+    this.carritoService.vaciarCarrito();
+    this.modalVaciarVisible = false;
+  }
 
-cancelarVaciar() {
-  this.modalVaciarVisible = false;
-
-}
-
+  cancelarVaciar() {
+    this.modalVaciarVisible = false;
+  }
 }

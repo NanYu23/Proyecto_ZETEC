@@ -1,12 +1,10 @@
 // checkout.component.ts
 
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
+import { DecimalPipe } from '@angular/common';
 import { CarritoService } from '../../services/carrito.service';
 import { PaypalService } from '../../services/paypal.service';
 import { enviroment } from '../../../enviroments/enviroment';
@@ -15,7 +13,7 @@ import { DireccionService } from '../../services/direccion.service';
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, RouterModule, HttpClientModule],
+  imports: [RouterModule, DecimalPipe],
   providers: [PaypalService],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css',

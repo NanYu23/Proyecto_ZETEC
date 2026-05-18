@@ -2,12 +2,11 @@
 import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { Product } from '../../models/producto.model';
 import { CarritoService } from '../../services/carrito.service';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './producto.component.html',
   styleUrl: './producto.component.css',
 })
@@ -15,7 +14,7 @@ export class ProductCardComponent {
   showToast = false;
 
   @Input() product!: Product;
-  @Output() stockSuperado = new EventEmitter<Product>(); // 👈 nuevo
+  @Output() stockSuperado = new EventEmitter<Product>();
 
   private carritoService = inject(CarritoService);
   quantity: number = 1;
@@ -41,7 +40,7 @@ export class ProductCardComponent {
       this.cantidadEnCarrito >= this.product.inStock ||
       this.cantidadEnCarrito + this.quantity > this.product.inStock
     ) {
-      this.stockSuperado.emit(this.product); // 👈 emite al padre
+      this.stockSuperado.emit(this.product);
       return;
     }
     this.carritoService.agregarProducto(this.product, this.quantity);
