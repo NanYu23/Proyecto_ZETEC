@@ -37,6 +37,13 @@
   height: 62px;
   gap: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  box-sizing: border-box;
 }
 
 :host .navbar__brand {
@@ -109,7 +116,7 @@
 /* ===== CONTENEDOR ===== */
 .delivery-container {
   max-width: 780px;
-  margin: 35px auto;
+  margin: 100px auto 35px;
   padding: 0 24px 60px;
 }
 

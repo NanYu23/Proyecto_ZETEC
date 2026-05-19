@@ -5,43 +5,65 @@ export const routes: Routes = [
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
   {
     path: 'inicio',
-    loadComponent: () => import('./components/home/home')
-                          .then(m => m.HomeComponent)
+    loadComponent: () => import('./components/home/home').then((m) => m.HomeComponent),
   },
   {
     path: 'catalogo',
-    loadComponent: () => import('./components/catalogo/catalogo.component')
-                          .then(m => m.CatalogoComponent)
+    loadComponent: () =>
+      import('./components/catalogo/catalogo.component').then((m) => m.CatalogoComponent),
   },
-  { 
+  {
     path: 'carrito',
-    loadComponent: () => import('./components/carrito/carrito.component')
-                          .then(m => m.CarritoComponent) 
+    loadComponent: () =>
+      import('./components/carrito/carrito.component').then((m) => m.CarritoComponent),
   },
-  {  
+  {
     path: 'checkout',
-    loadComponent: () => import('./components/checkout/checkout.component')
-                          .then(m => m.CheckoutComponent)
-
+    loadComponent: () =>
+      import('./components/checkout/checkout.component').then((m) => m.CheckoutComponent),
   },
   {
     path: 'direccion-entrega',
-    loadComponent: () => import('./components/direccion-entrega/direccion-entrega.component')
-                          .then(m => m.DireccionEntregaComponent)
-
+    loadComponent: () =>
+      import('./components/direccion-entrega/direccion-entrega.component').then(
+        (m) => m.DireccionEntregaComponent,
+      ),
   },
   {
     path: 'finalizar-pedido',
-    loadComponent: () => import('./components/finalizar_pedido/finalizar_pedido.component')
-                          .then(m => m.FinalizarPedidoComponent)
-
+    loadComponent: () =>
+      import('./components/finalizar_pedido/finalizar_pedido.component').then(
+        (m) => m.FinalizarPedidoComponent,
+      ),
   },
   {
     path: 'historial-pedidos',
-    loadComponent: () => import('./components/historial_pedidos/historial_pedidos.component')
-                          .then(m => m.HistorialPedidosComponent)
-
+    loadComponent: () =>
+      import('./components/historial_pedidos/historial_pedidos.component').then(
+        (m) => m.HistorialPedidosComponent,
+      ),
+  },
+  {
+    path: 'crear_usuario',
+    loadComponent: () =>
+      import('./components/crear_usuario/crear_usuario.component').then(
+        (m) => m.CrearUsuarioComponent,
+      ),
+  },
+  {
+    path: 'inicio_sesion',
+    loadComponent: () =>
+      import('./components/inicio_sesion/inicio_sesion.component').then(
+        (m) => m.InicioSesionComponent,
+      ),
+  },
+  {
+    path: 'panel_administracion',
+    loadComponent: () =>
+      import('./components/panel_administracion/panel_administracion.component').then(
+        (m) => m.PanelAdministracionComponent,
+      ),
   },
 
-  { path: '**', redirectTo: 'inicio' }
+  { path: '**', redirectTo: 'inicio' },
 ];

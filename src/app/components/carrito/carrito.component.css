@@ -34,11 +34,21 @@
   display: flex;
   align-items: center;
   background-color: #1a6dbf !important;
+  background: #1a6dbf;
   padding: 0 28px;
   height: 62px;
   gap: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  box-sizing: border-box;
 }
+
+
 :host .navbar__brand { display: flex; align-items: center; gap: 12px; flex: 1; }
 :host .navbar__logo {
   width: 42px; height: 42px; border-radius: 50%;
@@ -58,8 +68,8 @@
 /* ===== CONTENEDOR ===== */
 .cart-container {
   max-width: 780px;
-  margin: 40px auto;
-  padding: 0 24px 60px;
+  margin: 0 auto;
+  padding: 100px 24px 60px;
 }
 
 /* ===== CABECERA ===== */

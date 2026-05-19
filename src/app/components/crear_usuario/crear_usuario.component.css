@@ -1,0 +1,294 @@
+/* crear_usuario.component.css */
+
+:root {
+  --color-primary:    #1a6dbf;
+  --color-primary-dk: #155a9e;
+  --color-accent:     #2f80d1;
+  --color-text:       #111827;
+  --color-muted:      #6b7280;
+  --color-bg:         #f9fafb;
+  --color-white:      #ffffff;
+  --radius-card:      12px;
+  --shadow-card:      0 2px 12px rgba(0,0,0,0.10);
+}
+
+:host {
+  display: block;
+  background: var(--color-bg);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+
+/* ===== NAVBAR ===== */
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  border-radius: 50%;
+  padding: 2px 6px;
+}
+
+:host .navbar {
+  display: flex;
+  align-items: center;
+  background-color: #1a6dbf !important;
+  padding: 0 28px;
+  height: 62px;
+  gap: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  box-sizing: border-box;
+}
+
+:host .navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+:host .navbar__logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+:host .navbar__logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+:host .navbar__title {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+}
+
+:host .navbar__links {
+  display: flex;
+  gap: 28px;
+}
+
+:host .navbar__link {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0.9;
+  transition: 0.2s;
+}
+
+:host .navbar__link:hover,
+:host .navbar__link.active {
+  opacity: 1;
+  border-bottom: 2px solid rgba(255,255,255,0.8);
+  padding-bottom: 2px;
+}
+
+:host .navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+:host .navbar__icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  transition: background 0.2s;
+}
+
+:host .navbar__icon-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+
+.registro-wrapper {
+  width: 100%;
+  padding: 40px 20px 60px;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+}
+
+/* ===== TARJETA ===== */
+
+.card-registro {
+  width: 100%;
+  max-width: 950px;
+
+  background: white;
+
+  border-radius: 18px;
+  overflow: hidden;
+
+  box-shadow: var(--shadow-card);
+}
+
+
+/* ===== CONTENIDO ===== */
+
+.contenido {
+  padding: 60px 40px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== TITULO ===== */
+
+.contenido h2 {
+  margin: 0;
+
+  font-size: 52px;
+  font-weight: 800;
+  color: black;
+
+  text-align: center;
+  line-height: 1.1;
+
+  margin-bottom: 18px;
+}
+
+/* ===== TEXTO LOGIN ===== */
+
+.login-texto {
+  font-size: 18px;
+  color: var(--color-muted);
+
+  margin-bottom: 42px;
+}
+
+.login-texto a {
+  color: #2289e6;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.login-texto a:hover {
+  text-decoration: underline;
+  color: blue;
+}
+
+/* ===== FORM ===== */
+
+form {
+  width: 100%;
+  max-width: 340px;
+}
+
+/* ===== INPUTS ===== */
+
+.grupo-input {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 22px;
+}
+
+.grupo-input label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #374151;
+
+  margin-bottom: 8px;
+}
+
+.grupo-input input,
+.grupo-input select {
+  height: 48px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  padding: 0 14px;
+
+  font-size: 14px;
+  color: var(--color-text);
+
+  background: white;
+
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.grupo-input input:focus,
+.grupo-input select:focus {
+  outline: none;
+
+  border-color: var(--color-accent);
+
+  box-shadow: 0 0 0 3px rgba(47,128,209,0.15);
+}
+
+/* ===== BOTON ===== */
+
+.btn-registro {
+  width: 100%;
+  height: 50px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #2289e6;
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  margin-top: 12px;
+
+  transition: 0.2s;
+}
+
+.btn-registro:hover {
+  background: blue;
+  transform: translateY(-1px);
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+
+  .contenido {
+    padding: 45px 24px;
+  }
+
+  .contenido h2 {
+    font-size: 36px;
+  }
+
+  .login-texto {
+    text-align: center;
+    font-size: 16px;
+  }
+
+}

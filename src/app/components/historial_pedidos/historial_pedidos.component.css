@@ -1,5 +1,11 @@
 /*historial-pedidos.component.css*/
 
+:host {
+  display: block;
+  background: var(--color-bg);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
 /* NAVBAR */
 
 .cart-count {
@@ -22,6 +28,13 @@
   height: 62px;
   gap: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  box-sizing: border-box;
 }
 
 :host .navbar__brand {
@@ -105,7 +118,7 @@
 
 /* CONTENEDOR GENERAL */
 .historial-container {
-  padding: 30px;
+  padding: 50px;
   background: #f5f7fa;
   min-height: 100vh;
 }

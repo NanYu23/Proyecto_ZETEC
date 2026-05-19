@@ -1,0 +1,272 @@
+/* ===== VARIABLES ===== */
+
+:root {
+  --color-primary: #2289e6;
+  --color-primary-dark: #156fc0;
+
+  --color-edit: #decd88;
+  --color-edit-dark: #c8b86d;
+
+  --color-bg: #f3f3f3;
+  --color-text: #111827;
+
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.10);
+}
+
+/* ===== GENERAL ===== */
+
+:host {
+  display: block;
+  background: var(--color-bg);
+  min-height: 100vh;
+
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== NAVBAR ===== */
+
+.navbar {
+  display: flex;
+  align-items: center;
+
+  background: #1a6dbf;
+
+  height: 62px;
+
+  padding: 0 24px;
+
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  flex: 1;
+}
+
+.navbar__logo {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  background: rgba(255,255,255,0.15);
+}
+
+.navbar__logo-img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.navbar__title {
+  color: white;
+
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.navbar__links {
+  display: flex;
+  gap: 28px;
+}
+
+.navbar__link {
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  transition: 0.2s;
+}
+
+.navbar__link:hover,
+.navbar__link.active {
+  opacity: 0.9;
+}
+
+.navbar__actions {
+  display: flex;
+  align-items: center;
+
+  margin-left: 24px;
+}
+
+.navbar__icon-btn {
+  background: none;
+  border: none;
+
+  color: white;
+
+  cursor: pointer;
+
+  padding: 6px;
+
+  border-radius: 8px;
+
+  transition: 0.2s;
+}
+
+.navbar__icon-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* ===== CONTENEDOR ===== */
+
+.panel-container {
+  padding: 42px 30px 60px;
+}
+
+/* ===== TITULO ===== */
+
+.panel-title {
+  text-align: center;
+
+  font-size: 52px;
+  font-weight: 800;
+
+  color: #1a6dbf;
+
+  margin-bottom: 28px;
+}
+
+/* ===== BOTONES ===== */
+
+.panel-actions {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+
+  margin-bottom: 50px;
+
+  flex-wrap: wrap;
+}
+
+.btn-accion {
+  width: 220px;
+  height: 46px;
+
+  border: none;
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.btn-azul {
+  background: #2289e6;
+}
+
+.btn-azul:hover {
+  background: #156fc0;
+}
+
+/* ===== GRID ===== */
+
+.productos-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+  gap: 30px;
+
+  max-width: 1200px;
+
+  margin: 0 auto;
+}
+
+/* ===== CARD ===== */
+
+.producto-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 20px;
+
+  border-radius: 14px;
+
+  background: white;
+
+  box-shadow: var(--shadow-card);
+}
+
+/* ===== IMAGEN ===== */
+
+.producto-img {
+  width: 150px;
+  height: 150px;
+
+  object-fit: cover;
+
+  border-radius: 12px;
+
+  margin-bottom: 14px;
+}
+
+/* ===== INFO ===== */
+
+.producto-info {
+  text-align: center;
+
+  margin-bottom: 18px;
+}
+
+.producto-info p {
+  margin: 6px 0;
+
+  font-size: 16px;
+
+  color: var(--color-text);
+}
+
+/* ===== BOTON EDITAR ===== */
+
+.btn-editar {
+  width: 120px;
+  height: 40px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #decd88;
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.btn-editar:hover {
+  background: #c8b86d;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+
+  .panel-title {
+    font-size: 36px;
+  }
+
+  .panel-actions {
+    gap: 20px;
+  }
+
+}

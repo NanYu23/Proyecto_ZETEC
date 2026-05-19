@@ -10,12 +10,11 @@
   </div>
 
   <div class="navbar__links">
-    <a routerLink="/catalogo" routerLinkActive="active" class="navbar__link">Catálogo</a>
     <a routerLink="/inicio" routerLinkActive="active" class="navbar__link">Inicio</a>
+    <a routerLink="/catalogo" routerLinkActive="active" class="navbar__link">Catálogo</a>
   </div>
 
   <div class="navbar__actions">
-    
     <button class="navbar__icon-btn" title="Historial" routerLink="/historial-pedidos">
       <svg
         viewBox="0 0 24 24"
@@ -48,7 +47,7 @@
         {{ carritoService.obtenerCantidad() }}
       </span>
     </button>
-    <button class="navbar__icon-btn" title="Mi cuenta">
+    <button class="navbar__icon-btn" title="Mi cuenta" routerLink="/inicio_sesion">
       <svg
         viewBox="0 0 24 24"
         width="22"
@@ -94,9 +93,8 @@
 <!-- GRID: escucha el evento (stockSuperado) de cada card -->
 <section class="catalog-grid">
   @for (p of filteredProducts(); track p.id) {
-    <app-product-card
-      [product]="p"
-      (stockSuperado)="onStockSuperado($event)">  <!-- 👈 -->
+    <app-product-card [product]="p" (stockSuperado)="onStockSuperado($event)">
+      <!-- 👈 -->
     </app-product-card>
   }
 
@@ -245,7 +243,6 @@
   </div>
 }
 
-
 <!-- ===== MODAL — aquí ya no hay transforms ni overflow que lo bloqueen ===== -->
 @if (mostrarModalStock() && productoModalStock()) {
   <div class="modal-overlay" (click)="cerrarModal()">
@@ -254,8 +251,8 @@
       <h3 class="modal-title">Stock no disponible</h3>
       <p class="modal-message">
         No puedes agregar más unidades de
-        <strong>{{ productoModalStock()!.name }}</strong>.
-        Solo hay <strong>{{ productoModalStock()!.inStock }}</strong>
+        <strong>{{ productoModalStock()!.name }}</strong
+        >. Solo hay <strong>{{ productoModalStock()!.inStock }}</strong>
         {{ productoModalStock()!.inStock === 1 ? 'unidad' : 'unidades' }} en existencia.
       </p>
       <button class="modal-btn" (click)="cerrarModal()">Entendido</button>
