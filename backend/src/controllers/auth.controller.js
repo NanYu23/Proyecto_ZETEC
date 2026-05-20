@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
     try {
+        console.log('JWT_SECRET:', process.env.JWT_SECRET); //este es nuevo
         const { username, email, password } = req.body;
 
         const [existingUser] = await db.query(

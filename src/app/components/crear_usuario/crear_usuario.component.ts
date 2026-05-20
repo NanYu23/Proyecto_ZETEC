@@ -1,3 +1,5 @@
+//crear_usuario.component.ts
+
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -51,6 +53,7 @@ export class CrearUsuarioComponent {
           next: (res) => {
             console.log('✅ Login exitoso:', res);
             this.authService.saveToken(res.token);
+            this.carritoService.cargarDesdeBackend();
             this.loading = false;
             this.router.navigate(['/inicio']);
           },
