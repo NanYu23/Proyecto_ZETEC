@@ -1,14 +1,24 @@
-//app.js
+// app.js
 
-const express = require('express');
-const cors = require('cors');
-const productosRoutes = require('./routes/productos.routes');
+import express from 'express';
+import cors from 'cors';
+import productosRoutes from './routes/productos.routes.js';
+import paypalRoutes    from './routes/paypal.routes.js';
+import direccionesRoutes from './routes/direcciones.routes.js';
+import authRoutes      from './routes/auth.routes.js';
+import userRoutes      from './routes/user.routes.js';
+import cartRoutes      from './routes/carrito.routes.js';
+
 const app = express();
 
-app.use(cors()); //activa CORS para permitir solicitudes desde el frontend
-app.use(express.json()); //recibir json
-app.use('/api', productosRoutes);
-app.use('/api/paypal', require('./routes/paypal.routes'));
-app.use('/api/direcciones', require('./routes/direcciones.routes'));
+app.use(cors());
+app.use(express.json());
 
-module.exports = app;
+app.use('/api',             productosRoutes);
+app.use('/api/paypal',      paypalRoutes);
+app.use('/api/direcciones', direccionesRoutes);
+app.use('/api/auth',        authRoutes);
+app.use('/api/user',        userRoutes);
+app.use('/api/cart',        cartRoutes);
+
+export default app;

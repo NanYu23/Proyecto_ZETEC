@@ -1,7 +1,8 @@
-//direcciones.controller.js
-const db = require('../config/db');
+// direcciones.controller.js
 
-const getDirecciones = async (req, res) => {
+import db from '../config/db.js';
+
+export const getDirecciones = async (req, res) => {
   try {
     const [rows] = await db.query(
       'SELECT * FROM direcciones WHERE usuario_id = ? ORDER BY fecha_creacion ASC',
@@ -13,7 +14,7 @@ const getDirecciones = async (req, res) => {
   }
 };
 
-const agregarDireccion = async (req, res) => {
+export const agregarDireccion = async (req, res) => {
   const { usuario_id = 1, direccion, telefono } = req.body;
   try {
     const [result] = await db.query(
@@ -25,5 +26,3 @@ const agregarDireccion = async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 };
-
-module.exports = { getDirecciones, agregarDireccion };

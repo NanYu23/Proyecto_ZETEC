@@ -1,9 +1,11 @@
-//direcciones.routes.js
-const express = require('express');
-const router = express.Router();
-const { getDirecciones, agregarDireccion } = require('../controllers/direcciones.controller');
+// direcciones.routes.js
+
+import { Router } from 'express';
+import { getDirecciones, agregarDireccion } from '../controllers/direcciones.controller.js';
+
+const router = Router();
 
 router.get('/:usuarioId', getDirecciones);
 router.post('/', agregarDireccion);
 
-module.exports = router;
+export default router;

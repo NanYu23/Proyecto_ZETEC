@@ -1,16 +1,12 @@
 // paypal.routes.js
 
-const express = require('express');
-const router = express.Router();
-const { createOrder, captureOrder, getOrderDetails } = require('../controllers/paypal.controller');
+import { Router } from 'express';
+import { createOrder, captureOrder, getOrderDetails } from '../controllers/paypal.controller.js';
 
-// Crear una nueva orden
-router.post('/create-order', createOrder);
+const router = Router();
 
-// Capturar una orden existente (después de que el usuario la apruebe)
-router.post('/capture-order', captureOrder);
-
-// Obtener detalles de una orden
+router.post('/create-order',          createOrder);
+router.post('/capture-order',         captureOrder);
 router.get('/order-details/:orderId', getOrderDetails);
 
-module.exports = router;
+export default router;

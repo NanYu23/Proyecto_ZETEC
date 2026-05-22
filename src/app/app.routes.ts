@@ -1,5 +1,6 @@
 // app.routes.ts
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
@@ -38,6 +39,7 @@ export const routes: Routes = [
   },
   {
     path: 'historial-pedidos',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./components/historial_pedidos/historial_pedidos.component').then(
         (m) => m.HistorialPedidosComponent,
@@ -71,6 +73,8 @@ export const routes: Routes = [
         (m) => m.PerfilUsuarioComponent,
       ),
   },
+
+  //AGREGAR CAN ACTIVATE EN PERFIL (COMO EN HISTORIAL DE PEDIDOS)
 
   { path: '**', redirectTo: 'inicio' },
 ];
