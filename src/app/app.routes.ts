@@ -64,6 +64,13 @@ export const routes: Routes = [
         (m) => m.PanelAdministracionComponent,
       ),
   },
+  {
+    path: 'perfil_usuario',
+    loadComponent: () =>
+      import('./components/perfil_usuario/perfil_usuario.component').then(
+        (m) => m.PerfilUsuarioComponent,
+      ),
+  },
 
   { path: '**', redirectTo: 'inicio' },
 ];
