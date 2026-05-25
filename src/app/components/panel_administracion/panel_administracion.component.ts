@@ -1,60 +1,44 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+// panel_administracion.component.ts
 
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 import { CarritoService } from '../../services/carrito.service';
+import { ProductService } from '../../services/producto.service';
+import { AuthService }    from '../../services/auth.service';
+import { Product } from '../../models/producto.model';
 
 @Component({
   selector: 'app-panel-administracion',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule
-  ],
+  imports: [CommonModule, RouterModule],
   templateUrl: './panel_administracion.component.html',
   styleUrls: ['./panel_administracion.component.css']
 })
-export class PanelAdministracionComponent {
+export class PanelAdministracionComponent implements OnInit {
 
   carritoService = inject(CarritoService);
+  productService = inject(ProductService);
+  authService    = inject(AuthService);
+  router         = inject(Router);
 
-  productos = [
-    {
-      nombre: 'Descripción del producto',
-      precio: 0,
-      stock: 0,
-      imagen: 'https://via.placeholder.com/150'
-    },
-    {
-      nombre: 'Descripción del producto',
-      precio: 0,
-      stock: 0,
-      imagen: 'https://via.placeholder.com/150'
-    },
-    {
-      nombre: 'Descripción del producto',
-      precio: 0,
-      stock: 0,
-      imagen: 'https://via.placeholder.com/150'
-    },
-    {
-      nombre: 'Descripción del producto',
-      precio: 0,
-      stock: 0,
-      imagen: 'https://via.placeholder.com/150'
+  productos = signal<Product[]>([]);
+
+  ngOnInit() {
+    this.productService.getAll().subscribe((data) => {
+      this.productos.set(data);
+    });
+  }
+
+  irAlPerfil() {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/perfil_usuario']);
+    } else {
+      this.router.navigate(['/inicio_sesion']);
     }
-  ];
-
-  agregarProducto() {
-    alert('Agregar producto');
   }
 
-  administrarCategorias() {
-    alert('Administrar categorías');
-  }
-
-  editarProducto(producto: any) {
-    alert('Editar: ' + producto.nombre);
-  }
-
+  agregarProducto() { alert('Agregar producto'); }
+  administrarCategorias() { alert('Administrar categorías'); }
+  editarProducto(producto: Product) { alert('Editar: ' + producto.name); }
 }

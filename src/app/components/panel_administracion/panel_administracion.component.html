@@ -1,129 +1,56 @@
 <!-- ===== NAVBAR ===== -->
 <nav class="navbar">
-
   <div class="navbar__brand">
-
     <div class="navbar__logo">
-      <img
-        src="logo_papeleria.jpeg"
-        alt="Logo"
-        class="navbar__logo-img"
-      />
+      <img src="logo_papeleria.jpeg" alt="Logo" class="navbar__logo-img" />
     </div>
 
-    <span class="navbar__title">
-      Papelería Zetec
-    </span>
-
+    <span class="navbar__title"> Papelería Zetec </span>
   </div>
 
   <div class="navbar__links">
+    <a routerLink="/catalogo" routerLinkActive="active" class="navbar__link"> Panel </a>
 
-    <a
-      routerLink="/catalogo"
-      routerLinkActive="active"
-      class="navbar__link"
-    >
-      Inventario
-    </a>
-
-    <a
-      routerLink="/historial-pedidos"
-      routerLinkActive="active"
-      class="navbar__link"
-    >
-      Recibos
-    </a>
-
+    <a routerLink="/historial-pedidos" routerLinkActive="active" class="navbar__link"> Recibos </a>
   </div>
 
   <div class="navbar__actions">
-
-    <button
-      class="navbar__icon-btn"
-      routerLink="/inicio_sesion"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-      </svg>
-    </button>
-
+    <button class="navbar__icon-btn" (click)="irAlPerfil()">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+</button>
   </div>
-
 </nav>
 
 <!-- ===== CONTENIDO ===== -->
 
 <div class="panel-container">
-
-  <h1 class="panel-title">
-    Panel de administración
-  </h1>
+  <h1 class="panel-title">Panel de administración</h1>
 
   <!-- BOTONES -->
   <div class="panel-actions">
+    <button class="btn-accion btn-azul" (click)="agregarProducto()">AGREGAR PRODUCTO</button>
 
-    <button
-      class="btn-accion btn-azul"
-      (click)="agregarProducto()"
-    >
-      AGREGAR PRODUCTO
-    </button>
-
-    <button
-      class="btn-accion btn-azul"
-      (click)="administrarCategorias()"
-    >
-      CATEGORÍAS
-    </button>
-
+    <button class="btn-accion btn-azul" (click)="administrarCategorias()">CATEGORÍAS</button>
   </div>
 
   <!-- PRODUCTOS -->
   <div class="productos-grid">
+    @for (producto of productos(); track producto.id) {
+      <div class="producto-card">
+        <img [src]="producto.imageUrl" alt="Producto" class="producto-img" />
 
-    <div
-      class="producto-card"
-      *ngFor="let producto of productos"
-    >
+        <div class="producto-info">
+          <p>{{ producto.name }}</p>
+          <p>Precio: $ {{ producto.price }} MXN</p>
+          <p>Stock: {{ producto.inStock }}</p>
+          <p>Categoría: {{ producto.category }}</p>
+        </div>
 
-      <img
-        [src]="producto.imagen"
-        alt="Producto"
-        class="producto-img"
-      />
-
-      <div class="producto-info">
-
-        <p>{{ producto.nombre }}</p>
-
-        <p>
-          precio: $ {{ producto.precio }} MXN
-        </p>
-
-        <p>
-          Stock: {{ producto.stock }}
-        </p>
-
+        <button class="btn-editar" (click)="editarProducto(producto)">Editar</button>
       </div>
-
-      <button
-        class="btn-editar"
-        (click)="editarProducto(producto)"
-      >
-        Editar
-      </button>
-
-    </div>
-
+    }
   </div>
-
 </div>

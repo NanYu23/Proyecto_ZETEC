@@ -17,7 +17,7 @@ import { AuthService }    from '../../services/auth.service';
 export class PerfilUsuarioComponent {
 
   private http        = inject(HttpClient);
-  private authService = inject(AuthService);
+  authService = inject(AuthService);
   private router      = inject(Router);
   private cdr         = inject(ChangeDetectorRef); 
   carritoService      = inject(CarritoService);
@@ -26,8 +26,10 @@ export class PerfilUsuarioComponent {
   correoUsuario = '';
   cargando      = true;
   errorMsg      = '';
+  esAdmin = false;
 
   constructor() {
+    this.esAdmin = this.authService.isAdmin(); 
     afterNextRender(() => {
       this.cargarPerfil();
     });

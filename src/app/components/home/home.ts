@@ -3,8 +3,10 @@ import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { ProductService } from '../../services/producto.service';
 import { Product } from '../../models/producto.model';
 import { ProductCardComponent } from '../producto/producto.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CarritoService } from '../../services/carrito.service';
+import { AuthService } from '../../services/auth.service';
+
 
 @Component({
   selector: 'app-home',
@@ -17,6 +19,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   products = signal<Product[]>([]);
   private productService = inject(ProductService);
   carritoService = inject(CarritoService);
+  router = inject(Router);
+  authService = inject(AuthService);
 
   // Modal
   mostrarModalStock = signal(false);
@@ -24,6 +28,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   mostrarTerminos = false;
   mostrarPrivacidad = false;
+
+  irAlPerfil() {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/perfil_usuario']);
+    } else {
+      this.router.navigate(['/inicio_sesion']);
+    }
+  }
 
   abrirTerminos() {
     this.mostrarTerminos = true;

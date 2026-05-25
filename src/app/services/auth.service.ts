@@ -1,5 +1,3 @@
-//auth.service.ts
-
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
@@ -11,9 +9,12 @@ export class AuthService {
   private apiUrl = 'http://localhost:3000/api/auth';
 
   login(data: any): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, data).pipe(
-      tap((res: { token: string }) => {
+    return this.http.post<{ token: string; rol: number; message: string }>(
+      `${this.apiUrl}/login`, data
+    ).pipe(
+      tap((res) => {
         this.saveToken(res.token);
+        this.saveRol(res.rol); //guardar rol
       })
     );
   }
@@ -25,5 +26,13 @@ export class AuthService {
   saveToken(token: string): void  { localStorage.setItem('token', token); }
   getToken(): string | null       { return localStorage.getItem('token'); }
   isLoggedIn(): boolean           { return !!this.getToken(); }
-  logout(): void                  { localStorage.removeItem('token'); }
+
+  saveRol(rol: number): void      { localStorage.setItem('rol', String(rol)); } 
+  getRol(): number                { return Number(localStorage.getItem('rol')); } 
+  isAdmin(): boolean              { return this.getRol() === 2; } 
+
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('rol'); //limpiar rol al cerrar sesión
+  }
 }
