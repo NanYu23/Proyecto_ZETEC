@@ -1,42 +1,74 @@
-// perfil_usuario.component.ts
-
-import { Component } from '@angular/core';
+import { Component, inject, afterNextRender, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { CarritoService } from '../../services/carrito.service';
+import { AuthService }    from '../../services/auth.service';
 
 @Component({
   selector: 'app-perfil-usuario',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    RouterLinkActive,
-    FormsModule
-  ],
+  imports: [CommonModule, RouterLink, RouterLinkActive, FormsModule],
   templateUrl: './perfil_usuario.component.html',
   styleUrls: ['./perfil_usuario.component.css']
 })
 export class PerfilUsuarioComponent {
 
-  nombreUsuario: string = 'Nombre de usuario';
-  correoUsuario: string = 'Correo electrónico';
+  private http        = inject(HttpClient);
+  private authService = inject(AuthService);
+  private router      = inject(Router);
+  private cdr         = inject(ChangeDetectorRef); 
+  carritoService      = inject(CarritoService);
 
-  constructor(
-    public carritoService: CarritoService
-  ) {}
+  nombreUsuario = '';
+  correoUsuario = '';
+  cargando      = true;
+  errorMsg      = '';
+
+  constructor() {
+    afterNextRender(() => {
+      this.cargarPerfil();
+    });
+  }
+
+  cargarPerfil(): void {
+    this.http.get<{ user: any }>(
+      `http://localhost:3000/api/user/profile?t=${Date.now()}`
+    ).subscribe({
+      next: (res) => {
+        this.nombreUsuario = res.user.username;
+        this.correoUsuario = res.user.email;
+        this.cargando      = false;
+        this.cdr.detectChanges(); //forzar actualización de la vista
+      },
+      error: (err) => {
+        console.error('Error cargando perfil:', err);
+        this.cargando = false;
+        this.cdr.detectChanges(); //también aquí
+        this.errorMsg = 'No se pudo cargar el perfil';
+      }
+    });
+  }
 
   guardarCambios(): void {
-    alert('Cambios guardados correctamente');
+    this.http.put('http://localhost:3000/api/user/profile', {
+      username: this.nombreUsuario,
+      email:    this.correoUsuario
+    }).subscribe({
+      next: () => alert('Perfil actualizado correctamente'),
+      error: (err) => alert(err.error?.message || 'Error al actualizar el perfil')
+    });
   }
 
   cancelar(): void {
-    this.nombreUsuario = 'Nombre de usuario';
-    this.correoUsuario = 'Correo electrónico';
+    this.cargarPerfil();
   }
 
   cerrarSesion(): void {
-    alert('Sesión cerrada');
+    this.authService.logout();
+    this.carritoService.vaciarCarrito();
+    this.router.navigate(['/inicio']);
   }
 }

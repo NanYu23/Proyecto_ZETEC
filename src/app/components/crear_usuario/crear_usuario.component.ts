@@ -24,6 +24,7 @@ export class CrearUsuarioComponent {
   nombre   = '';
   email    = '';
   password = '';
+  direccion = '';
 
   errorMsg = '';
   loading  = false;
@@ -42,7 +43,8 @@ export class CrearUsuarioComponent {
     this.authService.register({
       username: this.nombre,
       email:    this.email,
-      password: this.password
+      password: this.password,
+      direccion: this.direccion
     }).subscribe({
       next: (res) => {
         console.log('✅ Registro exitoso:', res);

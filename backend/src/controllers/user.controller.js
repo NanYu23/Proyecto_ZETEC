@@ -21,6 +21,36 @@ export const getProfile = async (req, res) => {
     }
 };
 
+// PUT /profile
+export const updateProfile = async (req, res) => {
+    try {
+        const { username, email } = req.body;
+
+        if (!username || !email) {
+            return res.status(400).json({ message: 'Nombre y correo son requeridos' });
+        }
+
+        const [existing] = await db.query(
+            'SELECT id FROM users WHERE email = ? AND id != ?',
+            [email, req.user.id]
+        );
+        if (existing.length > 0) {
+            return res.status(409).json({ message: 'El correo ya está en uso' });
+        }
+
+        await db.query(
+            'UPDATE users SET username = ?, email = ? WHERE id = ?',
+            [username, email, req.user.id]
+        );
+
+        return res.status(200).json({ message: 'Perfil actualizado correctamente' });
+
+    } catch (error) {
+        console.error('Error en updateProfile:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+
 // GET /orders
 export const getOrderHistory = async (req, res) => {
     try {

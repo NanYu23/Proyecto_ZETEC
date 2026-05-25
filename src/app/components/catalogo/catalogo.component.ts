@@ -4,8 +4,10 @@ import { ProductCardComponent } from '../producto/producto.component';
 import { ProductService } from '../../services/producto.service';
 import { Product } from '../../models/producto.model';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CarritoService } from '../../services/carrito.service';
+import { AuthService } from '../../services/auth.service';
+
 
 @Component({
   selector: 'app-catalogo',
@@ -20,12 +22,23 @@ export class CatalogoComponent implements OnInit {
   categories = signal<string[]>([]);
   selectedCategory = '';
 
+  router = inject(Router);
+  authService = inject(AuthService);
+
   // Modal
   mostrarModalStock = signal(false);
   productoModalStock = signal<Product | null>(null);
 
   mostrarTerminos = false;
   mostrarPrivacidad = false;
+
+  irAlPerfil() {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/perfil_usuario']);
+    } else {
+      this.router.navigate(['/inicio_sesion']);
+    }
+  }
 
   abrirTerminos() {
     this.mostrarTerminos = true;

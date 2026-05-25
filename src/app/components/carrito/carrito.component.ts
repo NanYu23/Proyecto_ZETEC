@@ -2,6 +2,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CarritoService } from '../../services/carrito.service';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-carrito',
@@ -13,10 +14,19 @@ import { Router, RouterModule } from '@angular/router';
 export class CarritoComponent {
   carritoService = inject(CarritoService);
   router = inject(Router);
+  authService = inject(AuthService);
 
   toastVisible = signal(false);
   toastProducto = signal('');
   private toastTimer: any;
+
+  irAlPerfil() {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/perfil_usuario']);
+    } else {
+      this.router.navigate(['/inicio_sesion']);
+    }
+  }
 
   eliminarProducto(index: number) {
     this.carritoService.eliminarProducto(index);

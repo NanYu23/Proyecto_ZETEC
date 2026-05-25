@@ -6,8 +6,8 @@ import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
     try {
-        console.log('JWT_SECRET:', process.env.JWT_SECRET); //este es nuevo
-        const { username, email, password } = req.body;
+        const { username, email, password, direccion } = req.body;
+        console.log('Datos recibidos:', { username, email, direccion });
 
         const [existingUser] = await db.query(
             'SELECT id FROM users WHERE email = ?', [email]
@@ -18,12 +18,23 @@ export const register = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Insertar usuario
         const [result] = await db.query(
             'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
             [username, email, hashedPassword]
         );
 
-        return res.status(201).json({ message: 'Usuario registrado exitosamente', userId: result.insertId });
+        const userId = result.insertId;
+
+        // Guardar dirección si se proporcionó
+        if (direccion) {
+            await db.query(
+                'INSERT INTO direcciones (usuario_id, direccion, telefono) VALUES (?, ?, NULL)',
+                [userId, direccion]
+            );
+        }
+
+        return res.status(201).json({ message: 'Usuario registrado exitosamente', userId });
 
     } catch (error) {
         console.error('Error en register:', error);
