@@ -9,6 +9,7 @@ import { CarritoService } from '../../services/carrito.service';
 import { PaypalService } from '../../services/paypal.service';
 import { enviroment } from '../../../enviroments/enviroment';
 import { DireccionService } from '../../services/direccion.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-checkout',
@@ -23,6 +24,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private paypalService = inject(PaypalService);
   private router = inject(Router);
   private direccionService = inject(DireccionService);
+  private authService = inject(AuthService);
 
   nombreUsuario = 'Usuario';
   direccion = 'Av. Principal #123, Guadalajara, Jalisco';
@@ -33,10 +35,33 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private readonly API_URL = 'http://localhost:3000/api/paypal';
 
+  private getUserId(): number | null {
+    const token = this.authService.getToken();
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.id;
+    } catch {
+      return null;
+    }
+  }
+
+  private getUserEmail(): string | null {
+    const token = this.authService.getToken();
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // El token tiene el id, necesitamos buscar el email
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
   ngOnInit(): void {
     const dir = this.direccionService.direccionSeleccionada();
     if (dir) {
-      this.direccion = `${dir.direccion} — Tel: ${dir.telefono}`;
+      this.direccion = dir.direccion; 
     } else {
       this.direccion = 'Recolección física en tienda';
     }
@@ -82,16 +107,24 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         precio: item.product.price,
       }));
 
+      const userId = this.getUserId();
+      const token = this.authService.getToken(); 
+
       const response = await fetch(`${this.API_URL}/create-order`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, direccion: this.direccion }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '', 
+        },
+        body: JSON.stringify({
+          items,
+          direccion: this.direccion,
+          customerName: userId ? String(userId) : 'Cliente',
+        }),
       });
 
       const res = await response.json();
-
       if (res.success) return res.data.id;
-
       throw new Error(res.error || 'Error en servidor');
     };
 
@@ -110,7 +143,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         const capture = await response.json();
 
         if (capture.success) {
-
           // GUARDAR PEDIDO EN BACKEND
           await fetch('http://localhost:3000/api/pedidos', {
             method: 'POST',
@@ -122,7 +154,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
               productos: productosComprados,
               total: productosComprados.reduce(
                 (acc, item) => acc + item.product.price * item.quantity,
-                0
+                0,
               ),
             }),
           });
@@ -136,16 +168,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
               pedido: {
                 guia: data.orderID,
                 direccion: this.direccion,
-                telefono: '3312345678',
               },
               productos: productosComprados,
             },
           });
-
         } else {
           throw new Error(capture.error);
         }
-
       } catch (error) {
         console.error(error);
         this.paymentError = 'Error al procesar el pago.';
@@ -155,32 +184,36 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     };
 
     // BOTÓN PAYPAL
-    paypal.Buttons({
-      fundingSource: paypal.FUNDING.PAYPAL,
-      style: {
-        layout: 'vertical',
-        color: 'gold',
-        shape: 'pill',
-        label: 'paypal',
-        height: 50,
-      },
-      createOrder,
-      onApprove,
-      onError: () => (this.paymentError = 'Error con PayPal'),
-    }).render('#paypal-button-container');
+    paypal
+      .Buttons({
+        fundingSource: paypal.FUNDING.PAYPAL,
+        style: {
+          layout: 'vertical',
+          color: 'gold',
+          shape: 'pill',
+          label: 'paypal',
+          height: 50,
+        },
+        createOrder,
+        onApprove,
+        onError: () => (this.paymentError = 'Error con PayPal'),
+      })
+      .render('#paypal-button-container');
 
     // BOTÓN TARJETA
-    paypal.Buttons({
-      fundingSource: paypal.FUNDING.CARD,
-      style: {
-        layout: 'vertical',
-        shape: 'pill',
-        height: 50,
-      },
-      createOrder,
-      onApprove,
-      onError: () => (this.paymentError = 'Error con tarjeta'),
-    }).render('#card-button-container');
+    paypal
+      .Buttons({
+        fundingSource: paypal.FUNDING.CARD,
+        style: {
+          layout: 'vertical',
+          shape: 'pill',
+          height: 50,
+        },
+        createOrder,
+        onApprove,
+        onError: () => (this.paymentError = 'Error con tarjeta'),
+      })
+      .render('#card-button-container');
   }
 
   goToCatalog() {

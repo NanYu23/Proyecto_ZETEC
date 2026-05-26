@@ -95,7 +95,6 @@
         <input type="radio" name="direccion" [(ngModel)]="seleccion" [value]="dir.id.toString()" />
         <div class="delivery-option__content">
           <span class="delivery-option__title">{{ dir.direccion }}</span>
-          <span class="delivery-option__sub">Teléfono: {{ dir.telefono }}</span>
         </div>
       </label>
     }
@@ -113,8 +112,6 @@
     <h2 class="new-address__title">Ingresar nueva dirección</h2>
 
     <input type="text" placeholder="Dirección:" [(ngModel)]="nuevaDireccion" class="input-field" />
-
-    <input type="text" placeholder="Teléfono:" [(ngModel)]="nuevoTelefono" class="input-field" />
 
     <button class="btn-primary btn-add" (click)="agregarDireccion()">
       Agregar nueva dirección

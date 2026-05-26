@@ -69,30 +69,51 @@
 <div class="historial-container">
   <h1 class="titulo">Historial de pedidos</h1>
 
-  <div class="historial-box">
-    <h2 class="subtitulo">
-      Pedido anteriormente...
-      <span class="precio-header">Precio</span>
-    </h2>
+  @if (cargando) {
+    <p style="text-align:center; color:#1a6dbf;">Cargando pedidos...</p>
+  }
 
-    <!-- ITEM -->
-    @for (pedido of pedidos; track $index; let i = $index) {
-      <div class="pedido-item">
-        <img src="https://via.placeholder.com/80" class="producto-img" />
+  @if (!cargando && ordenes.length === 0) {
+    <p style="text-align:center; color:#6b7280;">No tienes pedidos completados aún.</p>
+  }
 
-        <div class="descripcion">Descripción del producto</div>
+  @for (orden of ordenes; track orden.id) {
+    <div class="historial-box">
 
-        <div class="precio">$ {{ pedido.precio }} MXN</div>
-
-        @if (i === 0) {
-          <button class="btn-cancelar">Cancelar compra</button>
-        }
+      <!-- ENCABEZADO DE LA ORDEN -->
+      <div class="orden-header">
+        <div class="orden-info">
+          <span class="orden-id">Pedido #{{ orden.id }}</span>
+          <span class="orden-fecha">{{ orden.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</span>
+          <span class="orden-direccion">📍 {{ orden.direccion || 'Recolección en tienda' }}</span>
+        </div>
+        <div class="orden-total">
+          <span class="total-label">Total pagado:</span>
+          <span class="total-valor">$ {{ orden.total | number:'1.2-2' }} {{ orden.moneda }}</span>
+        </div>
       </div>
-    }
 
-    <!-- BOTÓN -->
-    <div class="btn-container">
-      <button routerLink="/inicio" class="btn-volver">Volver al inicio</button>
+      <!-- ITEMS DE LA ORDEN -->
+      <div class="orden-items-header">
+        <span>Producto</span>
+        <span>Cantidad</span>
+        <span>Precio unitario</span>
+        <span>Subtotal</span>
+      </div>
+
+      @for (item of orden.items; track item.producto_id) {
+        <div class="orden-item">
+          <span class="item-nombre">{{ item.nombre }}</span>
+          <span class="item-cantidad">{{ item.cantidad }}</span>
+          <span class="item-precio">$ {{ item.precio_unitario | number:'1.2-2' }}</span>
+          <span class="item-subtotal">$ {{ item.subtotal | number:'1.2-2' }}</span>
+        </div>
+      }
+
     </div>
+  }
+
+  <div class="btn-container">
+    <button routerLink="/inicio" class="btn-volver">Volver al inicio</button>
   </div>
 </div>

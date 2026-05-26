@@ -22,7 +22,6 @@ export class DireccionEntregaComponent implements OnInit {
   cargando = false;
 
   nuevaDireccion: string = '';
-  nuevoTelefono: string = '';
 
   async ngOnInit() {
     this.cargando = true;
@@ -43,20 +42,15 @@ export class DireccionEntregaComponent implements OnInit {
   }
 
   async agregarDireccion() {
-    if (!this.nuevaDireccion || !this.nuevoTelefono) {
-      alert('Completa los campos');
-      return;
-    }
+
 
     const nueva = await this.direccionService.agregarDireccion(
       this.nuevaDireccion,
-      this.nuevoTelefono
     );
 
     if (nueva) {
       this.direcciones.push(nueva);
       this.nuevaDireccion = '';
-      this.nuevoTelefono = '';
       alert('Nueva dirección agregada');
     } else {
       alert('Error al guardar la dirección');

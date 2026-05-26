@@ -1,5 +1,5 @@
 // paypal.controller.js
-
+import { verifyToken } from '../middleware/auth.middleware.js';
 import db from '../config/db.js';
 import {
   createPaypalOrder,
@@ -12,9 +12,17 @@ import {
 ========================= */
 export async function createOrder(req, res) {
   try {
-    const { items, payerEmail, customerName, direccion } = req.body;
+    const { items, customerName, direccion } = req.body;
 
     console.log('ITEMS QUE LLEGAN DEL FRONT:', items);
+
+    let payerEmail = 'cliente@correo.com';
+    if (req.user?.id) {
+      const [userRows] = await db.query(
+        'SELECT email FROM users WHERE id = ?', [req.user.id]
+      );
+      if (userRows.length > 0) payerEmail = userRows[0].email;
+    }
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ success: false, error: 'El carrito está vacío' });
@@ -34,7 +42,7 @@ export async function createOrder(req, res) {
     const [ordenResult] = await db.execute(
       `INSERT INTO ordenes (paypal_order_id, cliente_nombre, cliente_email, total, estado, direccion)
        VALUES (?, ?, ?, ?, 'CREATED', ?)`,
-      [paypalOrder.id, customerName || 'Cliente', payerEmail || 'cliente@correo.com', total.toFixed(2), direccion || 'Recolección física en tienda']
+      [paypalOrder.id, customerName || 'Cliente', payerEmail, total.toFixed(2), direccion || 'Recolección física en tienda'] // 👈
     );
 
     const ordenId = ordenResult.insertId;

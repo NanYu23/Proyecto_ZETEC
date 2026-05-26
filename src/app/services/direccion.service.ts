@@ -2,9 +2,8 @@ import { Injectable, signal, inject } from '@angular/core';
 import { AuthService } from './auth.service';
 
 export interface Direccion {
-  id: number;
+  id:        number;
   direccion: string;
-  telefono: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -14,7 +13,6 @@ export class DireccionService {
   private authService   = inject(AuthService);
   direccionSeleccionada = signal<Direccion | null>(null);
 
-  // Obtener el token para enviarlo en los headers
   private getHeaders(): HeadersInit {
     const token = this.authService.getToken();
     return {
@@ -23,7 +21,6 @@ export class DireccionService {
     };
   }
 
-  // Obtener ID del usuario desde el token
   private getUserId(): number | null {
     const token = this.authService.getToken();
     if (!token) return null;
@@ -46,20 +43,20 @@ export class DireccionService {
     return json.success ? json.data : [];
   }
 
-  async agregarDireccion(direccion: string, telefono: string): Promise<Direccion | null> {
+  async agregarDireccion(direccion: string): Promise<Direccion | null> {
     const userId = this.getUserId();
     if (!userId) return null;
 
     const res  = await fetch(this.API, {
       method:  'POST',
       headers: this.getHeaders(),
-      body:    JSON.stringify({ usuario_id: userId, direccion, telefono })
+      body:    JSON.stringify({ usuario_id: userId, direccion })
     });
     const json = await res.json();
     return json.success ? json.data : null;
   }
 
-  seleccionar(dir: Direccion | null): void {
+  seleccionar(dir: Direccion | null): void {  
     this.direccionSeleccionada.set(dir);
   }
 }

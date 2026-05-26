@@ -54,6 +54,7 @@ export const updateProfile = async (req, res) => {
 // GET /orders
 export const getOrderHistory = async (req, res) => {
     try {
+        // Primero obtener las órdenes
         const [orders] = await db.query(
             `SELECT 
                 o.id,
@@ -62,24 +63,24 @@ export const getOrderHistory = async (req, res) => {
                 o.moneda,
                 o.estado,
                 o.direccion,
-                o.fecha_creacion,
-                o.fecha_actualizacion,
-                JSON_ARRAYAGG(
-                    JSON_OBJECT(
-                        'producto_id',     oi.producto_id,
-                        'nombre',          oi.nombre,
-                        'cantidad',        oi.cantidad,
-                        'precio_unitario', oi.precio_unitario,
-                        'subtotal',        oi.subtotal
-                    )
-                ) AS items
+                o.fecha_creacion
             FROM ordenes o
-            JOIN orden_items oi ON oi.orden_id = o.id
             WHERE o.cliente_email = (SELECT email FROM users WHERE id = ?)
-            GROUP BY o.id
+            AND o.estado = 'COMPLETED'
             ORDER BY o.fecha_creacion DESC`,
             [req.user.id]
         );
+
+        // Luego obtener los items de cada orden
+        for (const order of orders) {
+            const [items] = await db.query(
+                `SELECT producto_id, nombre, cantidad, precio_unitario, subtotal
+                 FROM orden_items
+                 WHERE orden_id = ?`,
+                [order.id]
+            );
+            order.items = items;
+        }
 
         return res.status(200).json({ orders });
 
