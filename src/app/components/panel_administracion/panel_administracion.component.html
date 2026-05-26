@@ -58,6 +58,12 @@
           <p>Precio: $ {{ producto.price }} MXN</p>
           <p>Stock: {{ producto.inStock }}</p>
           <p>Categoría: {{ producto.category }}</p>
+
+          @if (producto.inStock === 0) {
+            <p class="stock-agotado">🚫 Sin stock</p>
+          } @else if (producto.inStock < 5) {
+            <p class="stock-bajo">⚠️ Stock bajo</p>
+          }
         </div>
 
         <div class="producto-botones">

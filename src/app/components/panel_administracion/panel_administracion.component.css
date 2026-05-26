@@ -400,3 +400,7 @@
 .modal-btn--confirm:hover {
   background: #c0392b;
 }
+
+/*STOCK BAJO*/
+.stock-bajo    { color: #d97706; font-weight: 600; font-size: 13px; margin: 4px 0 0; }
+.stock-agotado { color: #e74c3c; font-weight: 600; font-size: 13px; margin: 4px 0 0; }
