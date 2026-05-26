@@ -54,7 +54,6 @@ export const updateProfile = async (req, res) => {
 // GET /orders
 export const getOrderHistory = async (req, res) => {
     try {
-        // Primero obtener las órdenes
         const [orders] = await db.query(
             `SELECT 
                 o.id,
@@ -62,21 +61,21 @@ export const getOrderHistory = async (req, res) => {
                 o.total,
                 o.moneda,
                 o.estado,
+                o.cancelado,
                 o.direccion,
                 o.fecha_creacion
             FROM ordenes o
             WHERE o.cliente_email = (SELECT email FROM users WHERE id = ?)
-            AND o.estado = 'COMPLETED'
+            AND o.cancelado = 0
+            AND o.estado IN ('COMPLETED', 'CREADO', 'CREATED')
             ORDER BY o.fecha_creacion DESC`,
             [req.user.id]
         );
 
-        // Luego obtener los items de cada orden
         for (const order of orders) {
             const [items] = await db.query(
                 `SELECT producto_id, nombre, cantidad, precio_unitario, subtotal
-                 FROM orden_items
-                 WHERE orden_id = ?`,
+                 FROM orden_items WHERE orden_id = ?`,
                 [order.id]
             );
             order.items = items;
@@ -86,6 +85,35 @@ export const getOrderHistory = async (req, res) => {
 
     } catch (error) {
         console.error('Error en getOrderHistory:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+
+export const cancelOrder = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const [rows] = await db.query(
+            `SELECT id, estado FROM ordenes 
+             WHERE id = ? AND cliente_email = (SELECT email FROM users WHERE id = ?)`,
+            [id, req.user.id]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Orden no encontrada' });
+        }
+
+        const estado = rows[0].estado;
+        if (estado !== 'CREADO' && estado !== 'CREATED') { // 👈 aceptar ambos
+            return res.status(400).json({ message: 'Solo se pueden cancelar órdenes pendientes' });
+        }
+
+        await db.query('UPDATE ordenes SET cancelado = 1 WHERE id = ?', [id]);
+
+        return res.status(200).json({ message: 'Orden cancelada correctamente' });
+
+    } catch (error) {
+        console.error('Error en cancelOrder:', error);
         return res.status(500).json({ message: 'Error interno del servidor' });
     }
 };

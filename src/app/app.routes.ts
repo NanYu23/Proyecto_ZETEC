@@ -11,21 +11,25 @@ export const routes: Routes = [
   },
   {
     path: 'catalogo',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./components/catalogo/catalogo.component').then((m) => m.CatalogoComponent),
   },
   {
     path: 'carrito',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./components/carrito/carrito.component').then((m) => m.CarritoComponent),
   },
   {
     path: 'checkout',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./components/checkout/checkout.component').then((m) => m.CheckoutComponent),
   },
   {
     path: 'direccion-entrega',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./components/direccion-entrega/direccion-entrega.component').then(
         (m) => m.DireccionEntregaComponent,
@@ -33,6 +37,7 @@ export const routes: Routes = [
   },
   {
     path: 'finalizar-pedido',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./components/finalizar_pedido/finalizar_pedido.component').then(
         (m) => m.FinalizarPedidoComponent,
@@ -62,6 +67,7 @@ export const routes: Routes = [
   },
   {
     path: 'panel_administracion',
+    canActivate: [authGuard, adminGuard],      
     loadComponent: () =>
       import('./components/panel_administracion/panel_administracion.component').then(
         (m) => m.PanelAdministracionComponent,
@@ -77,6 +83,7 @@ export const routes: Routes = [
 
   {
     path: 'agregar_producto',
+    canActivate: [authGuard, adminGuard],      
     loadComponent: () =>
       import('./components/agregar_producto/agregar_producto.component').then(
         (m) => m.AgregarProductoComponent,
@@ -93,6 +100,7 @@ export const routes: Routes = [
   },
   {
     path: 'crear_categoria',
+    canActivate: [authGuard, adminGuard],      
     loadComponent: () =>
       import('./components/crear_categoria/crear_categoria.component').then(
         (m) => m.CrearCategoriaComponent,

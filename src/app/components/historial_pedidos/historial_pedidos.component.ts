@@ -1,10 +1,9 @@
-//historial_pedidos.component.ts
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CarritoService } from '../../services/carrito.service';
-import { AuthService } from '../../services/auth.service';
+import { AuthService }    from '../../services/auth.service';
 
 interface OrdenItem {
   producto_id:     number;
@@ -20,6 +19,7 @@ interface Orden {
   total:           number;
   moneda:          string;
   estado:          string;
+  cancelado:       number;
   direccion:       string;
   fecha_creacion:  string;
   items:           OrdenItem[];
@@ -37,21 +37,26 @@ export class HistorialPedidosComponent implements OnInit {
   carritoService = inject(CarritoService);
   private http   = inject(HttpClient);
   private cdr    = inject(ChangeDetectorRef);
-  router = inject(Router);
-  authService = inject(AuthService);
-  
-  ordenes: Orden[] = [];
+  router         = inject(Router);
+  authService    = inject(AuthService);
+
+  ordenes:  Orden[] = [];
   cargando = true;
 
+  modalCancelarVisible    = false;
+  ordenACancelar: Orden | null = null;
+
   irAlPerfil() {
-    if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/perfil_usuario']);
-    } else {
-      this.router.navigate(['/inicio_sesion']);
-    }
+    this.authService.isLoggedIn()
+      ? this.router.navigate(['/perfil_usuario'])
+      : this.router.navigate(['/inicio_sesion']);
   }
 
   ngOnInit(): void {
+    this.cargarOrdenes();
+  }
+
+  cargarOrdenes(): void {
     this.http.get<{ orders: Orden[] }>(
       `http://localhost:3000/api/user/orders?t=${Date.now()}`
     ).subscribe({
@@ -61,13 +66,36 @@ export class HistorialPedidosComponent implements OnInit {
           items: typeof o.items === 'string' ? JSON.parse(o.items) : o.items
         }));
         this.cargando = false;
-        this.cdr.detectChanges(); // 
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error cargando historial:', err);
         this.cargando = false;
-        this.cdr.detectChanges(); //
+        this.cdr.detectChanges();
       }
     });
+  }
+
+  abrirModalCancelar(orden: Orden) {
+    this.ordenACancelar       = orden;
+    this.modalCancelarVisible = true;
+  }
+
+  cerrarModalCancelar() {
+    this.ordenACancelar       = null;
+    this.modalCancelarVisible = false;
+  }
+
+  confirmarCancelar() {
+    if (!this.ordenACancelar) return;
+
+    this.http.delete(`http://localhost:3000/api/user/orders/${this.ordenACancelar.id}`)
+      .subscribe({
+        next: () => {
+          this.cerrarModalCancelar();
+          this.cargarOrdenes();
+        },
+        error: (err) => alert(err.error?.message || 'Error al cancelar la orden')
+      });
   }
 }
