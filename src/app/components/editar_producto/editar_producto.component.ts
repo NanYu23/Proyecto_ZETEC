@@ -37,17 +37,19 @@ export class EditarProductoComponent implements OnInit {
 
   ngOnInit(): void {
     this.productoId = Number(this.route.snapshot.paramMap.get('id'));
-    console.log('Producto ID:', this.productoId); // 👈
+    console.log('Producto ID:', this.productoId);
 
-    this.productService.getAll().subscribe((productos: Product[]) => {
-      this.categorias.set([...new Set(productos.map((p) => p.category))].sort());
+    //obtener categorias de la base de datos
+    this.http.get<{ categorias: any[] }>('http://localhost:3000/api/panel/categorias').subscribe({
+      next: (res) => this.categorias.set(res.categorias.map((c) => c.nombre)),
+      error: (err) => console.error('Error cargando categorías:', err),
     });
 
     this.http
       .get<{ producto: any }>(`http://localhost:3000/api/panel/productos/${this.productoId}`)
       .subscribe({
         next: (res) => {
-          console.log('Producto cargado:', res); // 👈
+          console.log('Producto cargado:', res);
           const p = res.producto;
           this.nombre = p.name;
           this.descripcion = p.description;
@@ -58,7 +60,7 @@ export class EditarProductoComponent implements OnInit {
           this.imagenPreview = p.imageUrl;
           this.cdr.detectChanges();
         },
-        error: (err) => console.error('❌ Error cargando producto:', err), // 👈
+        error: (err) => console.error('Error cargando producto:', err),
       });
   }
 

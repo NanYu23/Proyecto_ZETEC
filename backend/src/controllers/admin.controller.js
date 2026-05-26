@@ -56,3 +56,89 @@ export const createProducto = async (req, res) => {
         return res.status(500).json({ message: 'Error interno del servidor' });
     }
 };
+
+export const getCategorias = async (req, res) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM categorias ORDER BY nombre ASC');
+        return res.status(200).json({ categorias: rows });
+    } catch (error) {
+        console.error('Error en getCategorias:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+
+export const createCategoria = async (req, res) => {
+    try {
+        const { nombre } = req.body;
+        if (!nombre?.trim()) {
+            return res.status(400).json({ message: 'El nombre es requerido' });
+        }
+
+        const [existing] = await db.query(
+            'SELECT id FROM categorias WHERE nombre = ?', [nombre.trim()]
+        );
+        if (existing.length > 0) {
+            return res.status(409).json({ message: 'La categoría ya existe' });
+        }
+
+        const [result] = await db.query(
+            'INSERT INTO categorias (nombre) VALUES (?)', [nombre.trim()]
+        );
+        return res.status(201).json({ message: 'Categoría creada', id: result.insertId });
+
+    } catch (error) {
+        console.error('Error en createCategoria:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+
+export const updateCategoria = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nombre } = req.body;
+
+        if (!nombre?.trim()) {
+            return res.status(400).json({ message: 'El nombre es requerido' });
+        }
+
+        // Actualizar también los productos que usen esta categoría
+        const [categoria] = await db.query('SELECT nombre FROM categorias WHERE id = ?', [id]);
+        if (categoria.length === 0) {
+            return res.status(404).json({ message: 'Categoría no encontrada' });
+        }
+
+        const nombreAnterior = categoria[0].nombre;
+
+        await db.query('UPDATE categorias SET nombre = ? WHERE id = ?', [nombre.trim(), id]);
+        await db.query(
+            'UPDATE productos SET category = ? WHERE category = ?',
+            [nombre.trim(), nombreAnterior]
+        );
+
+        return res.status(200).json({ message: 'Categoría actualizada' });
+
+    } catch (error) {
+        console.error('Error en updateCategoria:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+
+export const deleteProducto = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const [result] = await db.query(
+            'UPDATE productos SET activo = 0 WHERE id = ?', [id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+
+        return res.status(200).json({ message: 'Producto eliminado correctamente' });
+
+    } catch (error) {
+        console.error('Error en deleteProducto:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};

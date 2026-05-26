@@ -1,15 +1,9 @@
 // agregar_producto.component.ts
-import {
-  Component,
-  ChangeDetectorRef,
-  inject,
-  OnInit,
-  signal
-} from '@angular/core';
+import { Component, ChangeDetectorRef, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { AuthService }    from '../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { ProductService } from '../../services/producto.service';
 import { Product } from '../../models/producto.model';
 
@@ -21,27 +15,30 @@ import { Product } from '../../models/producto.model';
   styleUrls: ['./agregar_producto.component.css'],
 })
 export class AgregarProductoComponent implements OnInit {
+  nombre: string = '';
+  descripcion: string = '';
+  precio: number | null = null;
+  stock: number = 1;
+  categoria: string = '';
+  imageUrl: string = '';
 
-  nombre:      string       = '';
-  descripcion: string       = '';
-  precio:      number | null = null;
-  stock:       number       = 1;
-  categoria:   string       = '';
-  imageUrl:    string       = '';
-
-  categorias    = signal<string[]>([]);
+  categorias = signal<string[]>([]);
   imagenPreview = 'fondo_imagen_vacia.png';
 
   private productService = inject(ProductService);
-  private authService    = inject(AuthService);
-  private http           = inject(HttpClient);
+  private authService = inject(AuthService);
+  private http = inject(HttpClient);
 
-  constructor(private router: Router, private cdr: ChangeDetectorRef) {}
-
+  constructor(
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+  ) {}
+ 
+  //Obtener las categorías de la base de datos
   ngOnInit(): void {
-    this.productService.getAll().subscribe((productos: Product[]) => {
-      const categoriasUnicas = [...new Set(productos.map(p => p.category))].sort();
-      this.categorias.set(categoriasUnicas);
+    this.http.get<{ categorias: any[] }>('http://localhost:3000/api/panel/categorias').subscribe({
+      next: (res) => this.categorias.set(res.categorias.map((c) => c.nombre)),
+      error: (err) => console.error('Error cargando categorías:', err),
     });
   }
 
@@ -51,8 +48,12 @@ export class AgregarProductoComponent implements OnInit {
       : this.router.navigate(['/inicio_sesion']);
   }
 
-  aumentarStock(): void { this.stock++; }
-  disminuirStock(): void { if (this.stock > 1) this.stock--; }
+  aumentarStock(): void {
+    this.stock++;
+  }
+  disminuirStock(): void {
+    if (this.stock > 1) this.stock--;
+  }
 
   seleccionarImagen(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -60,7 +61,7 @@ export class AgregarProductoComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         this.imagenPreview = reader.result as string;
-        this.imageUrl      = reader.result as string;
+        this.imageUrl = reader.result as string;
         this.cdr.detectChanges();
       };
       reader.readAsDataURL(input.files[0]);
@@ -73,19 +74,21 @@ export class AgregarProductoComponent implements OnInit {
       return;
     }
 
-    this.http.post('http://localhost:3000/api/panel/productos', {
-      name:        this.nombre,
-      price:       this.precio,
-      inStock:     this.stock,
-      category:    this.categoria,
-      description: this.descripcion,
-      imageUrl:    this.imageUrl
-    }).subscribe({
-      next: () => {
-        alert('Producto agregado correctamente');
-        this.router.navigate(['/panel_administracion']);
-      },
-      error: (err) => alert(err.error?.message || 'Error al agregar el producto')
-    });
+    this.http
+      .post('http://localhost:3000/api/panel/productos', {
+        name: this.nombre,
+        price: this.precio,
+        inStock: this.stock,
+        category: this.categoria,
+        description: this.descripcion,
+        imageUrl: this.imageUrl,
+      })
+      .subscribe({
+        next: () => {
+          alert('Producto agregado correctamente');
+          this.router.navigate(['/panel_administracion']);
+        },
+        error: (err) => alert(err.error?.message || 'Error al agregar el producto'),
+      });
   }
 }

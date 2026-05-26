@@ -1,9 +1,10 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ProductService } from '../../services/producto.service';
-import { Product } from '../../models/producto.model';
-import { AuthService }    from '../../services/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
+
+interface Categoria { id: number; nombre: string; }
 
 @Component({
   selector: 'app-crear-categoria',
@@ -13,97 +14,86 @@ import { AuthService }    from '../../services/auth.service';
   styleUrls: ['./crear_categoria.component.css'],
 })
 export class CrearCategoriaComponent implements OnInit {
-  nuevaCategoria: string = '';
-  mostrarModalEditar: boolean = false;
-  mostrarModalExito: boolean = false;
 
+  nuevaCategoria:    string = '';
   categoriaEditando: string = '';
+  indiceEditando:    number = -1;
+  idEditando:        number = -1;
 
-  indiceEditando: number = -1;
+  mostrarModalEditar = false;
+  mostrarModalExito  = false;
 
-  // mismas categorías dinámicas
-  categorias = signal<string[]>([]);
+  categorias = signal<Categoria[]>([]);
 
-  private productService = inject(ProductService);
-  private authService    = inject(AuthService);
+  private http        = inject(HttpClient);
+  private authService = inject(AuthService);
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.productService.getAll().subscribe((productos: Product[]) => {
-      const categoriasUnicas = [...new Set(productos.map((p) => p.category))].sort();
+    this.cargarCategorias();
+  }
 
-      this.categorias.set(categoriasUnicas);
-    });
+  cargarCategorias(): void {
+    this.http.get<{ categorias: Categoria[] }>('http://localhost:3000/api/panel/categorias')
+      .subscribe({
+        next: (res) => this.categorias.set(res.categorias),
+        error: (err) => console.error('Error cargando categorías:', err)
+      });
   }
 
   irAlPerfil(): void {
-    if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/perfil_usuario']); 
-    } else {
-      this.router.navigate(['/inicio_sesion']);
+    this.authService.isLoggedIn()
+      ? this.router.navigate(['/perfil_usuario'])
+      : this.router.navigate(['/inicio_sesion']);
+  }
+
+  agregarCategoria(): void {
+    if (!this.nuevaCategoria.trim()) {
+      alert('Escribe una categoría');
+      return;
     }
+
+    this.http.post('http://localhost:3000/api/panel/categorias', {
+      nombre: this.nuevaCategoria.trim()
+    }).subscribe({
+      next: () => {
+        this.nuevaCategoria = '';
+        this.mostrarModalExito = true;
+        this.cargarCategorias();
+      },
+      error: (err) => alert(err.error?.message || 'Error al agregar categoría')
+    });
   }
 
-
- agregarCategoria(): void {
-
-  if (!this.nuevaCategoria.trim()) {
-    alert('Escribe una categoría');
-    return;
-  }
-
-  const categoriasActuales = this.categorias();
-
-  if (categoriasActuales.includes(this.nuevaCategoria.trim())) {
-    alert('La categoría ya existe');
-    return;
-  }
-
-  this.categorias.set([
-    ...categoriasActuales,
-    this.nuevaCategoria.trim()
-  ]);
-
-  this.nuevaCategoria = '';
-
-  this.mostrarModalExito = true;
-}
-cerrarModalExito(): void {
-
-  this.mostrarModalExito = false;
-}
-
+  cerrarModalExito(): void { this.mostrarModalExito = false; }
 
   abrirModalEditar(index: number): void {
+    const cat = this.categorias()[index];
+    this.indiceEditando    = index;
+    this.idEditando        = cat.id;
+    this.categoriaEditando = cat.nombre;
+    this.mostrarModalEditar = true;
+  }
 
-  this.indiceEditando = index;
+  cerrarModal(): void {
+    this.mostrarModalEditar = false;
+    this.categoriaEditando  = '';
+    this.indiceEditando     = -1;
+    this.idEditando         = -1;
+  }
 
-  this.categoriaEditando = this.categorias()[index];
+  guardarCategoria(): void {
+    if (!this.categoriaEditando.trim()) return;
 
-  this.mostrarModalEditar = true;
-}
-
-cerrarModal(): void {
-
-  this.mostrarModalEditar = false;
-
-  this.categoriaEditando = '';
-
-  this.indiceEditando = -1;
-}
-
-guardarCategoria(): void {
-
-  if (!this.categoriaEditando.trim()) return;
-
-  const copia = [...this.categorias()];
-
-  copia[this.indiceEditando] = this.categoriaEditando.trim();
-
-  this.categorias.set(copia);
-
-  this.cerrarModal();
-}
-
+    this.http.put(`http://localhost:3000/api/panel/categorias/${this.idEditando}`, {
+      nombre: this.categoriaEditando.trim()
+    }).subscribe({
+      next: () => {
+        this.cerrarModal();
+        this.cargarCategorias();
+      },
+      error: (err) => alert(err.error?.message || 'Error al actualizar categoría')
+    });
+  }
 }
