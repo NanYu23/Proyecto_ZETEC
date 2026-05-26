@@ -20,8 +20,10 @@ export class CrearCategoriaComponent implements OnInit {
   indiceEditando:    number = -1;
   idEditando:        number = -1;
 
-  mostrarModalEditar = false;
-  mostrarModalExito  = false;
+  mostrarModalEditar   = false;
+  mostrarModalExito    = false;
+  mostrarModalEliminar = false;         
+  categoriaAEliminar: Categoria | null = null; 
 
   categorias = signal<Categoria[]>([]);
 
@@ -30,9 +32,7 @@ export class CrearCategoriaComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit(): void {
-    this.cargarCategorias();
-  }
+  ngOnInit(): void { this.cargarCategorias(); }
 
   cargarCategorias(): void {
     this.http.get<{ categorias: Categoria[] }>('http://localhost:3000/api/panel/categorias')
@@ -49,16 +49,13 @@ export class CrearCategoriaComponent implements OnInit {
   }
 
   agregarCategoria(): void {
-    if (!this.nuevaCategoria.trim()) {
-      alert('Escribe una categoría');
-      return;
-    }
+    if (!this.nuevaCategoria.trim()) { alert('Escribe una categoría'); return; }
 
     this.http.post('http://localhost:3000/api/panel/categorias', {
       nombre: this.nuevaCategoria.trim()
     }).subscribe({
       next: () => {
-        this.nuevaCategoria = '';
+        this.nuevaCategoria    = '';
         this.mostrarModalExito = true;
         this.cargarCategorias();
       },
@@ -70,9 +67,9 @@ export class CrearCategoriaComponent implements OnInit {
 
   abrirModalEditar(index: number): void {
     const cat = this.categorias()[index];
-    this.indiceEditando    = index;
-    this.idEditando        = cat.id;
-    this.categoriaEditando = cat.nombre;
+    this.indiceEditando     = index;
+    this.idEditando         = cat.id;
+    this.categoriaEditando  = cat.nombre;
     this.mostrarModalEditar = true;
   }
 
@@ -89,11 +86,32 @@ export class CrearCategoriaComponent implements OnInit {
     this.http.put(`http://localhost:3000/api/panel/categorias/${this.idEditando}`, {
       nombre: this.categoriaEditando.trim()
     }).subscribe({
-      next: () => {
-        this.cerrarModal();
-        this.cargarCategorias();
-      },
+      next: () => { this.cerrarModal(); this.cargarCategorias(); },
       error: (err) => alert(err.error?.message || 'Error al actualizar categoría')
     });
+  }
+
+  //s métodos para eliminar
+  abrirModalEliminar(index: number): void {
+    this.categoriaAEliminar    = this.categorias()[index];
+    this.mostrarModalEliminar  = true;
+  }
+
+  cancelarEliminar(): void {
+    this.categoriaAEliminar   = null;
+    this.mostrarModalEliminar = false;
+  }
+
+  confirmarEliminar(): void {
+    if (!this.categoriaAEliminar) return;
+
+    this.http.delete(`http://localhost:3000/api/panel/categorias/${this.categoriaAEliminar.id}`)
+      .subscribe({
+        next: () => {
+          this.cancelarEliminar();
+          this.cargarCategorias();
+        },
+        error: (err) => alert(err.error?.message || 'Error al eliminar categoría')
+      });
   }
 }

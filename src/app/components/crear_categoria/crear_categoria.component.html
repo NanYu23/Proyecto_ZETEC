@@ -60,85 +60,60 @@
         </button>
 
         <span class="nombre-categoria">
-          {{  cat.nombre  }}
+          {{ cat.nombre }}
         </span>
+        <button class="btn-eliminar-cat" (click)="abrirModalEliminar(i)">✕</button>
       </div>
     }
   </div>
 
+  @if (mostrarModalEliminar && categoriaAEliminar) {
+    <div class="modal-overlay" (click)="cancelarEliminar()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <h2 class="modal-titulo">¿Eliminar categoría?</h2>
+        <p style="text-align: center; color: #6b7280; margin-bottom: 24px">
+          ¿Estás seguro de eliminar <strong>{{ categoriaAEliminar.nombre }}</strong
+          >?
+        </p>
+        <div class="modal-botones">
+          <button class="btn-modal cancelar" (click)="cancelarEliminar()">Cancelar</button>
+          <button class="btn-modal eliminar" (click)="confirmarEliminar()">Sí, eliminar</button>
+        </div>
+      </div>
+    </div>
+  }
+
   <!-- ===== MODAL EDITAR ===== -->
 
-@if (mostrarModalEditar) {
+  @if (mostrarModalEditar) {
+    <div class="modal-overlay">
+      <div class="modal">
+        <h2 class="modal-titulo">Editar categoría</h2>
 
-  <div class="modal-overlay">
+        <input type="text" [(ngModel)]="categoriaEditando" class="modal-input" />
 
-    <div class="modal">
+        <div class="modal-botones">
+          <button class="btn-modal cancelar" (click)="cerrarModal()">Cancelar</button>
 
-      <h2 class="modal-titulo">
-        Editar categoría
-      </h2>
-
-      <input
-        type="text"
-        [(ngModel)]="categoriaEditando"
-        class="modal-input"
-      />
-
-      <div class="modal-botones">
-
-        <button
-          class="btn-modal cancelar"
-          (click)="cerrarModal()"
-        >
-          Cancelar
-        </button>
-
-        <button
-          class="btn-modal guardar"
-          (click)="guardarCategoria()"
-        >
-          Guardar
-        </button>
-
+          <button class="btn-modal guardar" (click)="guardarCategoria()">Guardar</button>
+        </div>
       </div>
-
     </div>
+  }
 
-  </div>
-}
+  <!-- ===== MODAL EXITO ===== -->
 
+  @if (mostrarModalExito) {
+    <div class="modal-overlay">
+      <div class="modal-exito">
+        <div class="check-icono">✓</div>
 
-<!-- ===== MODAL EXITO ===== -->
+        <h2>Categoría agregada</h2>
 
-@if (mostrarModalExito) {
+        <p>La categoría se agregó correctamente.</p>
 
-  <div class="modal-overlay">
-
-    <div class="modal-exito">
-
-      <div class="check-icono">
-        ✓
+        <button class="btn-cerrar-exito" (click)="cerrarModalExito()">Entendido</button>
       </div>
-
-      <h2>
-        Categoría agregada
-      </h2>
-
-      <p>
-        La categoría se agregó correctamente.
-      </p>
-
-      <button
-        class="btn-cerrar-exito"
-        (click)="cerrarModalExito()"
-      >
-        Entendido
-      </button>
-
     </div>
-
-  </div>
-
-}
-
+  }
 </div>

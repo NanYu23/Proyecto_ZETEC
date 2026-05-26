@@ -231,7 +231,7 @@
   color: #111;
 }
 
-/* ===== BOTON EDITAR ===== */
+/* ===== BOTON EDITAR Y ELIMINAR ===== */
 
 .btn-editar {
   width: 42px;
@@ -266,6 +266,28 @@
   background: #f3f3f3;
   transform: scale(1.05);
 }
+
+.btn-eliminar-cat {
+  margin-left: auto;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-eliminar-cat:hover { background: #c0392b; }
+
+.btn-modal.eliminar {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-modal.eliminar:hover { background: #c0392b; }
 
 /* ===== MODAL ===== */
 

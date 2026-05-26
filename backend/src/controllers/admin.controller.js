@@ -59,7 +59,9 @@ export const createProducto = async (req, res) => {
 
 export const getCategorias = async (req, res) => {
     try {
-        const [rows] = await db.query('SELECT * FROM categorias ORDER BY nombre ASC');
+        const [rows] = await db.query(
+            'SELECT * FROM categorias WHERE activo = 1 ORDER BY nombre ASC'
+        );
         return res.status(200).json({ categorias: rows });
     } catch (error) {
         console.error('Error en getCategorias:', error);
@@ -139,6 +141,26 @@ export const deleteProducto = async (req, res) => {
 
     } catch (error) {
         console.error('Error en deleteProducto:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+
+export const deleteCategoria = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const [result] = await db.query(
+            'UPDATE categorias SET activo = 0 WHERE id = ?', [id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Categoría no encontrada' });
+        }
+
+        return res.status(200).json({ message: 'Categoría eliminada correctamente' });
+
+    } catch (error) {
+        console.error('Error en deleteCategoria:', error);
         return res.status(500).json({ message: 'Error interno del servidor' });
     }
 };

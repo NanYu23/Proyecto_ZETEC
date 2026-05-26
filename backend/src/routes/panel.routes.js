@@ -8,7 +8,8 @@ import {
     deleteProducto,
     getCategorias,
     createCategoria,
-    updateCategoria
+    updateCategoria,
+    deleteCategoria
 } from '../controllers/admin.controller.js';
 
 const router = Router();
@@ -21,5 +22,6 @@ router.delete('/productos/:id', verifyToken, adminMiddleware, deleteProducto);
 router.get('/categorias',          verifyToken, adminMiddleware, getCategorias);
 router.post('/categorias',         verifyToken, adminMiddleware, createCategoria);
 router.put('/categorias/:id',      verifyToken, adminMiddleware, updateCategoria);
+router.delete('/categorias/:id', verifyToken, adminMiddleware, deleteCategoria); 
 
 export default router;
