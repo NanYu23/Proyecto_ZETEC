@@ -67,7 +67,7 @@ export const routes: Routes = [
   },
   {
     path: 'panel_administracion',
-    canActivate: [authGuard, adminGuard],      
+    canActivate: [authGuard, adminGuard],
     loadComponent: () =>
       import('./components/panel_administracion/panel_administracion.component').then(
         (m) => m.PanelAdministracionComponent,
@@ -83,16 +83,15 @@ export const routes: Routes = [
 
   {
     path: 'agregar_producto',
-    canActivate: [authGuard, adminGuard],      
+    canActivate: [authGuard, adminGuard],
     loadComponent: () =>
       import('./components/agregar_producto/agregar_producto.component').then(
         (m) => m.AgregarProductoComponent,
       ),
-
   },
   {
-    path: 'editar_producto/:id',               
-    canActivate: [authGuard, adminGuard],      
+    path: 'editar_producto/:id',
+    canActivate: [authGuard, adminGuard],
     loadComponent: () =>
       import('./components/editar_producto/editar_producto.component').then(
         (m) => m.EditarProductoComponent,
@@ -100,10 +99,17 @@ export const routes: Routes = [
   },
   {
     path: 'crear_categoria',
-    canActivate: [authGuard, adminGuard],      
+    canActivate: [authGuard, adminGuard],
     loadComponent: () =>
       import('./components/crear_categoria/crear_categoria.component').then(
         (m) => m.CrearCategoriaComponent,
+      ),
+  },
+  {
+    path: 'recuperar-password',
+    loadComponent: () =>
+      import('./components/recuperar_password/recuperar_password.component').then(
+        (m) => m.RecuperarPasswordComponent,
       ),
   },
 

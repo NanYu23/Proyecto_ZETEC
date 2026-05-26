@@ -76,3 +76,37 @@ export const enviarConfirmacionPedido = async ({ email, nombre, orderId, items, 
         html
     });
 };
+
+export const enviarCodigoRecuperacion = async ({ email, username, code }) => {
+    const html = `
+        <div style="font-family:Arial,sans-serif; max-width:600px; margin:0 auto;">
+            <div style="background:#1a6dbf; padding:24px; text-align:center;">
+                <h1 style="color:white; margin:0;">Papelería Zetec</h1>
+                <p style="color:rgba(255,255,255,0.85); margin:4px 0 0;">Recuperación de contraseña</p>
+            </div>
+            <div style="padding:24px;">
+                <p>Hola <strong>${username}</strong>,</p>
+                <p>Recibimos una solicitud para recuperar tu contraseña. Usa el siguiente código:</p>
+                <div style="background:#f0f7ff; border-radius:12px; padding:24px; text-align:center; margin:24px 0;">
+                    <p style="font-size:48px; font-weight:800; letter-spacing:12px; color:#1a6dbf; margin:0;">
+                        ${code}
+                    </p>
+                </div>
+                <p style="color:#6b7280; font-size:13px;">
+                    Este código expira en <strong>15 minutos</strong>.<br>
+                    Si no solicitaste este cambio, ignora este correo.
+                </p>
+            </div>
+            <div style="background:#f9fafb; padding:16px; text-align:center; font-size:12px; color:#9ca3af;">
+                ZETEC S.A. DE C.V. | Guadalajara, Jalisco, México
+            </div>
+        </div>
+    `;
+
+    await transporter.sendMail({
+        from:    '"Papelería Zetec" <no-reply@zetec.com.mx>',
+        to:      email,
+        subject: '🔐 Código de recuperación de contraseña',
+        html
+    });
+};
