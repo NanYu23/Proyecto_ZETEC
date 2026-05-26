@@ -10,7 +10,7 @@ import {
 
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
+import { AuthService }    from '../../services/auth.service';
 import { ProductService } from '../../services/producto.service';
 import { Product } from '../../models/producto.model';
 
@@ -28,12 +28,13 @@ export class AgregarProductoComponent implements OnInit {
   stock: number = 1;
   categoria: string = '';
 
-  // 👇 categorías dinámicas
+  // categorías dinámicas
   categorias = signal<string[]>([]);
 
   imagenPreview: string = 'fondo_imagen_vacia.png';
 
   private productService = inject(ProductService);
+  private authService    = inject(AuthService)
 
   constructor(
     private router: Router,
@@ -44,7 +45,7 @@ export class AgregarProductoComponent implements OnInit {
 
     this.productService.getAll().subscribe((productos: Product[]) => {
 
-      // 👇 obtener categorías únicas
+      //  obtener categorías únicas
       const categoriasUnicas = [
         ...new Set(productos.map(p => p.category))
       ].sort();
@@ -54,7 +55,11 @@ export class AgregarProductoComponent implements OnInit {
   }
 
   irAlPerfil(): void {
-    this.router.navigate(['/perfil']);
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/perfil_usuario']);
+    } else {
+      this.router.navigate(['/inicio_sesion']);
+    }
   }
 
   aumentarStock(): void {

@@ -50,7 +50,7 @@
           <p>Categoría: {{ producto.category }}</p>
         </div>
 
-        <button routerLink="/editar_producto" routerLinkActive="active" class="btn-editar" >Editar</button>
+        <button [routerLink]="['/editar_producto', producto.id]" class="btn-editar">Editar</button>
       </div>
     }
   </div>

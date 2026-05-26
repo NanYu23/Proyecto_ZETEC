@@ -3,6 +3,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../services/producto.service';
 import { Product } from '../../models/producto.model';
+import { AuthService }    from '../../services/auth.service';
 
 @Component({
   selector: 'app-crear-categoria',
@@ -20,10 +21,11 @@ export class CrearCategoriaComponent implements OnInit {
 
   indiceEditando: number = -1;
 
-  // 👇 mismas categorías dinámicas
+  // mismas categorías dinámicas
   categorias = signal<string[]>([]);
 
   private productService = inject(ProductService);
+  private authService    = inject(AuthService);
 
   constructor(private router: Router) {}
 
@@ -36,8 +38,13 @@ export class CrearCategoriaComponent implements OnInit {
   }
 
   irAlPerfil(): void {
-    this.router.navigate(['/perfil']);
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/perfil_usuario']); 
+    } else {
+      this.router.navigate(['/inicio_sesion']);
+    }
   }
+
 
  agregarCategoria(): void {
 

@@ -8,6 +8,8 @@ export const adminGuard: CanActivateFn = () => {
     const router = inject(Router);
     const rol    = localStorage.getItem('rol');
 
+    console.log('adminGuard ejecutado - rol:', rol); 
+
     if (rol === '2') {
         return true;
     }

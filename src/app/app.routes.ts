@@ -1,6 +1,7 @@
 // app.routes.ts
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
@@ -83,7 +84,8 @@ export const routes: Routes = [
 
   },
   {
-    path: 'editar_producto',
+    path: 'editar_producto/:id',               
+    canActivate: [authGuard, adminGuard],      
     loadComponent: () =>
       import('./components/editar_producto/editar_producto.component').then(
         (m) => m.EditarProductoComponent,
