@@ -40,5 +40,4 @@ export class PanelAdministracionComponent implements OnInit {
 
   agregarProducto() { alert('Agregar producto'); }
   administrarCategorias() { alert('Administrar categorías'); }
-  editarProducto(producto: Product) { alert('Editar: ' + producto.name); }
 }

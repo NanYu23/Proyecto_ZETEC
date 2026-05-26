@@ -1,0 +1,301 @@
+/* editar_producto.component.css */
+
+
+
+:host {
+  display: block;
+  background: var(--color-bg);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+/* ===== NAVBAR ===== */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  background-color: #1a6dbf !important;
+  padding: 0 28px;
+  height: 62px;
+  gap: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  box-sizing: border-box;
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.navbar__logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255,255,255,0.15);
+}
+
+.navbar__logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.navbar__title {
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.navbar__links {
+  display: flex;
+  gap: 28px;
+}
+
+.navbar__link {
+  color: #ffffff !important;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0.9;
+  transition: 0.2s;
+}
+
+.navbar__link:hover,
+.navbar__link.active {
+  opacity: 1;
+  border-bottom: 2px solid rgba(255,255,255,0.8);
+  padding-bottom: 2px;
+}
+
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  margin-left: 24px;
+}
+
+.navbar__icon-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.navbar__icon-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* ===== CONTENIDO ===== */
+
+.contenedor {
+  padding-top: 120px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.titulo {
+  text-align: center;
+  color: #1a5fad;
+  font-size: 48px;
+  margin-bottom: 50px;
+  font-weight: 700;
+}
+
+.editar-producto {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+/* ===== IMAGEN ===== */
+
+.imagen-section {
+  display: flex;
+  justify-content: center;
+}
+
+.imagen-card {
+  width: 320px;
+  height: 320px;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #dff1ff;
+  transition: 0.25s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.imagen-card:hover {
+  transform: scale(1.02);
+}
+
+.imagen-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== FORMULARIO ===== */
+
+.formulario {
+  width: 580px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.campo label {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111;
+}
+
+.campo input,
+.campo select {
+  height: 52px;
+  border-radius: 14px;
+  border: 2px solid #222;
+  padding: 0 16px;
+  font-size: 18px;
+  outline: none;
+  background: white;
+}
+
+.campo input::placeholder {
+  color: #b9b9b9;
+  font-weight: 600;
+}
+
+.fila {
+  display: flex;
+  gap: 50px;
+}
+
+.campo-pequeno {
+  flex: 1;
+}
+
+.input-icono {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-icono span {
+  font-size: 38px;
+  font-weight: 700;
+}
+
+.input-icono input {
+  width: 140px;
+}
+
+/* ===== STOCK ===== */
+
+.stock-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stock-control button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  font-size: 34px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.stock-control input {
+  width: 120px;
+  text-align: center;
+}
+
+/* ===== CATEGORIA ===== */
+
+.categoria select {
+  width: 270px;
+  cursor: pointer;
+}
+
+/* ===== BOTON ===== */
+
+.btn-editar {
+  margin-top: 12px;
+  width: 250px;
+  height: 56px;
+  border: none;
+  border-radius: 14px;
+  background: #1a6dbf;
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn-editar:hover {
+  background: #15579a;
+  transform: translateY(-2px);
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 1000px) {
+
+  .editar-producto {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .formulario {
+    width: 100%;
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 700px) {
+
+  .titulo {
+    font-size: 36px;
+  }
+
+  .fila {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .imagen-card {
+    width: 260px;
+    height: 260px;
+  }
+
+  .campo input,
+  .campo select {
+    font-size: 16px;
+  }
+
+  .btn-editar {
+    width: 100%;
+  }
+}

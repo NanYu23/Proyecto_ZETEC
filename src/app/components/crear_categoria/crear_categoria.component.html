@@ -1,0 +1,144 @@
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar__brand">
+    <div class="navbar__logo">
+      <img src="logo_papeleria.jpeg" alt="Logo" class="navbar__logo-img" />
+    </div>
+
+    <span class="navbar__title">Papelería Zetec</span>
+  </div>
+
+  <div class="navbar__links">
+    <a routerLink="/panel_administracion" routerLinkActive="active" class="navbar__link"> Panel </a>
+  </div>
+
+  <div class="navbar__actions">
+    <button class="navbar__icon-btn" (click)="irAlPerfil()">
+      <svg
+        viewBox="0 0 24 24"
+        width="22"
+        height="22"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== CONTENIDO ===== -->
+
+<div class="contenedor">
+  <h1 class="titulo">Crear categoría</h1>
+
+  <!-- FORM -->
+  <div class="formulario">
+    <label class="label"> Nombre de la categoría: </label>
+
+    <input
+      type="text"
+      placeholder="Agrega un nombre..."
+      [(ngModel)]="nuevaCategoria"
+      class="input-categoria"
+    />
+
+    <button class="btn-agregar" (click)="agregarCategoria()">Agregar</button>
+  </div>
+
+  <!-- LINEA -->
+  <div class="linea"></div>
+
+  <!-- LISTA -->
+  <div class="lista-categorias">
+    @for (cat of categorias(); track cat; let i = $index) {
+      <div class="categoria-item">
+        <button class="btn-editar" (click)="abrirModalEditar(i)">
+          <img src="editar_categoria.png" alt="editar_categoria.png" />
+        </button>
+
+        <span class="nombre-categoria">
+          {{ cat }}
+        </span>
+      </div>
+    }
+  </div>
+
+  <!-- ===== MODAL EDITAR ===== -->
+
+@if (mostrarModalEditar) {
+
+  <div class="modal-overlay">
+
+    <div class="modal">
+
+      <h2 class="modal-titulo">
+        Editar categoría
+      </h2>
+
+      <input
+        type="text"
+        [(ngModel)]="categoriaEditando"
+        class="modal-input"
+      />
+
+      <div class="modal-botones">
+
+        <button
+          class="btn-modal cancelar"
+          (click)="cerrarModal()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          class="btn-modal guardar"
+          (click)="guardarCategoria()"
+        >
+          Guardar
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+}
+
+
+<!-- ===== MODAL EXITO ===== -->
+
+@if (mostrarModalExito) {
+
+  <div class="modal-overlay">
+
+    <div class="modal-exito">
+
+      <div class="check-icono">
+        ✓
+      </div>
+
+      <h2>
+        Categoría agregada
+      </h2>
+
+      <p>
+        La categoría se agregó correctamente.
+      </p>
+
+      <button
+        class="btn-cerrar-exito"
+        (click)="cerrarModalExito()"
+      >
+        Entendido
+      </button>
+
+    </div>
+
+  </div>
+
+}
+
+</div>

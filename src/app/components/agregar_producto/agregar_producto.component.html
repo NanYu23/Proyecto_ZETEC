@@ -1,0 +1,101 @@
+<!-- agregar_producto.component.html -->
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar__brand">
+    <div class="navbar__logo">
+      <img src="logo_papeleria.jpeg" alt="Logo" class="navbar__logo-img" />
+    </div>
+
+    <span class="navbar__title"> Papelería Zetec </span>
+  </div>
+
+  <div class="navbar__links">
+    <a routerLink="/panel_administracion" routerLinkActive="active" class="navbar__link"> Panel </a>
+  </div>
+
+  <div class="navbar__actions">
+    <button class="navbar__icon-btn" (click)="irAlPerfil()">
+      <svg
+        viewBox="0 0 24 24"
+        width="22"
+        height="22"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== CONTENIDO ===== -->
+<div class="contenedor">
+  <h1 class="titulo">Agregar producto</h1>
+
+  <div class="agregar-producto">
+    <!-- IMAGEN -->
+    <div class="imagen-section">
+      <label class="imagen-card">
+        <img [src]="imagenPreview" alt="Producto" class="imagen-preview" />
+
+        <input type="file" accept="image/*" hidden (change)="seleccionarImagen($event)" />
+      </label>
+    </div>
+
+    <!-- FORMULARIO -->
+    <div class="formulario">
+      <!-- DESCRIPCION -->
+      <div class="campo">
+        <label>Descripción del producto:</label>
+
+        <input type="text" placeholder="Agrega una descripción..." [(ngModel)]="descripcion" />
+      </div>
+
+      <!-- PRECIO Y STOCK -->
+      <div class="fila">
+        <div class="campo campo-pequeno">
+          <label>Precio:</label>
+
+          <div class="input-icono">
+            <span>$</span>
+
+            <input type="number" placeholder="MXN" [(ngModel)]="precio" />
+          </div>
+        </div>
+
+        <div class="campo campo-pequeno">
+          <label>Stock:</label>
+
+          <div class="stock-control">
+            <button (click)="disminuirStock()">-</button>
+
+            <input type="number" [(ngModel)]="stock" />
+
+            <button (click)="aumentarStock()">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORIA -->
+      <div class="campo categoria">
+        <label>Categoría:</label>
+
+        <select [(ngModel)]="categoria">
+          <option value="">Selecciona una categoría...</option>
+
+          @for (cat of categorias(); track cat) {
+            <option [value]="cat">
+              {{ cat }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <!-- BOTON -->
+      <button class="btn-agregar" (click)="agregarProducto()">Agregar</button>
+    </div>
+  </div>
+</div>

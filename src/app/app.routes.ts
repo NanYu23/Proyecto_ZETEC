@@ -74,6 +74,29 @@ export const routes: Routes = [
       ),
   },
 
+  {
+    path: 'agregar_producto',
+    loadComponent: () =>
+      import('./components/agregar_producto/agregar_producto.component').then(
+        (m) => m.AgregarProductoComponent,
+      ),
+
+  },
+  {
+    path: 'editar_producto',
+    loadComponent: () =>
+      import('./components/editar_producto/editar_producto.component').then(
+        (m) => m.EditarProductoComponent,
+      ),
+  },
+  {
+    path: 'crear_categoria',
+    loadComponent: () =>
+      import('./components/crear_categoria/crear_categoria.component').then(
+        (m) => m.CrearCategoriaComponent,
+      ),
+  },
+
   //AGREGAR CAN ACTIVATE EN PERFIL (COMO EN HISTORIAL DE PEDIDOS)
 
   { path: '**', redirectTo: 'inicio' },

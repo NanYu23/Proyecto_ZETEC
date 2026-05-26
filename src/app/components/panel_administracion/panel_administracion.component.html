@@ -1,3 +1,5 @@
+<!-- panel_administracion.component.html -->
+ 
 <!-- ===== NAVBAR ===== -->
 <nav class="navbar">
   <div class="navbar__brand">
@@ -9,9 +11,8 @@
   </div>
 
   <div class="navbar__links">
-    <a routerLink="/catalogo" routerLinkActive="active" class="navbar__link"> Panel </a>
+    <a routerLink="/panel_administracion" routerLinkActive="active" class="navbar__link"> Panel </a>
 
-    <a routerLink="/historial-pedidos" routerLinkActive="active" class="navbar__link"> Recibos </a>
   </div>
 
   <div class="navbar__actions">
@@ -31,9 +32,9 @@
 
   <!-- BOTONES -->
   <div class="panel-actions">
-    <button class="btn-accion btn-azul" (click)="agregarProducto()">AGREGAR PRODUCTO</button>
+    <button routerLink="/agregar_producto" routerLinkActive="active" class="btn-accion btn-azul">AGREGAR PRODUCTO</button>
 
-    <button class="btn-accion btn-azul" (click)="administrarCategorias()">CATEGORÍAS</button>
+    <button routerLink="/crear_categoria" routerLinkActive="active" class="btn-accion btn-azul" >CATEGORÍAS</button>
   </div>
 
   <!-- PRODUCTOS -->
@@ -49,7 +50,7 @@
           <p>Categoría: {{ producto.category }}</p>
         </div>
 
-        <button class="btn-editar" (click)="editarProducto(producto)">Editar</button>
+        <button routerLink="/editar_producto" routerLinkActive="active" class="btn-editar" >Editar</button>
       </div>
     }
   </div>
