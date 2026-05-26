@@ -92,21 +92,15 @@ export const getOrderHistory = async (req, res) => {
 
 // GET /addresses
 export const getAddresses = async (req, res) => {
-    try {
-        const [addresses] = await db.query(
-            `SELECT id, direccion, telefono, fecha_creacion
-             FROM direcciones
-             WHERE usuario_id = ?
-             ORDER BY fecha_creacion DESC`,
-            [req.user.id]
-        );
-
-        return res.status(200).json({ addresses });
-
-    } catch (error) {
-        console.error('Error en getAddresses:', error);
-        return res.status(500).json({ message: 'Error interno del servidor' });
-    }
+  try {
+    const [rows] = await db.query(
+      'SELECT * FROM direcciones WHERE usuario_id = ? AND activo = 1 ORDER BY fecha_creacion ASC',
+      [req.params.usuarioId]
+    );
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 };
 
 // POST /addresses
@@ -137,7 +131,7 @@ export const deleteAddress = async (req, res) => {
         const { id } = req.params;
 
         const [result] = await db.query(
-            'DELETE FROM direcciones WHERE id = ? AND usuario_id = ?',
+            'UPDATE direcciones SET activo = 0 WHERE id = ? AND usuario_id = ?',
             [id, req.user.id]
         );
 

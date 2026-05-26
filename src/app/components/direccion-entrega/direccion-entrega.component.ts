@@ -1,7 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { CarritoService } from '../../services/carrito.service';
+import { CarritoService }   from '../../services/carrito.service';
 import { DireccionService, Direccion } from '../../services/direccion.service';
 
 @Component({
@@ -13,22 +13,26 @@ import { DireccionService, Direccion } from '../../services/direccion.service';
 })
 export class DireccionEntregaComponent implements OnInit {
 
-  carritoService = inject(CarritoService);
+  carritoService   = inject(CarritoService);
   private direccionService = inject(DireccionService);
-  private router = inject(Router);
+  private router   = inject(Router);
+  private cdr      = inject(ChangeDetectorRef); // 👈
 
-  seleccion: string = 'recoleccion';
+  seleccion      = 'recoleccion';
   direcciones: Direccion[] = [];
-  cargando = false;
+  cargando       = false;
+  nuevaDireccion = '';
 
-  nuevaDireccion: string = '';
+  modalEliminarVisible    = false;
+  direccionAEliminar: Direccion | null = null;
 
   async ngOnInit() {
-    this.cargando = true;
+    this.cargando    = true;
     this.direcciones = await this.direccionService.obtenerDirecciones();
-    const actual = this.direccionService.direccionSeleccionada();
+    const actual     = this.direccionService.direccionSeleccionada();
     if (actual) this.seleccion = String(actual.id);
     this.cargando = false;
+    this.cdr.detectChanges(); // 👈
   }
 
   usarDireccion() {
@@ -42,18 +46,39 @@ export class DireccionEntregaComponent implements OnInit {
   }
 
   async agregarDireccion() {
+    if (!this.nuevaDireccion.trim()) { alert('Escribe una dirección'); return; }
 
-
-    const nueva = await this.direccionService.agregarDireccion(
-      this.nuevaDireccion,
-    );
-
+    const nueva = await this.direccionService.agregarDireccion(this.nuevaDireccion);
     if (nueva) {
       this.direcciones.push(nueva);
       this.nuevaDireccion = '';
+      this.cdr.detectChanges(); // 👈
       alert('Nueva dirección agregada');
     } else {
       alert('Error al guardar la dirección');
+    }
+  }
+
+  abrirModalEliminar(dir: Direccion) {
+    this.direccionAEliminar   = dir;
+    this.modalEliminarVisible = true;
+  }
+
+  cancelarEliminar() {
+    this.direccionAEliminar   = null;
+    this.modalEliminarVisible = false;
+  }
+
+  async confirmarEliminar() {
+    if (!this.direccionAEliminar) return;
+
+    const ok = await this.direccionService.eliminarDireccion(this.direccionAEliminar.id);
+    if (ok) {
+      this.direcciones = this.direcciones.filter(d => d.id !== this.direccionAEliminar!.id);
+      this.cancelarEliminar();
+      this.cdr.detectChanges(); //
+    } else {
+      alert('Error al eliminar la dirección');
     }
   }
 }

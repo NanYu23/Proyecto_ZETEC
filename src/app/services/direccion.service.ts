@@ -59,4 +59,14 @@ export class DireccionService {
   seleccionar(dir: Direccion | null): void {  
     this.direccionSeleccionada.set(dir);
   }
+
+  async eliminarDireccion(id: number): Promise<boolean> {
+  const token = this.authService.getToken();
+  const res = await fetch(`http://localhost:3000/api/user/addresses/${id}`, {
+    method:  'DELETE',
+    headers: this.getHeaders()
+  });
+  return res.ok;
 }
+}
+

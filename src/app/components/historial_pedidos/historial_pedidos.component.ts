@@ -1,9 +1,10 @@
 //historial_pedidos.component.ts
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CarritoService } from '../../services/carrito.service';
+import { AuthService } from '../../services/auth.service';
 
 interface OrdenItem {
   producto_id:     number;
@@ -36,9 +37,19 @@ export class HistorialPedidosComponent implements OnInit {
   carritoService = inject(CarritoService);
   private http   = inject(HttpClient);
   private cdr    = inject(ChangeDetectorRef);
-
+  router = inject(Router);
+  authService = inject(AuthService);
+  
   ordenes: Orden[] = [];
   cargando = true;
+
+  irAlPerfil() {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/perfil_usuario']);
+    } else {
+      this.router.navigate(['/inicio_sesion']);
+    }
+  }
 
   ngOnInit(): void {
     this.http.get<{ orders: Orden[] }>(

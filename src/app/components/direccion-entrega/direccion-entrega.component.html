@@ -97,8 +97,26 @@
           <span class="delivery-option__title">{{ dir.direccion }}</span>
         </div>
       </label>
+      <button class="btn-eliminar-dir" (click)="abrirModalEliminar(dir)">✕</button>
     }
   </div>
+
+  @if (modalEliminarVisible && direccionAEliminar) {
+  <div class="modal-overlay" (click)="cancelarEliminar()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-icon">⚠️</div>
+      <h3 class="modal-title">¿Eliminar dirección?</h3>
+      <p class="modal-message">
+        ¿Estás seguro de eliminar<br>
+        <strong>{{ direccionAEliminar.direccion }}</strong>?
+      </p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn--cancel"  (click)="cancelarEliminar()">Cancelar</button>
+        <button class="modal-btn modal-btn--confirm" (click)="confirmarEliminar()">Sí, eliminar</button>
+      </div>
+    </div>
+  </div>
+}
 
   <!-- BOTON -->
   <div class="delivery-action">
