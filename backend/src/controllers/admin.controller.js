@@ -34,3 +34,25 @@ export const updateProducto = async (req, res) => {
         return res.status(500).json({ message: 'Error interno del servidor' });
     }
 };
+
+export const createProducto = async (req, res) => {
+    try {
+        const { name, price, inStock, category, description, imageUrl } = req.body;
+
+        if (!name || !price || !category) {
+            return res.status(400).json({ message: 'Nombre, precio y categoría son requeridos' });
+        }
+
+        const [result] = await db.query(
+            `INSERT INTO productos (name, price, inStock, category, description, imageUrl)
+             VALUES (?, ?, ?, ?, ?, ?)`,
+            [name, price, inStock || 0, category, description || '', imageUrl || '']
+        );
+
+        return res.status(201).json({ message: 'Producto creado correctamente', id: result.insertId });
+
+    } catch (error) {
+        console.error('Error en createProducto:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
