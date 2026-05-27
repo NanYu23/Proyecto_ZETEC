@@ -37,6 +37,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private readonly API_URL = 'http://localhost:3000/api/paypal';
 
+  irAlPerfil() {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/perfil_usuario']);
+    } else {
+      this.router.navigate(['/inicio_sesion']);
+    }
+  }
+
   private getUserId(): number | null {
     const token = this.authService.getToken();
     if (!token) return null;
