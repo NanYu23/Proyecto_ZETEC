@@ -101,7 +101,33 @@
       </div>
 
       <!-- BOTON -->
-      <button class="btn-agregar" (click)="agregarProducto()">Agregar</button>
+      <button class="btn-agregar" (click)="agregarProducto()" [disabled]="cargando">
+        {{ cargando ? 'Agregando...' : 'Agregar' }}
+      </button>
     </div>
   </div>
 </div>
+
+@if (modalVisible) {
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div
+        class="modal-icon"
+        [class.success]="modalTipo === 'success'"
+        [class.error]="modalTipo === 'error'"
+      >
+        {{ modalTipo === 'success' ? '✓' : '✕' }}
+      </div>
+
+      <h2 class="modal-title">
+        {{ modalTitulo }}
+      </h2>
+
+      <p class="modal-message">
+        {{ modalMensaje }}
+      </p>
+
+      <button class="modal-btn" (click)="cerrarModal()">Entendido</button>
+    </div>
+  </div>
+}

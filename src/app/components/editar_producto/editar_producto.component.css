@@ -1,7 +1,5 @@
 /* editar_producto.component.css */
 
-
-
 :host {
   display: block;
   background: var(--color-bg);
@@ -17,7 +15,7 @@
   padding: 0 28px;
   height: 62px;
   gap: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 
   position: fixed;
   top: 0;
@@ -39,7 +37,7 @@
   height: 42px;
   border-radius: 50%;
   overflow: hidden;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .navbar__logo-img {
@@ -71,7 +69,7 @@
 .navbar__link:hover,
 .navbar__link.active {
   opacity: 1;
-  border-bottom: 2px solid rgba(255,255,255,0.8);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.8);
   padding-bottom: 2px;
 }
 
@@ -92,7 +90,7 @@
 }
 
 .navbar__icon-btn:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* ===== CONTENIDO ===== */
@@ -134,7 +132,7 @@
   cursor: pointer;
   background: #dff1ff;
   transition: 0.25s;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .imagen-card:hover {
@@ -144,7 +142,13 @@
 .imagen-preview {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+
+  object-fit: contain;
+  object-position: center;
+
+  display: block;
+
+  background: white;
 }
 
 /* ===== FORMULARIO ===== */
@@ -262,7 +266,6 @@
 /* ===== RESPONSIVE ===== */
 
 @media (max-width: 1000px) {
-
   .editar-producto {
     flex-direction: column;
     align-items: center;
@@ -275,7 +278,6 @@
 }
 
 @media (max-width: 700px) {
-
   .titulo {
     font-size: 36px;
   }
@@ -297,5 +299,135 @@
 
   .btn-editar {
     width: 100%;
+  }
+}
+
+/* ===== MODAL ===== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 999999;
+
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-box {
+  width: 90%;
+  max-width: 420px;
+
+  background: white;
+
+  border-radius: 22px;
+
+  padding: 36px 30px;
+
+  text-align: center;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+
+  animation: modalPop 0.22s ease;
+}
+
+.modal-icon {
+  width: 90px;
+  height: 90px;
+
+  margin: auto auto 18px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 42px;
+  font-weight: 800;
+
+  color: white;
+}
+
+.modal-icon.success {
+  background: #22c55e;
+}
+
+.modal-icon.error {
+  background: #ef4444;
+}
+
+.modal-title {
+  font-size: 28px;
+  font-weight: 800;
+
+  color: #111827;
+
+  margin-bottom: 14px;
+}
+
+.modal-message {
+  color: #6b7280;
+
+  font-size: 16px;
+  line-height: 1.5;
+
+  margin-bottom: 28px;
+}
+
+.modal-btn {
+  width: 180px;
+  height: 50px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: #1a6dbf;
+  color: white;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.modal-btn:hover {
+  background: #15579a;
+  transform: translateY(-2px);
+}
+
+.btn-editar:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ===== ANIMACIONES ===== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalPop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }

@@ -1,6 +1,6 @@
 // checkout.component.ts
-
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, OnDestroy, inject,  ChangeDetectorRef} from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -25,6 +25,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private direccionService = inject(DireccionService);
   private authService = inject(AuthService);
+  private http = inject(HttpClient);
+  private cdr = inject(ChangeDetectorRef);
 
   nombreUsuario = 'Usuario';
   direccion = 'Av. Principal #123, Guadalajara, Jalisco';
@@ -59,6 +61,16 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.http.get<{ user: any }>('http://localhost:3000/api/user/profile').subscribe({
+        next: (res) => {
+            this.nombreUsuario = res.user.username; 
+            this.cdr.detectChanges();
+        },
+        error: () => {
+            this.nombreUsuario = 'Usuario';
+        }
+    });
+
     const dir = this.direccionService.direccionSeleccionada();
     if (dir) {
       this.direccion = dir.direccion; 

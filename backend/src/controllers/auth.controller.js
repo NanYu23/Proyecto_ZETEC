@@ -30,7 +30,7 @@ export const register = async (req, res) => {
         // Guardar dirección si se proporcionó
         if (direccion) {
             await db.query(
-                'INSERT INTO direcciones (usuario_id, direccion, telefono) VALUES (?, ?, NULL)',
+                'INSERT INTO direcciones (usuario_id, direccion) VALUES (?, ?)',
                 [userId, direccion]
             );
         }

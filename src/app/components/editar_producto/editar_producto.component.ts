@@ -22,6 +22,12 @@ export class EditarProductoComponent implements OnInit {
   imageUrl: string = '';
   imagenPreview: string = 'fondo_imagen_vacia.png';
 
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: 'success' | 'error' = 'success';
+  cargando = false;
+
   categorias = signal<string[]>([]);
   productoId: number = 0;
 
@@ -77,19 +83,73 @@ export class EditarProductoComponent implements OnInit {
     if (this.stock > 0) this.stock--;
   }
 
+  abrirModal(titulo: string, mensaje: string, tipo: 'success' | 'error'): void {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+
+    this.cdr.detectChanges();
+  }
+
+  cerrarModal(): void {
+    this.modalVisible = false;
+  }
+
   seleccionarImagen(event: Event): void {
     const input = event.target as HTMLInputElement;
+
     if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+
+      const formatosPermitidos = [
+        'image/png',
+        'image/jpeg',
+        'image/jpg',
+        'image/webp',
+        'image/svg+xml',
+      ];
+
+      if (!formatosPermitidos.includes(file.type)) {
+        alert('Formato no permitido');
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert('La imagen no puede superar los 5MB');
+        return;
+      }
+
       const reader = new FileReader();
+
       reader.onload = () => {
         this.imagenPreview = reader.result as string;
+
+        // 🔥 ESTO TE FALTABA
+        this.imageUrl = reader.result as string;
+
         this.cdr.detectChanges();
       };
-      reader.readAsDataURL(input.files[0]);
+
+      reader.readAsDataURL(file);
     }
   }
 
   editarProducto(): void {
+    if (this.cargando) return;
+
+    if (!this.nombre || !this.precio || !this.categoria) {
+      this.abrirModal(
+        'Campos incompletos',
+        'Nombre, precio y categoría son obligatorios.',
+        'error',
+      );
+
+      return;
+    }
+
+    this.cargando = true;
+
     this.http
       .put(`http://localhost:3000/api/panel/productos/${this.productoId}`, {
         name: this.nombre,
@@ -101,10 +161,40 @@ export class EditarProductoComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          alert('Producto actualizado correctamente');
-          this.router.navigate(['/panel_administracion']);
+          this.cargando = false;
+
+          this.abrirModal(
+            'Producto actualizado',
+            'El producto se actualizó correctamente.',
+            'success',
+          );
+
+          this.cdr.detectChanges();
+
+          setTimeout(() => {
+            this.cerrarModal();
+
+            this.router.navigate(['/panel_administracion']);
+          }, 2200);
         },
-        error: (err) => alert(err.error?.message || 'Error al actualizar el producto'),
+
+        error: (err) => {
+          this.cargando = false;
+
+          console.error(err);
+
+          let mensaje = 'Ocurrió un error inesperado.';
+
+          if (err.status === 413) {
+            mensaje = 'La imagen es demasiado pesada.';
+          } else if (err.error?.message) {
+            mensaje = err.error.message;
+          }
+
+          this.abrirModal('Error al actualizar', mensaje, 'error');
+
+          this.cdr.detectChanges();
+        },
       });
   }
 }

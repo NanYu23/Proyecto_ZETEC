@@ -83,12 +83,13 @@
           <span class="orden-id">Pedido #{{ orden.id }}</span>
           <span class="orden-fecha">{{ orden.fecha_creacion | date: 'dd/MM/yyyy HH:mm' }}</span>
           <span class="orden-direccion">📍 {{ orden.direccion || 'Recolección en tienda' }}</span>
+
           <span
             class="orden-estado"
             [class.estado-completado]="orden.estado === 'COMPLETED'"
             [class.estado-creado]="orden.estado === 'CREADO' || orden.estado === 'CREATED'"
           >
-            {{ orden.estado === 'COMPLETED' ? ' Completado' : ' Pendiente' }}
+            {{ orden.estado === 'COMPLETED' ? 'Completado' : 'Pendiente' }}
           </span>
         </div>
         <div class="orden-total">

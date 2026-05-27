@@ -1,5 +1,5 @@
 //crear_usuario.component.ts
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -19,23 +19,23 @@ export class CrearUsuarioComponent {
   carritoService = inject(CarritoService);
   authService    = inject(AuthService);
   router         = inject(Router);
+  cdr            = inject(ChangeDetectorRef);
 
   nombre    = '';
   email     = '';
   password  = '';
   direccion = '';
 
-  errorMsg = '';
-  loading  = false;
-
-  // ─── Validaciones en tiempo real ───
+  errorMsg     = '';
+  loading      = false;
+  modalVisible = false; 
+  
   get emailValido(): boolean {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(this.email);
   }
 
   get passwordValida(): boolean {
-    // Mínimo 8 caracteres, al menos una letra, un número y un símbolo
     const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
     return regex.test(this.password);
   }
@@ -58,12 +58,10 @@ export class CrearUsuarioComponent {
       this.errorMsg = 'Todos los campos son obligatorios';
       return;
     }
-
     if (!this.emailValido) {
       this.errorMsg = 'El formato del correo no es válido';
       return;
     }
-
     if (!this.passwordValida) {
       this.errorMsg = 'La contraseña no cumple los requisitos de seguridad';
       return;
@@ -83,8 +81,14 @@ export class CrearUsuarioComponent {
           next: (res) => {
             this.authService.saveToken(res.token);
             this.carritoService.cargarDesdeBackend();
-            this.loading = false;
-            this.router.navigate(['/inicio']);
+            this.loading      = false;
+            this.modalVisible = true; // mostrar modal
+            this.cdr.detectChanges();
+
+            setTimeout(() => {
+              this.modalVisible = false;
+              this.router.navigate(['/catalogo']); //ir a catálogo
+            }, 2500);
           },
           error: () => {
             this.loading = false;
