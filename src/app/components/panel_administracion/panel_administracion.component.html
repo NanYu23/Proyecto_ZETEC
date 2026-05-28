@@ -60,9 +60,9 @@
           <p>Categoría: {{ producto.category }}</p>
 
           @if (producto.inStock === 0) {
-            <p class="stock-agotado">🚫 Sin stock</p>
+            <p class="stock-agotado">Sin stock</p>
           } @else if (producto.inStock < 5) {
-            <p class="stock-bajo">⚠️ Stock bajo</p>
+            <p class="stock-bajo">Stock bajo</p>
           }
         </div>
 
@@ -75,6 +75,57 @@
       </div>
     }
   </div>
+
+  <!-- PRODUCTOS ELIMINADOS -->
+  @if (productosInactivos().length > 0) {
+    <div class="seccion-inactivos">
+      <h2 class="seccion-titulo">Productos eliminados</h2>
+
+      <div class="productos-grid">
+        @for (producto of productosInactivos(); track producto.id) {
+          <div class="producto-card producto-inactivo">
+            <img [src]="producto.imageUrl" alt="Producto" class="producto-img" />
+
+            <div class="producto-info">
+              <p>{{ producto.name }}</p>
+              <p>Precio: $ {{ producto.price }} MXN</p>
+              <p>Stock: {{ producto.inStock }}</p>
+              <p>Categoría: {{ producto.category }}</p>
+              <p class="stock-agotado">Eliminado</p>
+            </div>
+
+            <div class="producto-botones">
+              <button (click)="abrirModalReactivar(producto)" class="btn-reactivar">
+                Reactivar
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- MODAL REACTIVAR -->
+  @if (modalReactivarVisible && productoAReactivar) {
+    <div class="modal-overlay" (click)="cancelarReactivar()">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+        <h3 class="modal-title">¿Reactivar producto?</h3>
+        <p class="modal-message">
+          ¿Deseas volver a mostrar
+          <strong>{{ productoAReactivar.name }}</strong> en la tienda?
+        </p>
+        <div class="modal-actions">
+          <button class="modal-btn modal-btn--cancel" (click)="cancelarReactivar()">
+            Cancelar
+          </button>
+          <button class="modal-btn modal-btn--confirm-green" (click)="confirmarReactivar()">
+            Sí, reactivar
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
   @if (modalEliminarVisible && productoAEliminar) {
     <div class="modal-overlay" (click)="cancelarEliminar()">
       <div class="modal-box" (click)="$event.stopPropagation()">
@@ -95,5 +146,17 @@
     </div>
   }
 
-  
+  @if (modalExitoVisible) {
+    <div class="modal-overlay">
+      <div class="modal-box">
+        <h3 class="modal-title">¡Producto recuperado!</h3>
+        <p class="modal-message">
+          El producto se ha reactivado exitosamente y ya aparece en la tienda.
+        </p>
+        <button class="modal-btn modal-btn--confirm-green" (click)="modalExitoVisible = false">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  }
 </div>

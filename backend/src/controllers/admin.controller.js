@@ -185,3 +185,15 @@ export const reactivarProducto = async (req, res) => {
         return res.status(500).json({ message: 'Error interno del servidor' });
     }
 };
+
+export const getProductosInactivos = async (req, res) => {
+    try {
+        const [rows] = await db.query(
+            'SELECT * FROM productos WHERE activo = 0 ORDER BY name ASC'
+        );
+        return res.status(200).json({ productos: rows });
+    } catch (error) {
+        console.error('Error en getProductosInactivos:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};

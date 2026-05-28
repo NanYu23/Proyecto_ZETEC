@@ -10,7 +10,8 @@ import {
     createCategoria,
     updateCategoria,
     deleteCategoria,
-    reactivarProducto
+    reactivarProducto, 
+    getProductosInactivos
 } from '../controllers/admin.controller.js';
 
 const router = Router();
@@ -25,6 +26,7 @@ router.post('/categorias',         verifyToken, adminMiddleware, createCategoria
 router.put('/categorias/:id',      verifyToken, adminMiddleware, updateCategoria);
 router.delete('/categorias/:id', verifyToken, adminMiddleware, deleteCategoria); 
 
-router.put('/productos/:id/reactivar', reactivarProducto);
+router.put('/productos/:id/reactivar', verifyToken, adminMiddleware, reactivarProducto);
+router.get('/productos-inactivos', verifyToken, adminMiddleware, getProductosInactivos);
 
 export default router;

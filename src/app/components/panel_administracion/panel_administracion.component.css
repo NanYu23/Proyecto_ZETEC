@@ -454,20 +454,47 @@
 }
 
 /* Botón Reactivar */
+.seccion-inactivos  { margin-top: 48px; }
+.seccion-titulo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #6b7280;
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 2px dashed #d1d5db;
+}
+
+.producto-inactivo {
+  opacity: 0.6;
+  filter: grayscale(40%);
+}
+
 .btn-reactivar {
-  width: 160px;
+  width: 120px;
   height: 40px;
   border: none;
   border-radius: 10px;
-  background: #10b981; /* Verde esmeralda para denotar alta */
+  background: #16a34a;
   color: white;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  transition: 0.2s;
 }
 
-.btn-reactivar:hover {
-  background: #059669;
-  transform: translateY(-1px);
+.btn-reactivar:hover { background: #15803d; }
+
+.modal-btn--confirm-green {
+  background: #16a34a;
+  color: white;
+  width: 140px;
+  height: 42px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
 }
+
+.modal-btn--confirm-green:hover { background: #15803d; }
