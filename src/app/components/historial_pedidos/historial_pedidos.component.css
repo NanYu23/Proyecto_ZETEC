@@ -403,3 +403,26 @@
 .modal-btn--confirm:hover {
   background: #dc2626;
 }
+
+.btn-xml-descarga {
+  margin-top: 10px;
+  background-color: #ffffff;
+  color: #1a6dbf;
+  border: 1.5px solid #1a6dbf;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-xml-descarga:hover {
+  background-color: #1a6dbf;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(26, 109, 191, 0.2);
+}

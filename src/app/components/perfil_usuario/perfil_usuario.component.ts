@@ -27,6 +27,7 @@ export class PerfilUsuarioComponent {
   errorMsg = '';
   esAdmin = false;
   modalEliminarVisible = false;
+  modalExitoVisible = false;
 
   constructor() {
     this.esAdmin = this.authService.isAdmin();
@@ -44,11 +45,24 @@ export class PerfilUsuarioComponent {
   }
 
   confirmarEliminarCuenta(): void {
-    this.http.delete('http://localhost:3000/api/user/account').subscribe({
+    const timestampCancelacion = new Date().toISOString();
+
+    this.http.delete('http://localhost:3000/api/user/account', {
+      body: { fecha_cancelacion: timestampCancelacion }
+    }).subscribe({
       next: () => {
-        this.authService.logout();
-        this.carritoService.vaciarCarrito();
-        this.router.navigate(['/inicio_sesion']);
+        this.modalEliminarVisible = false;
+        
+        // Activamos el modal de éxito
+        this.modalExitoVisible = true;
+        this.cdr.detectChanges(); // Forzamos actualización visual de emergencia
+
+        //Esperamos 3 segundos antes de limpiar la sesión y redirigir
+        setTimeout(() => {
+          this.authService.logout();
+          this.carritoService.vaciarCarrito();
+          this.router.navigate(['/inicio_sesion']);
+        }, 3000);
       },
       error: (err) => alert(err.error?.message || 'Error al eliminar la cuenta'),
     });

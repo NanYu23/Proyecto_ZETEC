@@ -175,10 +175,29 @@ export const deleteAddress = async (req, res) => {
     }
 };
 
+// DELETE /account
 export const deleteAccount = async (req, res) => {
     try {
-        await db.query('UPDATE users SET activo = 0 WHERE id = ?', [req.user.id]);
-        return res.status(200).json({ message: 'Cuenta desactivada correctamente' });
+        // 1. Extraemos la fecha de cancelación enviada en el body por Angular
+        const { fecha_cancelacion } = req.body;
+
+        // 2. Si no viene (respaldo), generamos un objeto Date con la fecha del servidor
+        // Si usas el formato ISO string directamente, es totalmente compatible con MySQL
+        const fechaActual = fecha_cancelacion || new Date().toISOString();
+
+        // 3. Modificamos la query para actualizar tanto el estado 'activo' como la nueva columna 'cancelado_at'
+        const [result] = await db.query(
+            'UPDATE users SET activo = 0, cancelado_at = ? WHERE id = ?', 
+            [fechaActual, req.user.id]
+        );
+
+        // Validar si el usuario existía
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        return res.status(200).json({ message: 'Cuenta desactivada y fecha registrada correctamente' });
+
     } catch (error) {
         console.error('Error en deleteAccount:', error);
         return res.status(500).json({ message: 'Error interno del servidor' });

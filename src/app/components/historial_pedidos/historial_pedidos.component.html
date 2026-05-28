@@ -93,14 +93,26 @@
           </span>
         </div>
         <div class="orden-total">
-          <span class="total-label">Total pagado:</span>
-          <span class="total-valor">$ {{ orden.total | number: '1.2-2' }} {{ orden.moneda }}</span>
-          @if (orden.estado === 'CREADO' || orden.estado === 'CREATED') {
-            <button class="btn-cancelar-orden" (click)="abrirModalCancelar(orden)">
-              Cancelar pedido
-            </button>
-          }
-        </div>
+  <span class="total-label">Total pagado:</span>
+  <span class="total-valor">$ {{ orden.total | number: '1.2-2' }} {{ orden.moneda }}</span>
+  
+  @if (orden.estado === 'CREADO' || orden.estado === 'CREATED') {
+    <button class="btn-cancelar-orden" (click)="abrirModalCancelar(orden)">
+      Cancelar pedido
+    </button>
+  }
+
+  @if (orden.estado === 'COMPLETED') {
+    <button class="btn-xml-descarga" (click)="descargarXMLPedido(orden)" title="Descargar Comprobante XML">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px; vertical-align: middle;">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <polyline points="7 10 12 15 17 10" />
+        <line x1="12" y1="15" x2="12" y2="3" />
+      </svg>
+      XML Recibo
+    </button>
+  }
+</div>
       </div>
 
       <div class="orden-items-header">

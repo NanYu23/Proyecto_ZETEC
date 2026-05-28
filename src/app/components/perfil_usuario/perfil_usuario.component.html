@@ -190,6 +190,21 @@
             </div>
           </div>
         }
+
+        @if (modalExitoVisible) {
+          <div class="modal-overlay">
+            <div class="modal-box" style="border-top: 5px solid #10b981;"> <div class="modal-icon" style="color: #10b981;">✅</div>
+              <h3 class="modal-title">Cuenta eliminada con éxito</h3>
+              <p class="modal-message">
+                Tu cuenta ha sido desactivada correctamente.<br />
+                Gracias por haber formado parte de Papelería Zetec.
+              </p>
+              <p style="font-size: 0.85rem; color: #6b7280; margin-top: 1rem; text-align: center;">
+                Redirigiendo automáticamente...
+              </p>
+            </div>
+          </div>
+        }
       </form>
     }
   </div>

@@ -164,3 +164,24 @@ export const deleteCategoria = async (req, res) => {
         return res.status(500).json({ message: 'Error interno del servidor' });
     }
 };
+
+// PUT /productos/:id/reactivar
+export const reactivarProducto = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const [result] = await db.query(
+            'UPDATE productos SET activo = 1 WHERE id = ?', [id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+
+        return res.status(200).json({ message: 'Producto reactivado correctamente' });
+
+    } catch (error) {
+        console.error('Error en reactivarProducto:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};

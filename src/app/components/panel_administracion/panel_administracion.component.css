@@ -406,3 +406,68 @@
 /*STOCK BAJO*/
 .stock-bajo    { color: #d97706; font-weight: 600; font-size: 13px; margin: 4px 0 0; }
 .stock-agotado { color: #e74c3c; font-weight: 600; font-size: 13px; margin: 4px 0 0; }
+
+/* ===========================
+   SECCIÓN PRODUCTOS INACTIVOS
+=========================== */
+
+.seccion-inactivos {
+  margin-top: 60px;
+}
+
+.panel-divisor {
+  border: 0;
+  height: 2px;
+  background: #e2e8f0;
+  margin-bottom: 40px;
+}
+
+.inactivos-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: #718096;
+  margin-bottom: 30px;
+}
+
+/* Variación de la tarjeta inactiva */
+.producto-card--inactivo {
+  background: #fcfcfc;
+  border: 1px dashed #cbd5e1;
+  box-shadow: none;
+}
+
+.img-opaca {
+  filter: grayscale(80%) opacity(60%);
+}
+
+.texto-tachado {
+  text-decoration: line-through;
+  color: #a0aec0 !important;
+}
+
+.estado-baja {
+  color: #e53e3e;
+  font-weight: 700;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+/* Botón Reactivar */
+.btn-reactivar {
+  width: 160px;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: #10b981; /* Verde esmeralda para denotar alta */
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.btn-reactivar:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
