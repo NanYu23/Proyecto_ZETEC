@@ -1,3 +1,4 @@
+//perfil_usuario.component.ts
 import { Component, inject, afterNextRender, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -29,6 +30,9 @@ export class PerfilUsuarioComponent {
   modalEliminarVisible = false;
   modalExitoVisible = false;
 
+  mensajeExito = '';
+  mensajeError = '';
+
   constructor() {
     this.esAdmin = this.authService.isAdmin();
     afterNextRender(() => {
@@ -47,25 +51,27 @@ export class PerfilUsuarioComponent {
   confirmarEliminarCuenta(): void {
     const timestampCancelacion = new Date().toISOString();
 
-    this.http.delete('http://localhost:3000/api/user/account', {
-      body: { fecha_cancelacion: timestampCancelacion }
-    }).subscribe({
-      next: () => {
-        this.modalEliminarVisible = false;
-        
-        // Activamos el modal de éxito
-        this.modalExitoVisible = true;
-        this.cdr.detectChanges(); // Forzamos actualización visual de emergencia
+    this.http
+      .delete('http://localhost:3000/api/user/account', {
+        body: { fecha_cancelacion: timestampCancelacion },
+      })
+      .subscribe({
+        next: () => {
+          this.modalEliminarVisible = false;
 
-        //Esperamos 3 segundos antes de limpiar la sesión y redirigir
-        setTimeout(() => {
-          this.authService.logout();
-          this.carritoService.vaciarCarrito();
-          this.router.navigate(['/inicio_sesion']);
-        }, 3000);
-      },
-      error: (err) => alert(err.error?.message || 'Error al eliminar la cuenta'),
-    });
+          // Activamos el modal de éxito
+          this.modalExitoVisible = true;
+          this.cdr.detectChanges(); // Forzamos actualización visual de emergencia
+
+          //Esperamos 3 segundos antes de limpiar la sesión y redirigir
+          setTimeout(() => {
+            this.authService.logout();
+            this.carritoService.vaciarCarrito();
+            this.router.navigate(['/inicio_sesion']);
+          }, 3000);
+        },
+        error: (err) => alert(err.error?.message || 'Error al eliminar la cuenta'),
+      });
   }
 
   cargarPerfil(): void {
@@ -88,14 +94,36 @@ export class PerfilUsuarioComponent {
   }
 
   guardarCambios(): void {
+    this.mensajeExito = '';
+    this.mensajeError = '';
+
     this.http
       .put('http://localhost:3000/api/user/profile', {
         username: this.nombreUsuario,
         email: this.correoUsuario,
       })
       .subscribe({
-        next: () => alert('Perfil actualizado correctamente'),
-        error: (err) => alert(err.error?.message || 'Error al actualizar el perfil'),
+        next: () => {
+          this.mensajeExito = 'Perfil actualizado correctamente';
+
+          this.cdr.detectChanges();
+
+          setTimeout(() => {
+            this.mensajeExito = '';
+            this.cdr.detectChanges();
+          }, 3000);
+        },
+
+        error: (err) => {
+          this.mensajeError = err.error?.message || 'Error al actualizar el perfil';
+
+          this.cdr.detectChanges();
+
+          setTimeout(() => {
+            this.mensajeError = '';
+            this.cdr.detectChanges();
+          }, 4000);
+        },
       });
   }
 

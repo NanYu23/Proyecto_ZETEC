@@ -70,6 +70,10 @@ export class AgregarProductoComponent implements OnInit {
 
   cerrarModal(): void {
     this.modalVisible = false;
+
+    if (this.modalTipo === 'success') {
+      this.router.navigate(['/panel_administracion']);
+    }
   }
 
   seleccionarImagen(event: Event): void {
@@ -138,7 +142,6 @@ export class AgregarProductoComponent implements OnInit {
 
     this.cargando = true;
 
- 
     this.http
       .post('http://localhost:3000/api/panel/productos', {
         name: this.nombre,
@@ -155,12 +158,6 @@ export class AgregarProductoComponent implements OnInit {
           this.abrirModal('Producto agregado', 'El producto se agregó correctamente.', 'success');
 
           this.cdr.detectChanges();
-
-          setTimeout(() => {
-            this.cerrarModal();
-
-            this.router.navigate(['/panel_administracion']);
-          }, 2500);
         },
 
         error: (err) => {

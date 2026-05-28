@@ -28,6 +28,8 @@ export class CrearUsuarioComponent {
   errorMsg = '';
   loading = false;
   modalVisible = false;
+  modalErrorVisible = false;
+  modalErrorTexto = '';
 
   mostrarTerminos = false;
   mostrarPrivacidad = false;
@@ -118,8 +120,21 @@ export class CrearUsuarioComponent {
         },
         error: (err) => {
           this.loading = false;
-          this.errorMsg = err.error?.message || 'Error al crear la cuenta';
+
+          this.modalErrorTexto = err.error?.message || 'Error al crear la cuenta';
+
+          this.modalErrorVisible = true;
+
+          this.cdr.detectChanges();
+
+          setTimeout(() => {
+            this.modalErrorVisible = false;
+          }, 3000);
         },
       });
+  }
+
+  cerrarModalError() {
+    this.modalErrorVisible = false;
   }
 }

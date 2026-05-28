@@ -74,4 +74,13 @@ export class CatalogoComponent implements OnInit {
   cerrarModal() {
     this.mostrarModalStock.set(false);
   }
+
+
+  scrollToTop(): void {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
 }
