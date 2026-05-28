@@ -186,6 +186,21 @@
       </div>
     </div>
   }
+  @if (modalErrorVisible) {
+    <div class="modal-overlay" (click)="cerrarModalError()">
+      <div class="modal-box modal-error" (click)="$event.stopPropagation()">
+        <div class="modal-icon-error">!</div>
+
+        <h3 class="modal-title">No se pudo crear la cuenta</h3>
+
+        <p class="modal-message">
+          {{ modalErrorTexto }}
+        </p>
+
+        <button class="modal-btn" (click)="cerrarModalError()">Entendido</button>
+      </div>
+    </div>
+  }
 </div>
 
 <footer class="footer">
