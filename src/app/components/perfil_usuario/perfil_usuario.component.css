@@ -443,3 +443,101 @@ form {
     gap: 16px;
   }
 }
+
+.btn-eliminar-cuenta {
+  width: 100%;
+  height: 44px;
+  border: 2px solid #e74c3c;
+  border-radius: 10px;
+  background: transparent;
+  color: #e74c3c;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: 0.2s;
+}
+
+.btn-eliminar-cuenta:hover {
+  background: #e74c3c;
+  color: white;
+}
+
+
+/* ===========================
+   MODAL DE ELIMINACIÓN
+=========================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000; /* Por encima de la navbar */
+}
+
+.modal-box {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.modal-title {
+  color: #e74c3c;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.modal-message {
+  color: #555;
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.modal-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.modal-btn--cancel {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.modal-btn--cancel:hover {
+  background: #d5d5d5;
+}
+
+.modal-btn--confirm {
+  background: #e74c3c;
+  color: white;
+}
+
+.modal-btn--confirm:hover {
+  background: #c0392b;
+}

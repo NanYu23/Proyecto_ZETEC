@@ -7,7 +7,7 @@ import { enviarCodigoRecuperacion } from '../services/email.service.js';
 
 export const register = async (req, res) => {
     try {
-        const { username, email, password, direccion } = req.body;
+        const { username, email, password, direccion, terminos_aceptados} = req.body;
         console.log('Datos recibidos:', { username, email, direccion });
 
         const [existingUser] = await db.query(
@@ -21,8 +21,8 @@ export const register = async (req, res) => {
 
         // Insertar usuario
         const [result] = await db.query(
-            'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
-            [username, email, hashedPassword]
+            'INSERT INTO users (username, email, password, terminos_aceptados) VALUES (?, ?, ?, ?)',
+            [username, email, hashedPassword, terminos_aceptados || 0]
         );
 
         const userId = result.insertId;
@@ -54,6 +54,10 @@ export const login = async (req, res) => {
         const user = rows[0];
         if (!user) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        if (user.activo === 0) {
+            return res.status(403).json({ message: 'Esta cuenta ha sido desactivada' });
         }
 
         const validPassword = await bcrypt.compare(password, user.password);

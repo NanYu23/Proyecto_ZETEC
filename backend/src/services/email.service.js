@@ -72,7 +72,7 @@ export const enviarConfirmacionPedido = async ({ email, nombre, orderId, items, 
     await transporter.sendMail({
         from:    `"Papelería Zetec" <${process.env.MAILTRAP_USER}>`,
         to:      email,
-        subject: `✅ Confirmación de pedido #${orderId}`,
+        subject: `Confirmación de pedido #${orderId}`,
         html
     });
 };
@@ -106,7 +106,7 @@ export const enviarCodigoRecuperacion = async ({ email, username, code }) => {
     await transporter.sendMail({
         from:    '"Papelería Zetec" <no-reply@zetec.com.mx>',
         to:      email,
-        subject: '🔐 Código de recuperación de contraseña',
+        subject: 'Código de recuperación de contraseña',
         html
     });
 };

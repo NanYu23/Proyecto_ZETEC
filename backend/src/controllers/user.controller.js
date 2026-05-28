@@ -174,3 +174,13 @@ export const deleteAddress = async (req, res) => {
         return res.status(500).json({ message: 'Error interno del servidor' });
     }
 };
+
+export const deleteAccount = async (req, res) => {
+    try {
+        await db.query('UPDATE users SET activo = 0 WHERE id = ?', [req.user.id]);
+        return res.status(200).json({ message: 'Cuenta desactivada correctamente' });
+    } catch (error) {
+        console.error('Error en deleteAccount:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};

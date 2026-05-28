@@ -14,28 +14,14 @@
 
   <div class="navbar__actions">
     <button class="navbar__icon-btn" title="Historial" routerLink="/historial-pedidos">
-      <svg
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="10" />
         <polyline points="12 6 12 12 16 14" />
       </svg>
     </button>
 
     <button class="navbar__icon-btn" title="Carrito" routerLink="/carrito">
-      <svg
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="9" cy="21" r="1" />
         <circle cx="20" cy="21" r="1" />
         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
@@ -47,19 +33,12 @@
     </button>
 
     <button class="navbar__icon-btn" title="Mi cuenta" routerLink="/inicio_sesion">
-      <svg
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
         <circle cx="12" cy="7" r="4" />
       </svg>
     </button>
-    
+
   </div>
 </nav>
 
@@ -81,32 +60,181 @@
         <div class="grupo-input">
           <label>EMAIL</label>
 
-          <input
-            type="email"
-            [(ngModel)]="email"
-            name="email"
-            placeholder="Ingresa tu correo electrónico"
-          />
+          <input type="email" [(ngModel)]="email" name="email" placeholder="Ingresa tu correo electrónico" />
         </div>
 
         <div class="grupo-input">
           <label>CONTRASEÑA</label>
 
           <!-- recuerden encubrir la contraseña por *** para que no se vea -->
-          <input
-            type="password"
-            [(ngModel)]="password"
-            name="password"
-            placeholder="Ingresa tu contraseña"
-          />
+          <input type="password" [(ngModel)]="password" name="password" placeholder="Ingresa tu contraseña" />
         </div>
 
         <div class="forgot-password">
           <a routerLink="/recuperar-password">¿OLVIDASTE TU CONTRASEÑA?</a>
         </div>
 
+        @if (errorMsg) {
+          <div style="color: #e74c3c; font-size: 14px; font-weight: 600; text-align: center; margin-bottom: 15px;">
+            {{ errorMsg }}
+          </div>
+        }
+
         <button class="btn-registro" type="submit">INICIAR SESIÓN</button>
+        
       </form>
     </div>
   </div>
 </div>
+
+<footer class="footer">
+    <span class="footer__link" (click)="abrirTerminos()">Consulta los términos y condiciones</span>
+    <span class="footer__sep">|</span>
+    <span class="footer__link" (click)="abrirPrivacidad()">Consulta el aviso de privacidad</span>
+  </footer>
+
+  <!-- DIALOG TÉRMINOS -->
+  @if (mostrarTerminos) {
+  <div class="dialog-overlay" (click)="mostrarTerminos = false">
+    <div class="dialog-box" (click)="$event.stopPropagation()">
+      <h2 class="dialog-title">Términos y Condiciones</h2>
+      <div class="dialog-content">
+        <p>
+          Bienvenido a Papelería Zetec. ZETEC”. Al acceder y utilizar nuestro sitio web, usted
+          acepta cumplir con los siguientes términos y condiciones. Por favor, léalos detenidamente.
+        </p>
+        <p>
+          <strong>1. Uso del sitio:</strong> EEl Usuario se compromete a utilizar el sitio web de
+          manera lícita, ética y conforme a la moral. Disponibilidad de Productos: Las imágenes de
+          los artículos de papelería son ilustrativas. Aunque nos esforzamos por la exactitud, los
+          colores y texturas pueden variar según la pantalla del dispositivo. Precios: Todos los
+          precios están sujetos a cambios sin previo aviso hasta que la orden sea confirmada.
+          Restricciones: Queda prohibido el uso del sitio para actividades fraudulentas, envío de
+          virus o cualquier acción que sature o dañe la infraestructura tecnológica de La Empresa.
+        </p>
+        <p>
+          <strong>2. Registros y cuentas:</strong> Para realizar compras, el Usuario podría requerir
+          la creación de una cuenta personal. Veracidad de Datos: El Usuario garantiza que la
+          información proporcionada (nombre, dirección de envío, correo) es verídica y actual.
+          Seguridad: La confidencialidad de la contraseña es responsabilidad exclusiva del Usuario.
+          Cualquier actividad realizada bajo su cuenta se presumirá hecha por él. Cancelación: La
+          Empresa se reserva el derecho de cancelar o suspender cuentas de usuarios que violen estos
+          términos o realicen actividades sospechosas.
+        </p>
+        <p>
+          <strong>3. Métodos de pago y seguridad:</strong> Para la adquisición de productos, La
+          Empresa acepta tarjetas de crédito y débito (Visa, Mastercard) a través de procesadores de
+          pago seguros. Procesamiento de Terceros: Los pagos son procesados a través de plataformas
+          externas autorizadas. ZETEC no almacena ni tiene acceso a los datos completos de su
+          tarjeta de crédito o débito (como el número de tarjeta completo o el código CVV).
+          Autorización: Al realizar una compra, el Usuario autoriza a La Empresa o a su procesador
+          de pagos a realizar el cargo correspondiente por el total de los productos y gastos de
+          envío. Prevención de Fraude: La Empresa se reserva el derecho de solicitar documentación
+          adicional o cancelar cualquier transacción si existen indicios de fraude o irregularidades
+          en el pago. En caso de cancelación por motivos de seguridad, el reembolso se realizará al
+          mismo método de pago utilizado. Cargos No Reconocidos: La Empresa no se hace responsable
+          por el mal uso de tarjetas robadas o extraviadas una vez que el pago ha sido aprobado por
+          la institución bancaria correspondiente.
+        </p>
+        <p>
+          <strong>4. Propiedad intelectual:</strong> Todo el contenido presente en este sitio,
+          incluyendo, pero no limitado a logotipos, textos, gráficos, fotografías de productos,
+          iconos y software, es propiedad de ZETEC o de sus proveedores de contenido y está
+          protegido por las leyes internacionales de derechos de autor y propiedad industrial. Queda
+          estrictamente prohibida la reproducción, copia o distribución del contenido con fines
+          comerciales sin autorización expresa por escrito.
+        </p>
+        <p>
+          <strong>5. Limitación de responsabilidad:</strong> La Empresa trabaja para ofrecer un
+          servicio ininterrumpido, pero no garantiza que el sitio esté libre de errores o caídas
+          técnicas ajenas a su control. Stock: En caso de que un producto no esté disponible después
+          de la compra, se notificará al Usuario para ofrecer un cambio o el reembolso total. Uso
+          del producto: La Empresa no se hace responsable por el uso inadecuado de los artículos de
+          papelería vendidos (por ejemplo, accidentes con objetos punzocortantes o químicos). Daños
+          Indirectos: En ninguna circunstancia La Empresa será responsable de daños indirectos,
+          incidentales o punitivos derivados del uso del sitio web.
+        </p>
+        <p>
+          <strong>6. Modificaciones:</strong> ZETEC se reserva el derecho de modificar, actualizar o
+          cambiar cualquier parte de estos Términos y Condiciones en cualquier momento para
+          adaptarlos a novedades legislativas o comerciales. Es responsabilidad del Usuario revisar
+          esta sección periódicamente. El uso continuado del sitio tras la publicación de cambios
+          constituye la aceptación de estos.
+        </p>
+      </div>
+      <button class="dialog-btn" (click)="mostrarTerminos = false">Cerrar</button>
+    </div>
+  </div>
+  }
+
+  <!-- DIALOG AVISO DE PRIVACIDAD -->
+  @if (mostrarPrivacidad) {
+  <div class="dialog-overlay" (click)="mostrarPrivacidad = false">
+    <div class="dialog-box" (click)="$event.stopPropagation()">
+      <h2 class="dialog-title">Aviso de Privacidad</h2>
+      <div class="dialog-content">
+        <p>
+          Papelería Zetec, con domicilio para oír y recibir notificaciones en Guadalajara, Jalisco,
+          México, y portal de internet, es el responsable del tratamiento de sus datos personales,
+          en cumplimiento con la Ley Federal de Protección de Datos Personales en Posesión de los
+          Particulares (LFPDPPP).
+        </p>
+        <p>
+          <strong>Datos que recabamos:</strong> Para la prestación de nuestros servicios de comercio
+          electrónico de artículos de papelería, recabamos las siguientes categorías de datos: •
+          Datos de Identificación y Contacto: Nombre completo, dirección de correo electrónico,
+          número telefónico y domicilio de entrega. • Datos de Facturación: Registro Federal de
+          Contribuyentes (RFC) y domicilio fiscal. • Datos Patrimoniales/Financieros: Información
+          relativa a métodos de pago (procesados de forma encriptada a través de pasarelas de pago
+          externas). • Datos Digitales: Dirección IP, tipo de navegador y cookies de sesión para
+          optimizar la experiencia de compra.
+        </p>
+        <p>
+          <strong>Finalidad:</strong> Los datos personales recabados serán utilizados para las
+          siguientes finalidades necesarias: • Gestión Comercial: Procesamiento de pedidos,
+          validación de pagos y envío de mercancía. • Atención al Cliente: Soporte técnico, gestión
+          de garantías, devoluciones y seguimiento de compras. • Obligaciones Legales: Emisión de
+          comprobantes fiscales digitales (CFDI) y cumplimiento con requerimientos de autoridades
+          competentes.
+        </p>
+        <p>
+          <strong>Transferencia de datos:</strong> ZETEC ha implementado medidas de seguridad
+          administrativas, técnicas y físicas para proteger sus datos personales contra daño,
+          pérdida, alteración, destrucción o el uso, acceso o tratamiento no autorizado. Entre estas
+          medidas se incluye el uso de protocolos de seguridad SSL/TLS (HTTPS) para la transmisión
+          de datos en el sitio web y el almacenamiento encriptado de información sensible en
+          nuestras bases de datos.
+        </p>
+        <p>
+          <strong>Derechos ARCO:</strong> Usted tiene derecho a conocer qué datos personales tenemos
+          de usted (Acceso), solicitar su corrección en caso de que esté desactualizada o sea
+          inexacta (Rectificación), que la eliminemos de nuestros registros (Cancelación) o negarse
+          al uso de sus datos para fines específicos (Oposición). Para ejercer estos derechos, el
+          titular deberá enviar una solicitud formal al correo electrónico: privacidad@zetec.com,
+          indicando su nombre y el derecho que desea ejercer.
+        </p>
+        <p>
+          <strong>Cambios:</strong> El presente aviso de privacidad puede sufrir modificaciones o
+          actualizaciones derivadas de nuevos requerimientos legales o de nuestras propias
+          necesidades operativas. Cualquier cambio será notificado a través de nuestra plataforma
+          web en la sección "Aviso de Privacidad". Se recomienda al usuario revisar este documento
+          periódicamente para estar informado sobre el tratamiento de sus datos.
+        </p>
+      </div>
+      <button class="dialog-btn" (click)="mostrarPrivacidad = false">Cerrar</button>
+    </div>
+  </div>
+  }
+
+@if (mostrarCuentaInactiva) {
+<div class="dialog-overlay" (click)="mostrarCuentaInactiva = false">
+  <div class="dialog-box dialog-box--error" (click)="$event.stopPropagation()">
+    <h2 class="dialog-title dialog-title--error">Acceso Denegado</h2>
+    <div class="dialog-content">
+      <p><strong>Esta cuenta ha sido desactivada.</strong></p>
+      <p>No es posible ingresar al sistema. Si consideras que esto es un error, por favor ponte en contacto con el administrador.</p>
+    </div>
+    <button class="dialog-btn dialog-btn--error" (click)="mostrarCuentaInactiva = false">Entendido</button>
+  </div>
+</div>
+}
