@@ -94,6 +94,10 @@ export class EditarProductoComponent implements OnInit {
 
   cerrarModal(): void {
     this.modalVisible = false;
+
+    if (this.modalTipo === 'success') {
+      this.router.navigate(['/panel_administracion']);
+    }
   }
 
   seleccionarImagen(event: Event): void {
@@ -170,12 +174,6 @@ export class EditarProductoComponent implements OnInit {
           );
 
           this.cdr.detectChanges();
-
-          setTimeout(() => {
-            this.cerrarModal();
-
-            this.router.navigate(['/panel_administracion']);
-          }, 2200);
         },
 
         error: (err) => {
