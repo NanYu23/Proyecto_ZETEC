@@ -47,6 +47,7 @@ export class AgregarProductoComponent implements OnInit {
     });
   }
 
+  // Redirige al perfil si está autenticado, o al login si no lo está
   irAlPerfil(): void {
     this.authService.isLoggedIn()
       ? this.router.navigate(['/perfil_usuario'])
@@ -56,9 +57,12 @@ export class AgregarProductoComponent implements OnInit {
   aumentarStock(): void {
     this.stock++;
   }
+
   disminuirStock(): void {
     if (this.stock > 1) this.stock--;
   }
+
+   // Abre el modal con el título, mensaje y tipo indicados
   abrirModal(titulo: string, mensaje: string, tipo: 'success' | 'error'): void {
     this.modalTitulo = titulo;
     this.modalMensaje = mensaje;
@@ -76,12 +80,15 @@ export class AgregarProductoComponent implements OnInit {
     }
   }
 
+  // Convierte el archivo seleccionado a Base64 para previsualizarlo
+  // y enviarlo al backend como string (sin necesidad de un servidor de archivos)
   seleccionarImagen(event: Event): void {
     const input = event.target as HTMLInputElement;
 
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
 
+      // Valida que el formato sea una imagen permitida
       const formatosPermitidos = [
         'image/png',
         'image/jpeg',
@@ -107,11 +114,13 @@ export class AgregarProductoComponent implements OnInit {
         return;
       }
 
+      // FileReader lee el archivo del sistema de forma asíncrona
+      // y lo convierte a una URL en formato Base64 (data:image/png;base64,...)
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.imagenPreview = reader.result as string;
-        this.imageUrl = reader.result as string;
+        this.imagenPreview = reader.result as string; // Muestra la imagen en el <img> del formulario
+        this.imageUrl = reader.result as string;  // Guarda el Base64 para enviarlo al backend
         this.cdr.detectChanges();
       };
 
@@ -158,6 +167,7 @@ export class AgregarProductoComponent implements OnInit {
           this.abrirModal('Producto agregado', 'El producto se agregó correctamente.', 'success');
 
           this.cdr.detectChanges();
+          // Al cerrar el modal de éxito, cerrarModal() redirigirá al panel
         },
 
         error: (err) => {

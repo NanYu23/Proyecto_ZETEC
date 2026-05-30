@@ -1,4 +1,5 @@
 // auth.guard.ts
+// Guard de ruta para proteger páginas que requieren estar autenticado.
 
 import { CanActivateFn } from '@angular/router';
 import { inject } from '@angular/core';

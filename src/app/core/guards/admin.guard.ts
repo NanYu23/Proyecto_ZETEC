@@ -1,4 +1,6 @@
 // admin.guard.ts
+// Guard de ruta para proteger las páginas del panel de administración
+// Si devuelve true, permite el acceso. Si devuelve false, lo bloquea.
 
 import { CanActivateFn } from '@angular/router';
 import { inject } from '@angular/core';

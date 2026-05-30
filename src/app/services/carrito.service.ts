@@ -16,10 +16,8 @@ export class CarritoService {
   private authService = inject(AuthService);
   private apiUrl      = 'http://localhost:3000/api/cart';
 
-  // ─── Signal principal ───
   carrito = signal<CartItem[]>([]);
 
-  // ─── Computed signals ───
   subtotal   = computed(() => this.carrito().reduce((acc, i) => acc + i.product.price * i.quantity, 0));
   iva        = computed(() => this.subtotal() * 0.16);
   totalConIVA = computed(() => this.subtotal() + this.iva());
@@ -30,7 +28,7 @@ export class CarritoService {
     }
   }
 
-  // ─── Cargar desde backend y mapear a la estructura { product, quantity } ───
+  // Cargar desde backend y mapear a la estructura { product, quantity } 
   cargarDesdeBackend() {
     this.http.get<{ items: any[], total: number }>(this.apiUrl).subscribe({
       next: (res) => {
@@ -50,7 +48,7 @@ export class CarritoService {
     });
   }
 
-  // ─── Agregar producto ───
+  //Agregar producto 
   agregarProducto(producto: any, cantidad: number = 1) {
     const actual = this.carrito();
     const index  = actual.findIndex(i => i.product.id === producto.id);
@@ -70,7 +68,7 @@ export class CarritoService {
     }
   }
 
-  // ─── Eliminar por índice ───
+  //Eliminar por índice 
   eliminarProducto(index: number) {
     const actual     = this.carrito();
     const productoId = actual[index].product.id;
@@ -83,7 +81,7 @@ export class CarritoService {
     }
   }
 
-  // ─── Eliminar todos los de un tipo ───
+  //Eliminar todos los de un tipo 
   eliminarProductosPorTipo(productoId: number) {
     this.carrito.set(this.carrito().filter(i => i.product.id !== productoId));
 
@@ -94,7 +92,7 @@ export class CarritoService {
     }
   }
 
-  // ─── Incrementar cantidad ───
+  //Incrementar cantidad 
   incrementarCantidad(index: number) {
     const actual     = [...this.carrito()];
     const item       = actual[index];
@@ -109,7 +107,7 @@ export class CarritoService {
     }
   }
 
-  // ─── Decrementar cantidad ───
+  // Decrementar cantidad
   decrementarCantidad(index: number) {
     const actual     = [...this.carrito()];
     const item       = actual[index];
@@ -130,7 +128,7 @@ export class CarritoService {
     }
   }
 
-  // ─── Vaciar carrito ───
+  // Vaciar carrito
   vaciarCarrito() {
     this.carrito.set([]);
 
@@ -141,7 +139,7 @@ export class CarritoService {
     }
   }
 
-  // ─── Métodos auxiliares ───
+
   obtenerCantidad(): number { return this.carrito().reduce((acc, i) => acc + i.quantity, 0); }
 
   obtenerCantidadEnCarrito(productoId: number): number {

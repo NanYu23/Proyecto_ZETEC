@@ -1,6 +1,9 @@
+// Servicio para gestionar las direcciones de entrega del usuario
+
 import { Injectable, signal, inject } from '@angular/core';
 import { AuthService } from './auth.service';
 
+// Define la estructura de una dirección
 export interface Direccion {
   id:        number;
   direccion: string;
@@ -9,10 +12,11 @@ export interface Direccion {
 @Injectable({ providedIn: 'root' })
 export class DireccionService {
 
-  private readonly API  = 'http://localhost:3000/api/direcciones';
+  private readonly API  = 'http://localhost:3000/api/direcciones';  // URL base del backend
   private authService   = inject(AuthService);
   direccionSeleccionada = signal<Direccion | null>(null);
 
+  // Construye los headers que se envían en cada petición HTTP
   private getHeaders(): HeadersInit {
     const token = this.authService.getToken();
     return {
@@ -21,6 +25,7 @@ export class DireccionService {
     };
   }
 
+  // Extrae el ID del usuario directamente desde el token JWT sin llamar al backend
   private getUserId(): number | null {
     const token = this.authService.getToken();
     if (!token) return null;
@@ -32,6 +37,7 @@ export class DireccionService {
     }
   }
 
+  //Obtener direcciones
   async obtenerDirecciones(): Promise<Direccion[]> {
     const userId = this.getUserId();
     if (!userId) return [];
@@ -43,6 +49,7 @@ export class DireccionService {
     return json.success ? json.data : [];
   }
 
+  //Agregar una dirección
   async agregarDireccion(direccion: string): Promise<Direccion | null> {
     const userId = this.getUserId();
     if (!userId) return null;

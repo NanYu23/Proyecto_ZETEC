@@ -1,14 +1,18 @@
 import nodemailer from 'nodemailer';
+// Servicio de correo electrónico
+// Centraliza el envío de emails del sistema usando Nodemailer + Mailtrap
 
 const transporter = nodemailer.createTransport({
-    host: 'sandbox.smtp.mailtrap.io',  // Mailtrap
-    port: 2525,
+    host: 'sandbox.smtp.mailtrap.io',  //servidor Mailtrap
+    port: 2525, // Puerto específico de Mailtrap
     auth: {
-        user: process.env.MAILTRAP_USER,
+        user: process.env.MAILTRAP_USER,    // Credenciales 
         pass: process.env.MAILTRAP_PASS
     }
 });
 
+// Se llama desde paypal.controller.js después de capturar un pago exitoso
+// Recibe los datos del pedido y construye un correo HTML con el resumen
 export const enviarConfirmacionPedido = async ({ email, nombre, orderId, items, total, direccion }) => {
     const itemsHTML = items.map(item => `
         <tr>
@@ -69,14 +73,18 @@ export const enviarConfirmacionPedido = async ({ email, nombre, orderId, items, 
         </div>
     `;
 
+     // Envía el correo con la configuración del transporter definido arriba
     await transporter.sendMail({
-        from:    `"Papelería Zetec" <${process.env.MAILTRAP_USER}>`,
-        to:      email,
+        from:    `"Papelería Zetec" <${process.env.MAILTRAP_USER}>`,    // Nombre visible + remitente
+        to:      email,                 // Correo del cliente
         subject: `Confirmación de pedido #${orderId}`,
         html
     });
 };
 
+
+// Se llama desde auth.controller.js
+// Envía el código de 4 dígitos con un diseño visual destacado
 export const enviarCodigoRecuperacion = async ({ email, username, code }) => {
     const html = `
         <div style="font-family:Arial,sans-serif; max-width:600px; margin:0 auto;">

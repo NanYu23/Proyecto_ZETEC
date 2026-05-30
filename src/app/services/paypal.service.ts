@@ -1,10 +1,12 @@
 // paypal.service.ts
+// Servicio que comunica el frontend con el paypal.controller.js del backend
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { enviroment } from '../../enviroments/enviroment';
+import { enviroment } from '../../enviroments/enviroment';   // URL base del backend 
 
+// Respuesta de createOrder: contiene el ID de PayPal y los links de pago
 export interface PaymentResponse {
   success: boolean;
   data?: {
@@ -15,6 +17,7 @@ export interface PaymentResponse {
   error?: string;
 }
 
+// Respuesta de captureOrder: contiene el recibo completo de la transacción
 export interface CaptureResponse {
   success: boolean;
   message?: string;
@@ -44,9 +47,8 @@ export class PaypalService {
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Crear una nueva orden de pago con PayPal
-   */
+
+  //crear la orden
   createOrder(
     items: any[],
     total: number,
@@ -55,7 +57,7 @@ export class PaypalService {
   ): Observable<PaymentResponse> {
     const payload = {
       items,
-      total: Number(total).toFixed(2),
+      total: Number(total).toFixed(2),  // Asegura 2 decimales antes de enviar
       payerEmail: payerEmail || undefined,
       customerName: customerName || undefined
     };
