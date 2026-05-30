@@ -15,8 +15,6 @@ export async function createOrder(req, res) {
   try {
     const { items, customerName, direccion } = req.body;
 
-    console.log('ITEMS QUE LLEGAN DEL FRONT:', items);
-
     let payerEmail = 'cliente@correo.com';
     if (req.user?.id) {
       const [userRows] = await db.query('SELECT email FROM users WHERE id = ?', [req.user.id]);
@@ -28,26 +26,64 @@ export async function createOrder(req, res) {
     }
 
     const subtotal = items.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
-    const iva = subtotal * 0.16;
-    const total = subtotal + iva;
+    const iva      = subtotal * 0.16;
+    const total    = subtotal + iva;
 
+    // Buscar orden CREATED existente
+    const [existingOrders] = await db.execute(
+      `SELECT id, paypal_order_id FROM ordenes 
+       WHERE cliente_email = ? AND estado = 'CREATED' AND cancelado = 0
+       ORDER BY fecha_creacion DESC LIMIT 1`,
+      [payerEmail]
+    );
+
+    if (existingOrders.length > 0) {
+      const ordenExistenteId = existingOrders[0].id;
+
+      // Verificar si los items son los mismos
+      const [itemsExistentes] = await db.execute(
+        'SELECT producto_id, cantidad FROM orden_items WHERE orden_id = ?',
+        [ordenExistenteId]
+      );
+
+      const mismoCarrito =
+        itemsExistentes.length === items.length &&
+        items.every(item =>
+          itemsExistentes.some(
+            ei => ei.producto_id === item.id && ei.cantidad === item.cantidad
+          )
+        );
+
+      if (mismoCarrito) {
+        // Solo actualizar dirección
+        await db.execute(
+          'UPDATE ordenes SET direccion = ?, total = ? WHERE id = ?',
+          [direccion || 'Recolección física en tienda', total.toFixed(2), ordenExistenteId]
+        );
+
+        return res.status(200).json({
+          success: true,
+          data: { id: existingOrders[0].paypal_order_id }
+        });
+      } else {
+        // Carrito cambió — cancelar la anterior y crear nueva
+        await db.execute(
+          'UPDATE ordenes SET cancelado = 1 WHERE id = ?',
+          [ordenExistenteId]
+        );
+      }
+    }
+
+    // Crear nueva orden en PayPal y BD
     const paypalOrder = await createPaypalOrder({
       items,
       payerEmail: payerEmail || 'customer@papeleria-zetec.com',
     });
 
-    console.log('Orden PayPal creada:', paypalOrder.id);
-
     const [ordenResult] = await db.execute(
       `INSERT INTO ordenes (paypal_order_id, cliente_nombre, cliente_email, total, estado, direccion)
        VALUES (?, ?, ?, ?, 'CREATED', ?)`,
-      [
-        paypalOrder.id,
-        customerName || 'Cliente',
-        payerEmail,
-        total.toFixed(2),
-        direccion || 'Recolección física en tienda',
-      ], 
+      [paypalOrder.id, customerName || 'Cliente', payerEmail, total.toFixed(2), direccion || 'Recolección física en tienda']
     );
 
     const ordenId = ordenResult.insertId;
@@ -56,14 +92,7 @@ export async function createOrder(req, res) {
       await db.execute(
         `INSERT INTO orden_items (orden_id, producto_id, nombre, cantidad, precio_unitario, subtotal)
          VALUES (?, ?, ?, ?, ?, ?)`,
-        [
-          ordenId,
-          item.id,
-          item.nombre,
-          item.cantidad,
-          item.precio,
-          (item.precio * item.cantidad).toFixed(2),
-        ],
+        [ordenId, item.id, item.nombre, item.cantidad, item.precio, (item.precio * item.cantidad).toFixed(2)]
       );
     }
 
@@ -71,11 +100,10 @@ export async function createOrder(req, res) {
       success: true,
       data: { id: paypalOrder.id, status: paypalOrder.status, links: paypalOrder.links },
     });
+
   } catch (error) {
     console.error('Error en createOrder:', error.message);
-    res
-      .status(500)
-      .json({ success: false, error: 'No se pudo crear la orden', detalle: error.message });
+    res.status(500).json({ success: false, error: 'No se pudo crear la orden', detalle: error.message });
   }
 }
 
