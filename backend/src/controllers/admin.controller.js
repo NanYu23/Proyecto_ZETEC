@@ -197,3 +197,45 @@ export const getProductosInactivos = async (req, res) => {
         return res.status(500).json({ message: 'Error interno del servidor' });
     }
 };
+
+export const getAllOrdenes = async (req, res) => {
+    try {
+        const [orders] = await db.query(
+            `SELECT 
+                o.id,
+                o.paypal_order_id,
+                o.cliente_nombre,
+                o.cliente_email,
+                o.total,
+                o.moneda,
+                o.estado,
+                o.cancelado,
+                o.direccion,
+                o.fecha_creacion
+            FROM ordenes o
+            ORDER BY o.fecha_creacion DESC`
+        );
+
+        for (const order of orders) {
+            const [items] = await db.query(
+                `SELECT producto_id, nombre, cantidad, precio_unitario, subtotal
+                 FROM orden_items WHERE orden_id = ?`,
+                [order.id]
+            );
+            order.items = items;
+
+            // Obtener nombre real del usuario
+            const [user] = await db.query(
+                'SELECT username FROM users WHERE id = ?',
+                [order.cliente_nombre]
+            );
+            order.username = user.length > 0 ? user[0].username : 'Cliente';
+        }
+
+        return res.status(200).json({ orders });
+
+    } catch (error) {
+        console.error('Error en getAllOrdenes:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};

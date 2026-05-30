@@ -113,8 +113,14 @@ export const routes: Routes = [
         (m) => m.RecuperarPasswordComponent,
       ),
   },
-
-  //AGREGAR CAN ACTIVATE EN PERFIL (COMO EN HISTORIAL DE PEDIDOS)
+  {
+    path: 'admin-pedidos',
+    canActivate: [authGuard, adminGuard],
+    loadComponent: () =>
+      import('./components/admin_pedidos/admin_pedidos.component').then(
+        (m) => m.AdminPedidosComponent,
+      ),
+  },
 
   { path: '**', redirectTo: 'inicio' },
 ];

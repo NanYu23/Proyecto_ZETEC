@@ -1,0 +1,72 @@
+<nav class="navbar">
+  <div class="navbar__brand">
+    <div class="navbar__logo">
+      <img src="logo_papeleria.jpeg" alt="Logo" class="navbar__logo-img" />
+    </div>
+    <span class="navbar__title">Papelería Zetec</span>
+  </div>
+  <div class="navbar__links">
+    <a routerLink="/panel_administracion" routerLinkActive="active" class="navbar__link">Panel</a>
+    <a routerLink="/admin-pedidos" routerLinkActive="active" class="navbar__link">Pedidos</a>
+  </div>
+  <div class="navbar__actions">
+    <button class="navbar__icon-btn" (click)="irAlPerfil()">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<div class="historial-container">
+  <h1 class="titulo">Todos los pedidos</h1>
+
+  @if (cargando) {
+    <p style="text-align:center; color:#1a6dbf;">Cargando pedidos...</p>
+  }
+
+  @if (!cargando && ordenes.length === 0) {
+    <p style="text-align:center; color:#6b7280;">No hay pedidos registrados.</p>
+  }
+
+  @for (orden of ordenes; track orden.id) {
+    <div class="historial-box">
+      <div class="orden-header">
+        <div class="orden-info">
+          <span class="orden-id">Pedido #{{ orden.id }}</span>
+          <span class="orden-fecha">{{ orden.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</span>
+          <span class="orden-cliente">👤 {{ orden.username }} — {{ orden.cliente_email }}</span>
+          <span class="orden-direccion">📍 {{ orden.direccion || 'Recolección en tienda' }}</span>
+          <span class="orden-estado" [ngClass]="getEstadoClass(orden)">
+            {{ getEstadoLabel(orden) }}
+          </span>
+        </div>
+        <div class="orden-total">
+          <span class="total-label">Total:</span>
+          <span class="total-valor">$ {{ orden.total | number:'1.2-2' }} {{ orden.moneda }}</span>
+        </div>
+      </div>
+
+      <div class="orden-items-header">
+        <span>Producto</span>
+        <span>Cantidad</span>
+        <span>Precio unitario</span>
+        <span>Subtotal</span>
+      </div>
+
+      @for (item of orden.items; track item.producto_id) {
+        <div class="orden-item">
+          <span class="item-nombre">{{ item.nombre }}</span>
+          <span class="item-cantidad">{{ item.cantidad }}</span>
+          <span class="item-precio">$ {{ item.precio_unitario | number:'1.2-2' }}</span>
+          <span class="item-subtotal">$ {{ item.subtotal | number:'1.2-2' }}</span>
+        </div>
+      }
+    </div>
+  }
+
+  <div class="btn-container">
+    <button routerLink="/panel_administracion" class="btn-volver">← Volver al panel</button>
+  </div>
+</div>
