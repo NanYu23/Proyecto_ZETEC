@@ -1,7 +1,9 @@
 // carrito.controller.js
+// Maneja todas las operaciones sobre los items del carrito de un usuario autenticado.
 
 import db from '../config/db.js';
 
+// Devuelve todos los productos en el carrito del usuario, más el total a pagar
 export const getCart = async (req, res) => {
     try {
         const [items] = await db.query(
@@ -19,9 +21,11 @@ export const getCart = async (req, res) => {
             JOIN productos p ON p.id = ci.producto_id
             WHERE ci.user_id = ?
             ORDER BY ci.added_at DESC`,
-            [req.user.id]
+            [req.user.id]   // ID del usuario extraído del token JWT por el middleware
         );
 
+        // Calcula el total sumando los subtotales de todos los items.
+        // Number() convierte el subtotal a número por si MySQL lo devuelve como string.
         const total = items.reduce((sum, item) => sum + Number(item.subtotal), 0);
         return res.status(200).json({ items, total });
 
@@ -31,6 +35,7 @@ export const getCart = async (req, res) => {
     }
 };
 
+// Agrega un producto al carrito, o incrementa su cantidad si ya estaba
 export const addToCart = async (req, res) => {
     try {
         const { producto_id, cantidad = 1 } = req.body;
@@ -39,6 +44,7 @@ export const addToCart = async (req, res) => {
             return res.status(400).json({ message: 'Datos inválidos' });
         }
 
+        // Verifica que el producto exista antes de agregarlo al carrito
         const [product] = await db.query(
             'SELECT id FROM productos WHERE id = ?', [producto_id]
         );
@@ -46,6 +52,7 @@ export const addToCart = async (req, res) => {
             return res.status(404).json({ message: 'Producto no encontrado' });
         }
 
+        // si el producto ya está en el carrito, ejecuta el UPDATE y suma la cantidad nueva a la que ya había
         await db.query(
             `INSERT INTO cart_items (user_id, producto_id, cantidad)
              VALUES (?, ?, ?)
@@ -61,6 +68,7 @@ export const addToCart = async (req, res) => {
     }
 };
 
+// Reemplaza la cantidad de un producto en el carrito
 export const updateCartItem = async (req, res) => {
     try {
         const { productoId } = req.params;
@@ -70,12 +78,14 @@ export const updateCartItem = async (req, res) => {
             return res.status(400).json({ message: 'Cantidad inválida' });
         }
 
+        // Actualiza la cantidad filtrando por usuario Y producto
         const [result] = await db.query(
             `UPDATE cart_items SET cantidad = ?
              WHERE user_id = ? AND producto_id = ?`,
             [cantidad, req.user.id, productoId]
         );
 
+        // Si affectedRows es 0, ese producto no estaba en el carrito del usuario
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'Producto no encontrado en el carrito' });
         }
@@ -88,6 +98,7 @@ export const updateCartItem = async (req, res) => {
     }
 };
 
+// Elimina un producto específico del carrito del usuario
 export const removeFromCart = async (req, res) => {
     try {
         const { productoId } = req.params;
@@ -109,8 +120,10 @@ export const removeFromCart = async (req, res) => {
     }
 };
 
+// Vacía completamente el carrito del usuario
 export const clearCart = async (req, res) => {
     try {
+        // Elimina TODOS los items del usuario de una sola vez
         await db.query('DELETE FROM cart_items WHERE user_id = ?', [req.user.id]);
         return res.status(200).json({ message: 'Carrito vaciado' });
 

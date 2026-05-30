@@ -1,13 +1,14 @@
 // user.controller.js
+// Maneja perfil, historial de órdenes, direcciones y eliminación de cuenta.
 
 import db from '../config/db.js';
 
-// GET /profile
+// Devuelve los datos básicos del perfil del usuario autenticado
 export const getProfile = async (req, res) => {
   try {
     const [rows] = await db.query(
       'SELECT id, username, email, created_at FROM users WHERE id = ?',
-      [req.user.id],
+      [req.user.id], // ID extraído del token JWT por el middleware
     );
 
     const user = rows[0];
@@ -20,7 +21,7 @@ export const getProfile = async (req, res) => {
   }
 };
 
-// PUT /profile
+// Actualiza username y email del usuario autenticado
 export const updateProfile = async (req, res) => {
   try {
     const { username, email } = req.body;
@@ -31,7 +32,7 @@ export const updateProfile = async (req, res) => {
       });
     }
 
-    // ===== VALIDAR CORREO =====
+    //Validar correo
     const [existingEmail] = await db.query('SELECT id FROM users WHERE email = ? AND id != ?', [
       email,
       req.user.id,
@@ -43,7 +44,7 @@ export const updateProfile = async (req, res) => {
       });
     }
 
-    // ===== VALIDAR USERNAME =====
+    // Validar usuario
     const [existingUsername] = await db.query(
       'SELECT id FROM users WHERE username = ? AND id != ?',
       [username, req.user.id],
@@ -74,7 +75,7 @@ export const updateProfile = async (req, res) => {
   }
 };
 
-// GET /orders
+// Devuelve el historial de órdenes del usuario con sus productos
 export const getOrderHistory = async (req, res) => {
   try {
     const [orders] = await db.query(
@@ -95,13 +96,14 @@ export const getOrderHistory = async (req, res) => {
       [req.user.id],
     );
 
+    // Agrega los items a cada orden
     for (const order of orders) {
       const [items] = await db.query(
         `SELECT producto_id, nombre, cantidad, precio_unitario, subtotal
                  FROM orden_items WHERE orden_id = ?`,
         [order.id],
       );
-      order.items = items;
+      order.items = items;  // Inyecta los items dentro del objeto de la orden
     }
 
     return res.status(200).json({ orders });
@@ -111,10 +113,12 @@ export const getOrderHistory = async (req, res) => {
   }
 };
 
+// Cancela una orden pendiente del usuario autenticado
 export const cancelOrder = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params; // ID de la orden a cancelar
 
+    // Busca la orden verificando que pertenezca al usuario autenticado.
     const [rows] = await db.query(
       `SELECT id, estado FROM ordenes 
              WHERE id = ? AND cliente_email = (SELECT email FROM users WHERE id = ?)`,
@@ -125,9 +129,9 @@ export const cancelOrder = async (req, res) => {
       return res.status(404).json({ message: 'Orden no encontrada' });
     }
 
+      // Solo se pueden cancelar órdenes que aún no han sido pagadas.
     const estado = rows[0].estado;
     if (estado !== 'CREADO' && estado !== 'CREATED') {
-      // 👈 aceptar ambos
       return res.status(400).json({ message: 'Solo se pueden cancelar órdenes pendientes' });
     }
 
@@ -136,61 +140,6 @@ export const cancelOrder = async (req, res) => {
     return res.status(200).json({ message: 'Orden cancelada correctamente' });
   } catch (error) {
     console.error('Error en cancelOrder:', error);
-    return res.status(500).json({ message: 'Error interno del servidor' });
-  }
-};
-
-// GET /addresses
-export const getAddresses = async (req, res) => {
-  try {
-    const [rows] = await db.query(
-      'SELECT * FROM direcciones WHERE usuario_id = ? AND activo = 1 ORDER BY fecha_creacion ASC',
-      [req.params.usuarioId],
-    );
-    res.json({ success: true, data: rows });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-};
-
-// POST /addresses
-export const addAddress = async (req, res) => {
-  try {
-    const { direccion, telefono } = req.body;
-
-    if (!direccion || !telefono) {
-      return res.status(400).json({ message: 'Dirección y teléfono son requeridos' });
-    }
-
-    const [result] = await db.query(
-      'INSERT INTO direcciones (usuario_id, direccion, telefono) VALUES (?, ?, ?)',
-      [req.user.id, direccion, telefono],
-    );
-
-    return res.status(201).json({ message: 'Dirección agregada', id: result.insertId });
-  } catch (error) {
-    console.error('Error en addAddress:', error);
-    return res.status(500).json({ message: 'Error interno del servidor' });
-  }
-};
-
-// DELETE /addresses/:id
-export const deleteAddress = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const [result] = await db.query(
-      'UPDATE direcciones SET activo = 0 WHERE id = ? AND usuario_id = ?',
-      [id, req.user.id],
-    );
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Dirección no encontrada' });
-    }
-
-    return res.status(200).json({ message: 'Dirección eliminada' });
-  } catch (error) {
-    console.error('Error en deleteAddress:', error);
     return res.status(500).json({ message: 'Error interno del servidor' });
   }
 };

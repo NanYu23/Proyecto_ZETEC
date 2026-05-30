@@ -1,19 +1,23 @@
 // auth.controller.js
+// Controlador de autenticación: maneja registro, login y recuperación de contraseña.
 
 import db from '../config/db.js';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { enviarCodigoRecuperacion } from '../services/email.service.js';
+import bcrypt from 'bcrypt';   // Para encriptar y comparar contraseñas
+import jwt from 'jsonwebtoken'; // Para generar tokens de sesión seguros
+import { enviarCodigoRecuperacion } from '../services/email.service.js';  // Servicio de correo
 
+
+// Registra un nuevo usuario en el sistema
 export const register = async (req, res) => {
   try {
     const { username, password, direccion, terminos_aceptados } = req.body;
 
+    // Normaliza el email: quita espacios y convierte a minúsculas
     const email = req.body.email.trim().toLowerCase();
 
     console.log('Datos recibidos:', { username, email, direccion });
 
-    // ===== VALIDAR CORREO =====
+    // Verifica que no exista otro usuario con el mismo email
     const [existingEmail] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
 
     if (existingEmail.length > 0) {
@@ -22,7 +26,7 @@ export const register = async (req, res) => {
       });
     }
 
-    // ===== VALIDAR USERNAME =====
+    // Verifica que el nombre de usuario tampoco esté 
     const [existingUsername] = await db.query('SELECT * FROM users WHERE username = ?', [username]);
 
     if (existingUsername.length > 0) {
@@ -31,18 +35,19 @@ export const register = async (req, res) => {
       });
     }
 
-    // ===== ENCRIPTAR PASSWORD =====
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Encriptar contraseña
+    const hashedPassword = await bcrypt.hash(password, 10); //el 10 es el número de salt rounds
 
-    // ===== INSERTAR USUARIO =====
+    // Insertar usuario
     const [result] = await db.query(
       'INSERT INTO users (username, email, password, terminos_aceptados) VALUES (?, ?, ?, ?)',
       [username, email, hashedPassword, terminos_aceptados || 0],
     );
 
+    // ID autogenerado del nuevo usuario
     const userId = result.insertId;
 
-    // ===== GUARDAR DIRECCIÓN =====
+    // Guardar dirección
     if (direccion) {
       await db.query('INSERT INTO direcciones (usuario_id, direccion) VALUES (?, ?)', [
         userId,
@@ -63,6 +68,7 @@ export const register = async (req, res) => {
   }
 };
 
+// Autentica un usuario y devuelve un token JWT
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -74,15 +80,20 @@ export const login = async (req, res) => {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
+    // Verifica que la cuenta esté activa (activo = 1)
     if (user.activo === 0) {
       return res.status(403).json({ message: 'Esta cuenta ha sido desactivada' });
     }
 
+    // bcrypt.compare compara la contraseña en texto plano con el hash guardado
+    // Devuelve true si coinciden, false si no
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
+    // Genera un token JWT que contiene el ID y rol del usuario.
+    // Este token se firma con JWT_SECRET (clave privada del servidor) y expira en 1 hora.
     const token = jwt.sign({ id: user.id, rol: user.rol }, process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
@@ -129,10 +140,12 @@ export const solicitarRecuperacion = async (req, res) => {
   }
 };
 
+// verifica el código y actualiza la contraseña
 export const resetPassword = async (req, res) => {
   try {
     const { email, code, newPassword } = req.body;
 
+    // Valida que todos los campos necesarios estén llenos
     if (!email || !code || !newPassword) {
       return res.status(400).json({ message: 'Todos los campos son requeridos' });
     }
@@ -148,7 +161,7 @@ export const resetPassword = async (req, res) => {
       return res.status(400).json({ message: 'Código inválido o expirado' });
     }
 
-    // Actualizar contraseña
+    // Encripta la nueva contraseña antes de guardarla
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await db.query('UPDATE users SET password = ? WHERE email = ?', [hashedPassword, email]);
 

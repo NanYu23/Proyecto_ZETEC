@@ -1,5 +1,7 @@
-import db from '../config/db.js';
+// Controlador para las operaciones administrativas del sistema.
+import db from '../config/db.js'; // Importa el pool de conexiones a MySQL
 
+// Busca y devuelve un producto específico por su ID
 export const getProductoById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -16,6 +18,7 @@ export const getProductoById = async (req, res) => {
     }
 };
 
+// Actualiza todos los campos de un producto existente
 export const updateProducto = async (req, res) => {
     try {
         const { id } = req.params;
@@ -35,14 +38,18 @@ export const updateProducto = async (req, res) => {
     }
 };
 
+// Crea un nuevo producto en la base de datos
 export const createProducto = async (req, res) => {
     try {
         const { name, price, inStock, category, description, imageUrl } = req.body;
 
+         // los campos obligatorios no pueden estar vacíos
         if (!name || !price || !category) {
             return res.status(400).json({ message: 'Nombre, precio y categoría son requeridos' });
         }
 
+        // Inserta el nuevo producto; si no se mandan inStock/description/imageUrl,
+        // se usan valores por defecto (0 o cadena vacía)
         const [result] = await db.query(
             `INSERT INTO productos (name, price, inStock, category, description, imageUrl)
              VALUES (?, ?, ?, ?, ?, ?)`,
@@ -57,6 +64,7 @@ export const createProducto = async (req, res) => {
     }
 };
 
+// Devuelve todas las categorías activas, ordenadas alfabéticamente
 export const getCategorias = async (req, res) => {
     try {
         const [rows] = await db.query(
@@ -69,6 +77,7 @@ export const getCategorias = async (req, res) => {
     }
 };
 
+// Crea una nueva categoría, verificando que no exista una con el mismo nombre
 export const createCategoria = async (req, res) => {
     try {
         const { nombre } = req.body;
@@ -94,6 +103,7 @@ export const createCategoria = async (req, res) => {
     }
 };
 
+// Actualiza el nombre de una categoría Y también actualiza todos los productos con esa categoría
 export const updateCategoria = async (req, res) => {
     try {
         const { id } = req.params;
@@ -125,6 +135,7 @@ export const updateCategoria = async (req, res) => {
     }
 };
 
+// En lugar de eliminar el registro, lo "desactiva" poniendo activo = 0
 export const deleteProducto = async (req, res) => {
     try {
         const { id } = req.params;
@@ -145,6 +156,7 @@ export const deleteProducto = async (req, res) => {
     }
 };
 
+// Desactiva una categoría sin eliminarla físicamente de la base de datos
 export const deleteCategoria = async (req, res) => {
     try {
         const { id } = req.params;
@@ -165,7 +177,7 @@ export const deleteCategoria = async (req, res) => {
     }
 };
 
-// PUT /productos/:id/reactivar
+// Reactiva un producto que fue desactivado previamente (activo = 1)
 export const reactivarProducto = async (req, res) => {
     try {
         const { id } = req.params;
@@ -186,6 +198,7 @@ export const reactivarProducto = async (req, res) => {
     }
 };
 
+// Devuelve todos los productos que han sido "eliminados" (activo = 0)
 export const getProductosInactivos = async (req, res) => {
     try {
         const [rows] = await db.query(
@@ -198,6 +211,7 @@ export const getProductosInactivos = async (req, res) => {
     }
 };
 
+// Devuelve todas las órdenes con sus productos y el nombre del cliente
 export const getAllOrdenes = async (req, res) => {
     try {
         const [orders] = await db.query(
