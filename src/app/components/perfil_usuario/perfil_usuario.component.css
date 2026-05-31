@@ -181,7 +181,7 @@
 .btn-cerrar {
   border: none;
 
-  background: #ee9898;
+  background: #f83636;
 
   color: white;
 
@@ -199,7 +199,7 @@
 }
 
 .btn-cerrar:hover {
-  background: #d97676;
+  background: #8a0101;
 
   transform: translateY(-2px);
 }
