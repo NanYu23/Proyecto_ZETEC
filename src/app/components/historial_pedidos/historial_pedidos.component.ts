@@ -6,23 +6,23 @@ import { CarritoService } from '../../services/carrito.service';
 import { AuthService } from '../../services/auth.service';
 
 interface OrdenItem {
-  producto_id:     number;
-  nombre:          string;
-  cantidad:        number;
+  producto_id: number;
+  nombre: string;
+  cantidad: number;
   precio_unitario: number;
-  subtotal:        number;
+  subtotal: number;
 }
 
 interface Orden {
-  id:              number;
+  id: number;
   paypal_order_id: string;
-  total:           number;
-  moneda:          string;
-  estado:          string;
-  cancelado:       number;
-  direccion:       string;
-  fecha_creacion:  string;
-  items:           OrdenItem[];
+  total: number;
+  moneda: string;
+  estado: string;
+  cancelado: number;
+  direccion: string;
+  fecha_creacion: string;
+  items: OrdenItem[];
 }
 
 @Component({
@@ -30,20 +30,19 @@ interface Orden {
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './historial_pedidos.component.html',
-  styleUrls: ['./historial_pedidos.component.css']
+  styleUrls: ['./historial_pedidos.component.css'],
 })
 export class HistorialPedidosComponent implements OnInit {
-
   carritoService = inject(CarritoService);
-  private http   = inject(HttpClient);
-  private cdr    = inject(ChangeDetectorRef);
-  router         = inject(Router);
-  authService    = inject(AuthService);
+  private http = inject(HttpClient);
+  private cdr = inject(ChangeDetectorRef);
+  router = inject(Router);
+  authService = inject(AuthService);
 
-  ordenes:  Orden[] = [];
+  ordenes: Orden[] = [];
   cargando = true;
 
-  modalCancelarVisible    = false;
+  modalCancelarVisible = false;
   ordenACancelar: Orden | null = null;
 
   // Datos fijos de la empresa (idénticos a tu ReceiptViewComponent)
@@ -53,7 +52,7 @@ export class HistorialPedidosComponent implements OnInit {
     address: 'Av. Vallarta #5000, Guadalajara, Jal. CP 44100',
     phone: '33 1234 5678',
     email: 'contacto@zetec.com.mx',
-    regimen: '601 - General de Ley Personas Morales'
+    regimen: '601 - General de Ley Personas Morales',
   };
 
   irAlPerfil() {
@@ -67,49 +66,53 @@ export class HistorialPedidosComponent implements OnInit {
   }
 
   cargarOrdenes(): void {
-    this.http.get<{ orders: Orden[] }>(
-      `http://localhost:3000/api/user/orders?t=${Date.now()}`
-    ).subscribe({
-      next: (res) => {
-        this.ordenes = res.orders.map(o => ({
-          ...o,
-          items: typeof o.items === 'string' ? JSON.parse(o.items) : o.items
-        }));
-        this.cargando = false;
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Error cargando historial:', err);
-        this.cargando = false;
-        this.cdr.detectChanges();
-      }
-    });
+    this.http
+      .get<{ orders: Orden[] }>(`http://localhost:3000/api/user/orders?t=${Date.now()}`)
+      .subscribe({
+        next: (res) => {
+          this.ordenes = res.orders.map((o) => ({
+            ...o,
+            items: typeof o.items === 'string' ? JSON.parse(o.items) : o.items,
+          }));
+          this.cargando = false;
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Error cargando historial:', err);
+          this.cargando = false;
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   abrirModalCancelar(orden: Orden) {
-    this.ordenACancelar       = orden;
+    this.ordenACancelar = orden;
     this.modalCancelarVisible = true;
   }
 
   cerrarModalCancelar() {
-    this.ordenACancelar       = null;
+    this.ordenACancelar = null;
     this.modalCancelarVisible = false;
   }
 
   confirmarCancelar() {
     if (!this.ordenACancelar) return;
+    console.log('Cancelando orden:', this.ordenACancelar.id, 'Estado:', this.ordenACancelar.estado);
 
-    this.http.delete(`http://localhost:3000/api/user/orders/${this.ordenACancelar.id}`)
-      .subscribe({
-        next: () => {
-          this.cerrarModalCancelar();
-          this.cargarOrdenes();
-        },
-        error: (err) => alert(err.error?.message || 'Error al cancelar la orden')
-      });
+    this.http.delete(`http://localhost:3000/api/user/orders/${this.ordenACancelar.id}`).subscribe({
+      next: (res) => {
+        console.log('Respuesta:', res);
+        this.cerrarModalCancelar();
+        this.cargarOrdenes();
+      },
+      error: (err) => {
+        console.error('Error completo:', err);
+        alert(err.error?.message || 'Error al cancelar la orden');
+      },
+    });
   }
 
-  // ===== NUEVO MÉTODO: DESCARGAR XML DESDE EL HISTORIAL =====
+  //  DESCARGAR XML DESDE EL HISTORIAL
   descargarXMLPedido(orden: Orden) {
     // Primero, recuperamos el perfil para rellenar los datos fiscales del receptor
     this.http.get<{ user: any }>('http://localhost:3000/api/user/profile').subscribe({
@@ -119,7 +122,7 @@ export class HistorialPedidosComponent implements OnInit {
       error: () => {
         // En caso de error o sesión intermitente, se genera con datos genéricos
         this.procesarGeneracionXML(orden, null);
-      }
+      },
     });
   }
 
@@ -131,13 +134,14 @@ export class HistorialPedidosComponent implements OnInit {
 
     // Estructuración de los conceptos CFDI basados en los items de la orden
     // Estructuración de los conceptos CFDI basados en los items de la orden
-    const xmlItems = (orden.items || []).map(item => {
-      // 🌟 Forzamos la conversión a números reales para evitar fallos si el backend envía strings
-      const cant = Number(item.cantidad) || 1;
-      const precio = Number(item.precio_unitario) || 0;
-      const importe = cant * precio;
-      
-      return `
+    const xmlItems = (orden.items || [])
+      .map((item) => {
+        // Forzamos la conversión a números reales para evitar fallos si el backend envía strings
+        const cant = Number(item.cantidad) || 1;
+        const precio = Number(item.precio_unitario) || 0;
+        const importe = cant * precio;
+
+        return `
         <cfdi:Concepto 
             Cantidad="${cant.toFixed(2)}" 
             Unidad="PIEZA" 
@@ -151,7 +155,8 @@ export class HistorialPedidosComponent implements OnInit {
             </cfdi:Traslados>
         </cfdi:Impuestos>
         </cfdi:Concepto>`;
-    }).join('');
+      })
+      .join('');
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
     <cfdi:Comprobante 

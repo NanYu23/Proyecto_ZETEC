@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { CarritoService } from '../../services/carrito.service';
 import { DireccionService, Direccion } from '../../services/direccion.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-direccion-entrega',
@@ -22,6 +23,7 @@ export class DireccionEntregaComponent implements OnInit {
   direcciones: Direccion[] = [];
   cargando = false;
   nuevaDireccion = '';
+  authService = inject(AuthService);
 
   modalExitoVisible = false;
   mensajeExito = '';
@@ -29,13 +31,21 @@ export class DireccionEntregaComponent implements OnInit {
   modalEliminarVisible = false;
   direccionAEliminar: Direccion | null = null;
 
+  irAlPerfil() {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/perfil_usuario']);
+    } else {
+      this.router.navigate(['/inicio_sesion']);
+    }
+  }
+
   async ngOnInit() {
     this.cargando = true;
     this.direcciones = await this.direccionService.obtenerDirecciones();
     const actual = this.direccionService.direccionSeleccionada();
     if (actual) this.seleccion = String(actual.id);
     this.cargando = false;
-    this.cdr.detectChanges(); // 👈
+    this.cdr.detectChanges(); 
   }
 
   usarDireccion() {

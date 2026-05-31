@@ -171,3 +171,20 @@ export const deleteAccount = async (req, res) => {
     return res.status(500).json({ message: 'Error interno del servidor' });
   }
 };
+
+export const cancelarOrdenesPendientes = async (req, res) => {
+    try {
+        await db.query(
+            `UPDATE ordenes 
+             SET cancelado = 1 
+             WHERE cliente_email = (SELECT email FROM users WHERE id = ?)
+             AND estado IN ('CREATED', 'CREADO')
+             AND cancelado = 0`,
+            [req.user.id]
+        );
+        return res.status(200).json({ message: 'Órdenes pendientes canceladas' });
+    } catch (error) {
+        console.error('Error en cancelarOrdenesPendientes:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};

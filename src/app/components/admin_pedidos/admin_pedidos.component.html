@@ -36,8 +36,8 @@
         <div class="orden-info">
           <span class="orden-id">Pedido #{{ orden.id }}</span>
           <span class="orden-fecha">{{ orden.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</span>
-          <span class="orden-cliente">👤 {{ orden.username }} — {{ orden.cliente_email }}</span>
-          <span class="orden-direccion">📍 {{ orden.direccion || 'Recolección en tienda' }}</span>
+          <span class="orden-cliente">{{ orden.username }} — {{ orden.cliente_email }}</span>
+          <span class="orden-direccion">{{ orden.direccion || 'Recolección en tienda' }}</span>
           <span class="orden-estado" [ngClass]="getEstadoClass(orden)">
             {{ getEstadoLabel(orden) }}
           </span>
